@@ -9,8 +9,10 @@ Example sketch to connect to PM2.5 sensor with either I2C or UART.
 import time
 import board
 import busio
+import json
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_pm25.i2c import PM25_I2C
+import paho.mqtt.client as mqtt
 
 PM25_MAX = 250
 PM10_MAX = 430
@@ -326,6 +328,13 @@ def display_led(my_matrix, my_value, color):
 
 scd4x.start_periodic_measurement()
 print("Waiting for scd4x  measurement....")
+client = mqtt.Client()
+try:
+    client.connect("mqtt", 1883, 60)
+except Exception as e:
+    print("Error connecting to mqtt. ({0})".format(str(e)))
+else:
+    client.loop_start()
 
 while True:
     pm = {}
@@ -338,8 +347,11 @@ while True:
     scd.update(pm)
     # Get the custom index:
     idx = my_index(scd["pm25 standard"], scd["pm100 standard"], scd["co2"])
+    # Add index to dict
+    scd["IAQ"] = idx
     print("Using index: {0}".format(idx))
     # Display on LED matrix
     display_index(idx)
-    #TODO: code here to publish scd for charts and graphs
+    # Publish all data to MQTT
+    client.publish("sensors", json.dumps(scd))
     time.sleep(55)
