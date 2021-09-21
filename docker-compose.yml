@@ -1,0 +1,32 @@
+version: '2'
+volumes:
+    sense-data:
+    dashboard-data:
+services:
+  influxdb:
+    restart: always
+    image: arm32v7/influxdb@sha256:2fed9b09a672cab330ac3ea1f03616e6821f2235bda64d549f605ef0d7081911
+    volumes:
+      - 'sense-data:/var/lib/influxdb'
+  dashboard:
+    image: balenablocks/dashboard
+    restart: always
+    volumes:
+        - 'dashboard-data:/data'
+    ports:
+        - '80'
+  iaq:
+    build: ./iaq
+    privileged: true
+    restart: always
+  connector:
+    image: balenablocks/connector
+    restart: always
+    labels:
+      io.balena.features.balena-api: '1'
+    privileged: true
+  mqtt:
+    image: eclipse-mosquitto:1.6.15
+    ports:
+      - "1883:1883"
+    restart: always 
