@@ -1,4 +1,4 @@
 # balena-iaq
 Indoor air quality device with matrix LED display
 
-![logo](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit1.jpg)
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/main/images/unit1.jpg)
