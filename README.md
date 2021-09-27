@@ -11,7 +11,7 @@ The LED display changes color based on the score as follows:
 | ------------ | ----------- | ----------- |
 | 0 - 49 | Good air quality | green |
 | 50 - 74 | Moderate air quality | orange |
-| 75 - 99 | Hazardous air qulaity | red |
+| 75 - 99 | Hazardous air quality | red |
 
 We've included STL files so you can print and assemble your own custom case!
 
