@@ -1,5 +1,5 @@
 # balena-iaq
-Indoor air quality device with matrix LED display.
+Indoor air quality device with a matrix LED display driven by a Raspberry Pi 3A+ and two sensors.
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit1.jpg)
 
