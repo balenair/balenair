@@ -16,3 +16,15 @@ The LED display changes color based on the score as follows:
 We've included STL files so you can print and assemble your own custom case!
 
 ## Parts list
+2x [Adafruit Bicolor LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902)
+
+1x [Adafruit PMSA003I Air Quality Breakout](https://www.adafruit.com/product/4632)
+
+1x [SCD-40 - True CO2, Temperature and Humidity Sensor](https://www.adafruit.com/product/5187)
+
+2x [STEMMA QT / Qwiic JST SH 4-pin Cable - 100mm Long](https://www.adafruit.com/product/4210)
+
+3x [STEMMA QT / Qwiic JST SH 4-pin Cable with Premium Female Sockets - 150mm Long](https://www.adafruit.com/product/4397)
+
+1x [Raspberry Pi 3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)
+
