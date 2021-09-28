@@ -32,3 +32,5 @@ We've included STL files so you can print and assemble your own custom case!
 
 ## Assembly
 The device itself requires no soldering, however the LED pixel matrix does need to be soldered to the I2C backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). All of the components that need to be wired together use I2C, so simply connect everything using the Qwiic multiport and the recommended cables. The two sensors can be daisy-chained, while the two LED backpacks only have headers, so they will need to use the cables with female header sockets on one end. Finally, connect the multiport to the Pi using a similar Qwiic to female header cable. See the diagram below:
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/wiring.png)
