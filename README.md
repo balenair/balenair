@@ -28,3 +28,7 @@ We've included STL files so you can print and assemble your own custom case!
 
 1x [Raspberry Pi 3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)
 
+1x [SparkFun Qwiic Multiport](https://www.adafruit.com/product/4861) or [here](https://www.sparkfun.com/products/18012)
+
+## Assembly
+The device itself requires no soldering, however the LED pixel matrix does need to be soldered to the I2C backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). 
