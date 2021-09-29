@@ -41,7 +41,7 @@ The custom case consists of four pieces that can be printed using a standard con
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case.png)
 
 ### Front
-The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. The angled headers should face upwards. TIP: attach the female headers before inserting the diplays onto the posts.
+The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. The angled headers should face upwards. TIP: attach the female headers before inserting the displays onto the posts.
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_front.png)
 
 ### Pi Ring
