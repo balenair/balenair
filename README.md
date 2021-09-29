@@ -36,6 +36,20 @@ The device itself requires no soldering, however the LED pixel matrix does need 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/wiring.png)
 
 ## Custom case
-The custom case consists of four pieces that can be printed using a standard consumer 3D printer. The files for printing these pieces are in the `stl` folder.
+The custom case consists of four pieces that can be printed using a standard consumer 3D printer. The files for printing these pieces are in the `stl` folder. They are neamed as follows:
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case.png)
+
+### Front
+The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. The angled headers should face upwards. TIP: attach the female headers before inserting the diplays onto the posts.
+
+### Pi Ring
+The `pi_ring` holds the Raspberry Pi 3A+ in place. Use four #2-56 pan head screws 1/4" to 5/16" long to mount the Pi in the provided holes. A longer screw will go through the pi_ring so a nut could be added to the other side. 
+
+### Insulate sense
+The `insulate_sense` piece is used to insulate the sensor area from the heat of the Pi. There are mounting holes for both sensors. The bottom of the particulate sensor "sits" on a small shelf. TIP: Tape the blue part of the particulate sensor to the circuit board with a small amount of electrical tape to keep it from sliding around. (Make sure not to cover any of the venting holes on the right of the sensor though!) 
+
+There is a small opening at the bottom of this piece to feed the Qwiic sensor cable through to the other side. The side opposite the sensors has a hole to attach the Qwiic multiport connector with a #2-56 1/2" pan head screw and nut.
+
+### Back
+All four pieces are held together by inserting four M3 x 40mm hex socket head screws through the back piece and attaching to the screw holes in the front piece. These screws should not thread into any piece other than the front - they should move freely until they hit the holes in the front. You may need to start the threading on the front piece by inserting a small wood screw and rotating it a few turns.
