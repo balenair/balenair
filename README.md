@@ -46,6 +46,7 @@ The front panel holds the LED/backpack assemblies. Each assembly slides onto a s
 
 ### Pi Ring
 The `pi_ring` holds the Raspberry Pi 3A+ in place. Use four #2-56 pan head screws 1/4" to 5/16" long to mount the Pi in the provided holes. A longer screw will go through the pi_ring so a nut could be added to the other side. 
+
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_pi.png)
 
 ### Insulate sense
