@@ -36,4 +36,6 @@ The device itself requires no soldering, however the LED pixel matrix does need 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/wiring.png)
 
 ## Custom case
-The custom case consists of for pieces that need to be printed using a 3D printer. The files for printing these pieces are in the `stl` folder.
+The custom case consists of four pieces that can be printed using a standard consumer 3D printer. The files for printing these pieces are in the `stl` folder.
+
+
