@@ -1,10 +1,6 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
-"""
-Example sketch to connect to PM2.5 sensor with either I2C or UART.
-"""
-
 # pylint: disable=unused-import
 import time
 import board
@@ -161,8 +157,6 @@ def scd_sense():
     # Take a reading from the CO2 sensor, return dict
     #
     scd_dict = {}
-    #scd4x.start_periodic_measurement()
-    #print("Waiting for scd4x  measurement....")
     count = 0
     while not scd4x.data_ready:
         count = count + 1
@@ -186,7 +180,6 @@ def pm_sense():
     #
     try:
         aqdata = pm25.read()
-        # print(aqdata)
     except RuntimeError:
         print("Unable to read from sensor, retrying...")
         
@@ -256,9 +249,14 @@ def my_index(pm25, pm10, co2):
 
     print("Scaled pm25: {0}".format(scaled_pm25))
     print("Scaled pm10: {0}".format(scaled_pm10))
-    print("Scaled co2: {0}".format(scaled_co2))
-
-    return int(max(scaled_pm25, scaled_pm10, scaled_co2))
+    print("Scaled co2: {0}".format(scaled_co2)) 
+    
+    idx = int(max(scaled_pm25, scaled_pm10, scaled_co2))
+    
+    if idx > 99:
+        idx = 99
+        
+    return idx
 
 def make_interpolater(left_min, left_max, right_min, right_max):
     #
@@ -284,6 +282,7 @@ def make_interpolater(left_min, left_max, right_min, right_max):
 def rotate_matrix( m ):
     #
     # Rotate digit matrix by 90 degrees counterclockwise
+    # see https://stackoverflow.com/questions/53250821/in-python-how-do-i-rotate-a-matrix-90-degrees-counterclockwise
     #
     return [[m[j][i] for j in range(len(m))] for i in range(len(m[0])-1,-1,-1)]
 
@@ -346,12 +345,15 @@ while True:
     # Merge two dictionaries into scd:
     scd.update(pm)
     # Get the custom index:
-    idx = my_index(scd["pm25 standard"], scd["pm100 standard"], scd["co2"])
+    iaq_idx = my_index(scd["pm25 standard"], scd["pm100 standard"], scd["co2"])
     # Add index to dict
-    scd["IAQ"] = idx
-    print("Using index: {0}".format(idx))
+    scd["IAQ"] = iaq_idx
+    print("Using index: {0}".format(iaq_idx))
     # Display on LED matrix
-    display_index(idx)
+    display_index(iaq_idx)
     # Publish all data to MQTT
-    client.publish("sensors", json.dumps(scd))
+    try:
+        client.publish("sensors", json.dumps(scd))
+    except Exception as e:
+        print("Error publishing to mqtt. ({0})".format(str(e)))
     time.sleep(55)
