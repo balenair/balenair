@@ -38,3 +38,5 @@ services:
     labels:
       io.balena.features.dbus: "1"
       io.balena.features.firmware: "1"
+    environment:
+      PORTAL_LISTENING_PORT: 8080
