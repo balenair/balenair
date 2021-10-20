@@ -19,6 +19,7 @@ CO2_RED = 2000
 PM25_YELLOW = 35
 PM10_YELLOW = 54
 CO2_YELLOW = 1000
+CO2_MIN = 400
 
 digits = [[[1,1,1,1,1,1,1,0],
        [1,1,1,1,1,1,1,0],
@@ -100,7 +101,7 @@ digits = [[[1,1,1,1,1,1,1,0],
        [0,0,0,0,0,1,1,0],
        [1,1,1,1,1,1,1,0],
        [1,1,1,1,1,1,1,0]]]
-           
+        
 reset_pin = None
 # If you have a GPIO, its not a bad idea to connect it to the RESET pin
 # reset_pin = DigitalInOut(board.G0)
@@ -238,7 +239,7 @@ def my_index(pm25, pm10, co2):
         scaled_pm10 = scaler(pm10)
 
     if co2 < CO2_YELLOW:
-        scaler = make_interpolater(0, CO2_YELLOW, 0, 50)
+        scaler = make_interpolater(CO2_MIN, CO2_YELLOW, 0, 50)
         scaled_co2 = scaler(co2)
     elif co2 < CO2_RED:
         scaler = make_interpolater(CO2_YELLOW, CO2_RED, 50, 75)
@@ -299,12 +300,11 @@ def display_index(index_value):
         my_color = 3
     else:
         my_color = 1
-
             
-    disp_val = round(index_value)
+    disp_val = str(round(index_value)).rjust(2)
 
-    left_digit = str(disp_val)[:1]
-    right_digit = str(disp_val)[-1:]
+    left_digit = disp_val[:1]
+    right_digit = disp_val[-1:]
 
     display_led(matrix1, left_digit, my_color)
     display_led(matrix2, right_digit, my_color)
@@ -313,7 +313,11 @@ def display_led(my_matrix, my_value, color):
     #
     # Display a single digit
     #
-    my_digit = digits[int(my_value)]
+    if my_value == ' ':
+        my_digit = digits[0]
+    else:
+        my_digit = digits[int(my_value)]
+
     my_digit = rotate_matrix(my_digit)
     for x in range(8):
         for y in range(8):
