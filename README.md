@@ -3,7 +3,7 @@ Indoor air quality monitoring device with a matrix LED display driven by a Raspb
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit2.jpg)
 
-## Description
+## Description and use
 The IAQ device uses a combination of CO2 and particulate sensors to generate an indoor air quality score which it displays using an LED matrix on the front of the unit. The easy to remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
 
 The LED display changes color based on the score as follows:
@@ -19,7 +19,11 @@ The project consists of two sensors (listed below) but only one is required. You
 | ------------ | ----------- | ----------- | ----------- | ----------- | ----------- |
 | PMSA003I | Smoke, dust, dirt, pollen | PM2.5 | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
 | PMSA003I | Dust, smoke, exhaust, tiny particles | PM10 | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
-| SCD-40 | CO2 | Exhaled breath and burning fossil fuels | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
+| SCD-40 | Exhaled breath and burning fossil fuels | CO2 | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
+
+The reading with the highest index is the one that will be displayed. At startup, the device will display a list of the sensors that were detected.
+
+You can have the device alternate displaying the index and the name of the pollutant with the highest reading by setting the device [configuration variable](https://www.balena.io/docs/learn/manage/variables/) `ALERT_MODE`. The defualt value of `0` (or no setting) will never display the pollutant. A value of `1` will only display the pollutant if the index is over 49, and a value of `2` will always alternate the display with the pollutant name.
 
 
 ## Parts list
@@ -39,15 +43,21 @@ The project consists of two sensors (listed below) but only one is required. You
 
 1x [SparkFun Qwiic Multiport](https://www.adafruit.com/product/4861) also available [here](https://www.sparkfun.com/products/18012)
 
-## Software
-
-## Usage
-
-
 ## Assembly
-The device itself requires no soldering, however the LED pixel matrix does need to be soldered to the I2C backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). (You'll also need to change the I2C address of one of the LED matrix units to 0x71 by soldering together the A0 pads on the back.) All of the components that need to be wired together use I2C, so simply connect everything using the Qwiic multiport and the recommended cables. The two sensors can be daisy-chained, while the two LED backpacks only have headers, so they will need to use the cables with female header sockets on one end. Finally, connect the multiport to the Pi using a similar Qwiic to female header cable. See the diagram below:
+The device itself requires no soldering, however the LED pixel matrix does need to be soldered to the I2C backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). (You'll also need to change the I2C address of one of the LED matrix units to 0x71 by soldering together the A0 pads on the back.) If you are using our custom case, don't solder the included headers to the backpacks - use the angled ones described in the parts list above. All of the components that need to be wired together use I2C, so simply connect everything using the Qwiic multiport and the recommended cables. The two sensors can be daisy-chained, while the two LED backpacks only have headers, so they will need to use the cables with female header sockets on one end. Finally, connect the multiport to the Pi using a similar Qwiic to female header cable. See the diagram below:
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/wiring.png)
+
+## Software
+You can use the button below to deploy this software to your device. If you don't already have a free [balenaCloud account](https://dashboard.balena-cloud.com/signup), you will be prompted to set one up first.
+
+(button coming soon!)
+
+Alternatively, you can clone this repo, create a new fleet, and push it to your device using the [balena CLI](https://www.balena.io/docs/reference/balena-cli/). This method is recommended if you want to potentially modify the project or do further development.
+
+In either case, once you have clicked the deploy button (which will walk you through creating a fleet) or pushed the project using the CLI, next click the "Add device" button in your fleet. Choose the Raspberry Pi 3 (NOT 64 bit) and remember to enter your WiFi credentials since the Pi 3A+ does not have ethernet capability. Download the OS image file, burn it to a microSD card using [balena Etcher](https://www.balena.io/etcher/), insert the card into the Pi and then power it on.
+
+The Pi will begin downloading the application and once it has completed and begins executing you should see activity on the LED display.
 
 ## Custom case
 The custom case consists of four pieces that can be printed using a standard consumer 3D printer. The files for printing these pieces are in the `stl` folder. They are named as follows:
