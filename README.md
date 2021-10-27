@@ -4,7 +4,7 @@ Indoor air quality monitoring device with a matrix LED display driven by a Raspb
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit2.jpg)
 
 ## Description
-The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score which it displays using an LED matrix on the front of the unit. The easy to remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
+The IAQ device uses a combination of CO2 and particulate sensors to generate an indoor air quality score which it displays using an LED matrix on the front of the unit. The easy to remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
 
 The LED display changes color based on the score as follows:
 | Score range | Description | LED display color | 
@@ -13,7 +13,14 @@ The LED display changes color based on the score as follows:
 | 50 - 74 | Moderate air quality | orange |
 | 75 - 99 | Hazardous air quality | red |
 
-We've included STL files so you can print and assemble your own custom case!
+The project consists of two sensors (listed below) but only one is required. You can use either or both depending on your needs. The air quality score is comprised of the following readings:
+
+| Sensor Type | Reading | good index range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
+| ------------ | ----------- | ----------- | ----------- | ----------- |
+| PMSA003I | PM2.5 | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
+| PMSA003I | PM10 | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
+| SCD-40 | CO2 | 400 - 999 PPM | 1000 - 1999 PPM | 2000 + PPM |
+
 
 ## Parts list
 2x [Adafruit Bicolor LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902)
