@@ -16,9 +16,9 @@ The LED display changes color based on the score as follows:
 The project consists of two sensors (listed below) but only one is required. You can use either or both depending on your needs. The air quality score is comprised of the following readings:
 
 | Sensor Type | Description | Reading | good index range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
-| ------------ | ----------- | ----------- | ----------- | ----------- |
-| PMSA003I | Smoke  dust  dirt  pollen | PM2.5 | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
-| PMSA003I | Dust smoke  exhaust  tiny particles | PM10 | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
+| ------------ | ----------- | ----------- | ----------- | ----------- | ----------- |
+| PMSA003I | Smoke, dust, dirt, pollen | PM2.5 | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
+| PMSA003I | Dust, smoke, exhaust, tiny particles | PM10 | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
 | SCD-40 | CO2 | Exhaled breath and burning fossil fuels | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
 
 
