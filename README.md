@@ -1,10 +1,10 @@
 # balena-iaq
-Indoor air quality device with a matrix LED display driven by a Raspberry Pi 3A+ and two sensors.
+Indoor air quality monitoring device with a matrix LED display driven by a Raspberry Pi and one or more sensors.
 
-![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit1.jpg)
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit2.jpg)
 
 ## Description
-The IAQ device uses a CO2 and particulate sensor to generate an indoor air quality score which it displays using an LED matrix on the front of the unit. The easy to remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
+The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score which it displays using an LED matrix on the front of the unit. The easy to remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
 
 The LED display changes color based on the score as follows:
 | Score range | Description | LED display color | 
@@ -18,6 +18,8 @@ We've included STL files so you can print and assemble your own custom case!
 ## Parts list
 2x [Adafruit Bicolor LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902)
 
+1x Right-angled male headers for the LED matrix displays - ones where the right angle occurs above the plastic strip [like these](https://www.amazon.com/gp/product/B07ZHG25NH/), NOT below the strip [like these](https://www.adafruit.com/product/1540). (A subtle difference but one type will fit in the case while the other will not!) 
+
 1x [Adafruit PMSA003I Air Quality Breakout](https://www.adafruit.com/product/4632)
 
 1x [SCD-40 - True CO2, Temperature and Humidity Sensor](https://www.adafruit.com/product/5187)
@@ -26,20 +28,19 @@ We've included STL files so you can print and assemble your own custom case!
 
 3x [STEMMA QT / Qwiic JST SH 4-pin Cable with Premium Female Sockets - 150mm Long](https://www.adafruit.com/product/4397)
 
-1x [Raspberry Pi 3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)
+1x [Raspberry Pi 3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/) (The software will run on a Pi 2, 3, or 4 but this is the specific Pi model to use for the custom case)
 
 1x [SparkFun Qwiic Multiport](https://www.adafruit.com/product/4861) also available [here](https://www.sparkfun.com/products/18012)
-
-## Assembly
-The device itself requires no soldering, however the LED pixel matrix does need to be soldered to the I2C backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). (You'll also need to change the I2C address of one of the LED matrix units to 0x71 by soldering together the A0 pads on the back.) All of the components that need to be wired together use I2C, so simply connect everything using the Qwiic multiport and the recommended cables. The two sensors can be daisy-chained, while the two LED backpacks only have headers, so they will need to use the cables with female header sockets on one end. Finally, connect the multiport to the Pi using a similar Qwiic to female header cable. See the diagram below:
-
-![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/wiring.png)
-
 
 ## Software
 
 ## Usage
 
+
+## Assembly
+The device itself requires no soldering, however the LED pixel matrix does need to be soldered to the I2C backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). (You'll also need to change the I2C address of one of the LED matrix units to 0x71 by soldering together the A0 pads on the back.) All of the components that need to be wired together use I2C, so simply connect everything using the Qwiic multiport and the recommended cables. The two sensors can be daisy-chained, while the two LED backpacks only have headers, so they will need to use the cables with female header sockets on one end. Finally, connect the multiport to the Pi using a similar Qwiic to female header cable. See the diagram below:
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/wiring.png)
 
 ## Custom case
 The custom case consists of four pieces that can be printed using a standard consumer 3D printer. The files for printing these pieces are in the `stl` folder. They are named as follows:
@@ -47,7 +48,7 @@ The custom case consists of four pieces that can be printed using a standard con
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case.png)
 
 ### Front
-The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. The angled headers should face upwards. TIP: attach the female headers before inserting the displays onto the posts.
+The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. (Note newer versions of the front piece use screw holes instead of posts.) The angled headers should face upwards. TIP: attach the female headers before inserting the displays onto the posts.
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_front.png)
 
 ### Pi Ring
