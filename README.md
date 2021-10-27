@@ -15,7 +15,7 @@ The LED display changes color based on the score as follows:
 
 The project consists of two sensors (listed below) but only one is required. You can use either or both depending on your needs. The air quality score is comprised of the following readings:
 
-| Sensor Type | Description | Reading | good index range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
+| Sensor Type | Description | Reading | good range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
 | ------------ | ----------- | ----------- | ----------- | ----------- | ----------- |
 | PMSA003I | Smoke, dust, dirt, pollen | PM2.5 | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
 | PMSA003I | Dust, smoke, exhaust, tiny particles | PM10 | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
@@ -65,7 +65,7 @@ The custom case consists of four pieces that can be printed using a standard con
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case.png)
 
 ### Front
-The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. (Note newer versions of the front piece use screw holes instead of posts.) The angled headers should face upwards. TIP: attach the female headers before inserting the displays onto the posts.
+The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. (Note newer versions of the front piece use screw holes instead of posts.) The angled headers should face upwards. TIP: attach the female wire headers before inserting the displays onto the posts.
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_front.png)
 
 ### Pi Ring
