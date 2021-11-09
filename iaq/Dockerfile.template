@@ -19,5 +19,5 @@ ENV UDEV=1
 
 # iaq.py will run when container starts up on the device
 
-CMD ["sleep", "infinity"]
+CMD ["python3", "iaq.py"]
 
