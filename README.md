@@ -13,18 +13,18 @@ The LED display changes color based on the score as follows:
 | 50 - 74 | Moderate air quality | orange |
 | 75 - 99 | Unhealthy air quality | red |
 
-The project consists of up to three sensors (listed below) but only one is required. You can chooase any or all depending on your needs. The air quality score is comprised of the following readings:
+The project consists of up to three sensors (listed below) but only one is required. You can choose any or all depending on your needs. The air quality score is comprised of the following readings:
 
 | Reading | Description | Sensor Type | good range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
 | ------------ | ----------- | ----------- | ----------- | ----------- | ----------- |
 | PM2.5 | Smoke, dust, dirt, pollen | PMSA003I | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
 | PM | Dust, smoke, exhaust, tiny particles | PMSA003I | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
 | CO2 | Exhaled breath and burning fossil fuels | SCD-40 | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
-| VOC | Exhaled breath and burning fossil fuels | SGP-30 | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
+| VOC | Gasses emitted by solid and liquid products  | SGP-30 | 0 - 499 PPB | 500 - 999 PPB | 1000+ PPB |
 
 The reading with the highest index is the one that will be displayed. At startup, the device will display a list of the sensors that were detected.
 
-You can have the device alternate displaying the index and the name of the pollutant with the highest reading by setting the device [configuration variable](https://www.balena.io/docs/learn/manage/variables/) `ALERT_MODE`. The defualt value of `0` (or no setting) will never display the pollutant. A value of `1` will only display the pollutant if the index is over 49, and a value of `2` will always alternate the display with the pollutant name.
+The device can alternate between displaying the index and the name of the pollutant with the highest reading by setting the device [configuration variable](https://www.balena.io/docs/learn/manage/variables/) `ALERT_MODE`. The defualt value of `0` (or no setting) will never display the pollutant. A value of `1` will only display the pollutant if the index is over the `ALERT_LEVEL` variable, and a value of `2` will always alternate the display with the pollutant name regardless of the index value.
 
 
 ## Parts list
@@ -32,11 +32,19 @@ You can have the device alternate displaying the index and the name of the pollu
 
 1x Right-angled male headers for the LED matrix displays - ones where the right angle occurs above the plastic strip [like these](https://www.amazon.com/gp/product/B07ZHG25NH/), NOT below the strip [like these](https://www.adafruit.com/product/1540). (A subtle difference but one type will fit in the case while the other will not!) 
 
+One or more of the sensors below. The IAQ will automatically detect which ones are present.
+
 1x [Adafruit PMSA003I Air Quality Breakout](https://www.adafruit.com/product/4632)
 
 1x [SCD-40 - True CO2, Temperature and Humidity Sensor](https://www.adafruit.com/product/5187)
 
-2x [STEMMA QT / Qwiic JST SH 4-pin Cable - 100mm Long](https://www.adafruit.com/product/4210)
+1x [SGP30 Air Qulaity Sensor VOC and eC02](https://www.adafruit.com/product/3709)
+
+1x [STEMMA QT / Qwiic JST SH 4-pin Cable - 200mm Long](https://www.adafruit.com/product/4401)
+
+You'll need one of the following cables for each additional sensor beyond the first one:
+
+1x - 2x [STEMMA QT / Qwiic JST SH 4-pin Cable - 50mm Long](https://www.adafruit.com/product/4399)
 
 3x [STEMMA QT / Qwiic JST SH 4-pin Cable with Premium Female Sockets - 150mm Long](https://www.adafruit.com/product/4397)
 
