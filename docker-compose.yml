@@ -44,3 +44,4 @@ services:
       io.balena.features.firmware: "1"
     environment:
       PORTAL_LISTENING_PORT: 8080
+      ACTIVITY_TIMEOUT: 120
