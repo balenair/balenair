@@ -10,6 +10,10 @@ from digitalio import DigitalInOut, Direction, Pull
 from adafruit_pm25.i2c import PM25_I2C
 import paho.mqtt.client as mqtt
 import os
+import adafruit_sgp30
+import binascii
+
+import display
 
 PM25_MAX = 250
 PM10_MAX = 430
@@ -21,10 +25,18 @@ PM25_YELLOW = 35
 PM10_YELLOW = 54
 CO2_YELLOW = 1000
 CO2_MIN = 400
-
+VOC_MIN = 0
+VOC_MAX = 10000
+VOC_YELLOW = 500
+VOC_RED = 1000
 pm_sensor = 1
 scd_sensor = 1
-voc_sensor = 0
+voc_sensor = 1
+
+voc_baseline_count = 0
+voc_baseline_eco2 = 0x8973
+voc_baseline_tvoc = 0x8AAE
+voc_baseline_limit = 120
 
 green_limit = 50
 yellow_limit = 75
@@ -40,169 +52,12 @@ except Exception as e:
     print("Invalid value for ALERT_MODE. Using default 0.")
     alert_mode = 0
 
-digits = [[[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0]],      
-       [[0,1,1,1,0,0,0,0],
-       [0,1,1,1,0,0,0,0],
-       [0,0,1,1,0,0,0,0],
-       [0,0,1,1,0,0,0,0],
-       [0,0,1,1,0,0,0,0],
-       [0,0,1,1,0,0,0,0],
-       [1,1,1,1,1,1,0,0],
-       [1,1,1,1,1,1,0,0]],
-       [[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [0,0,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0]],
-       [[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [0,0,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [0,0,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0]],
-       [[1,1,0,0,0,0,0,0],
-       [1,1,0,1,1,0,0,0],
-       [1,1,0,1,1,0,0,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [0,0,0,1,1,0,0,0],
-       [0,0,0,1,1,0,0,0],
-       [0,0,0,1,1,0,0,0]],
-       [[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [0,0,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0]],
-       [[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0]],
-       [[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [0,0,0,0,0,1,1,0],
-       [0,0,0,0,1,1,0,0],
-       [0,0,0,1,1,0,0,0],
-       [0,0,1,1,0,0,0,0],
-       [0,1,1,0,0,0,0,0],
-       [1,1,0,0,0,0,0,0]],   
-       [[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0]],
-       [[1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [0,0,0,0,0,1,1,0],
-       [1,1,1,1,1,1,1,0],
-       [1,1,1,1,1,1,1,0]]]
- 
-# icons are [PM1, PM2, CO2, VOC, ??] - each two characters wide
-icons = [[[1,0,0,0,0,0,0,0],
-       [1,0,1,1,1,0,1,0],
-       [1,0,1,0,1,0,1,1],
-       [1,0,1,1,1,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,1]],      
-       [[0,0,0,0,0,0,0,1],
-       [0,0,1,0,0,1,0,1],
-       [0,1,1,0,0,1,0,1],
-       [1,0,1,0,0,1,0,1],
-       [0,0,1,0,0,1,0,1],
-       [0,0,1,0,0,1,0,1],
-       [0,0,0,0,0,0,0,1],
-       [1,1,1,1,1,1,1,1]],
-       [[1,0,0,0,0,0,0,0],
-       [1,0,1,1,1,0,1,0],
-       [1,0,1,0,1,0,1,1],
-       [1,0,1,1,1,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,1]],      
-       [[0,0,0,0,0,0,0,1],
-       [0,0,1,0,1,1,0,1],
-       [0,1,1,0,0,1,0,1],
-       [1,0,1,0,1,1,0,1],
-       [0,0,1,0,1,0,0,1],
-       [0,0,1,0,1,1,0,1],
-       [0,0,0,0,0,0,0,1],
-       [1,1,1,1,1,1,1,1]],      
-       [[1,0,0,0,0,0,0,0],
-       [1,0,1,1,1,0,1,1],
-       [1,0,1,0,0,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,1,1,1,0,1,1],
-       [1,0,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,1]],      
-       [[0,0,0,0,0,0,0,1],
-       [1,1,0,1,1,1,0,1],
-       [0,1,0,0,0,1,0,1],
-       [0,1,0,1,1,1,0,1],
-       [0,1,0,1,0,0,0,1],
-       [1,1,0,1,1,1,0,1],
-       [0,0,0,0,0,0,0,1],
-       [1,1,1,1,1,1,1,1]],
-       [[1,0,0,0,0,0,0,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,1,0,0,0,1,0],
-       [1,0,0,1,0,1,0,0],
-       [1,0,0,0,1,0,0,0],
-       [1,0,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,1]],      
-       [[0,0,0,0,0,0,0,1],
-       [1,1,1,0,1,1,0,1],
-       [1,0,1,0,1,0,0,1],
-       [1,0,1,0,1,0,0,1],
-       [1,0,1,0,1,0,0,1],
-       [1,1,1,0,1,1,0,1],
-       [0,0,0,0,0,0,0,1],
-       [1,1,1,1,1,1,1,1]],
-       [[1,0,1,1,1,1,0,0],
-       [1,0,0,0,0,1,0,0],
-       [1,0,0,1,1,1,0,0],
-       [1,0,0,1,0,0,0,0],
-       [1,0,0,0,0,0,0,0],
-       [1,0,0,1,0,0,0,0],
-       [1,0,0,0,0,0,0,0],
-       [1,1,1,1,1,1,1,1]],      
-       [[0,0,1,1,1,1,0,1],
-       [0,0,0,0,0,1,0,1],
-       [0,0,0,1,1,1,0,1],
-       [0,0,0,1,0,0,0,1],
-       [0,0,0,0,0,0,0,1],
-       [0,0,0,1,0,0,0,1],
-       [0,0,0,0,0,0,0,1],
-       [1,1,1,1,1,1,1,1]]]
-              
+try:
+    alert_level = int(os.getenv('ALERT_LEVEL', '50'))
+except Exception as e:
+    print("Invalid value for ALERT_LEVEL. Using default 50.")
+    alert_level = 50
+           
 reset_pin = None
 # If you have a GPIO, its not a bad idea to connect it to the RESET pin
 # reset_pin = DigitalInOut(board.G0)
@@ -246,7 +101,7 @@ else:
 # SPDX-License-Identifier: Unlicense
 import adafruit_scd4x
 
-i2c = board.I2C()
+#i2c = board.I2C()
 try:
     scd4x = adafruit_scd4x.SCD4X(i2c)
 except Exception as e:
@@ -261,6 +116,34 @@ from adafruit_ht16k33.matrix import Matrix8x8x2
 #i2c = board.I2C()
 matrix2 = Matrix8x8x2(i2c, address=0x70)
 matrix1 = Matrix8x8x2(i2c, address=0x71)
+
+#i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
+
+# Create library object on our I2C port
+try:
+    sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
+except Exception as e:
+    print("No SGP VOC sensor found...")
+    voc_sensor = 0
+else:
+    print("Found VOC sensor: SGP30 serial #", [hex(i) for i in sgp30.serial])
+    try:
+        f = open("/data/my_data/baseline-eco2.txt", "r")
+    except Exception as e:
+        print("Error reading from eCO2 baseline file. Using defaults...")
+    else:
+        voc_baseline_eco2 = int(f.read())
+        f.close()
+    try:
+        f = open("/data/my_data/baseline-tvoc.txt", "r")
+    except Exception as e:
+        print("Error reading from TVOC baseline file. Using defaults...")
+    else:
+        voc_baseline_tvoc = int(f.read())
+        f.close()
+    sgp30.iaq_init()
+    sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
+    print("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
 
 def scd_sense():
     #
@@ -297,7 +180,7 @@ def pm_sense():
             aqdata = pm25.read()
         except RuntimeError:
             print("Unable to read from sensor, retrying (2)...")
-            time.sleep(1)
+            time.sleep(2)
             try:
                 aqdata = pm25.read()
             except RuntimeError:
@@ -327,6 +210,17 @@ def pm_sense():
     print("---------------------------------------")
 
     return aqdata
+
+def voc_sense():
+    #
+    # Take a reading from the VOC SGP30 sensor, return dict
+    #
+    voc_dict = {}
+    print("eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
+    voc_dict["eCO2"] = sgp30.eCO2
+    voc_dict["TVOC"] = sgp30.TVOC
+    
+    return voc_dict
 
 def pm25_index(pm25):
     #
@@ -392,6 +286,26 @@ def co2_index(co2):
         
     return scaled_co2
 
+def voc_index(voc):
+    #
+    # Calculates our 0-99 AQ index for VOC
+    #
+    scaled_voc = 0
+
+    if voc < VOC_YELLOW:
+        scaler = make_interpolater(VOC_MIN, VOC_YELLOW, 0, 50)
+        scaled_voc = scaler(voc)
+    elif voc < VOC_RED:
+        scaler = make_interpolater(VOC_YELLOW, VOC_RED, 50, 75)
+        scaled_voc = scaler(voc)
+    else:
+        scaler = make_interpolater(VOC_RED, VOC_MAX, 75, 99)
+        scaled_voc = scaler(voc)
+    
+    if scaled_voc > 99:
+        scaled_voc = 99
+
+    return scaled_voc
        
 def make_interpolater(left_min, left_max, right_min, right_max):
     #
@@ -446,9 +360,9 @@ def display_led(my_matrix, my_value, color):
     # Display a single digit
     #
     if my_value == ' ':
-        my_digit = digits[0]
+        my_digit = display.digits[0]
     else:
-        my_digit = digits[int(my_value)]
+        my_digit = display.digits[int(my_value)]
 
     my_digit = rotate_matrix(my_digit)
     for x in range(8):
@@ -492,7 +406,7 @@ def display_icon(icon_index, my_color):
           my_matrix = matrix1
       else:
           my_matrix = matrix2
-      my_digit = icons[icon_index + digit]
+      my_digit = display.icons[icon_index + digit]
       my_digit = rotate_matrix(my_digit)
       for x in range(8):
           for y in range(8):
@@ -537,6 +451,7 @@ else:
 while True:
     pm = {}
     scd = {}
+    voc = {}
     if pm_sensor == 1:
         print("Testimg PM...")
         pm = pm_sense()
@@ -546,13 +461,19 @@ while True:
         print("Testing SCD...")
         scd = scd_sense()
         co2_idx = co2_index(scd["co2"])
-    # Merge two dictionaries into scd:
+    if voc_sensor == 1:
+        print("Testing VOC...")
+        voc = voc_sense()
+        voc_idx = voc_index(voc["TVOC"])
+    # Merge dictionaries into scd:
     # If sensor does not exist, neither will its fields
     scd.update(pm)
+    scd.update(voc)
     print("Scaled pm25: {0}".format(pm25_idx))
     print("Scaled pm10: {0}".format(pm10_idx))
-    print("Scaled co2: {0}".format(co2_idx)) 
-    iaq_idx = max(pm25_idx, pm10_idx, co2_idx)
+    print("Scaled co2: {0}".format(co2_idx))
+    print("Scaled voc: {0}".format(voc_idx))  
+    iaq_idx = max(pm25_idx, pm10_idx, co2_idx, voc_idx)
     # Add index to dict
     scd["IAQ"] = iaq_idx
     print("Using index: {0}".format(iaq_idx))
@@ -565,7 +486,7 @@ while True:
         print("Error publishing to mqtt. ({0})".format(str(e)))
         
     # Alternate display with icon every 2.5 seconds if index > green_limit
-    if ((iaq_idx > green_limit) and (alert_mode == 1)) or (alert_mode == 2):
+    if ((iaq_idx > alert_level) and (alert_mode == 1)) or (alert_mode == 2):
         time.sleep(2.5)
         for recur in range(11):
             display_pollutant(pm10_idx, pm25_idx, co2_idx)
@@ -575,3 +496,26 @@ while True:
     
     else:
         time.sleep(55)
+    
+    voc_baseline_count = voc_baseline_count + 1
+    print("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
+    if voc_baseline_count == voc_baseline_limit:
+        print("Saving VOC baseline values... CO2eq = {0}, TVOC = {1}".format(sgp30.baseline_eCO2, sgp30.baseline_TVOC))
+        # Add a save routine here
+        try:
+            f = open("/data/my_data/baseline-eco2.txt", "w")
+        except Exception as e:
+            print("Error saving eCO2 baseline...")
+        else:
+            f.write(str(sgp30.baseline_eCO2))
+            f.close()
+
+        try:
+            f = open("/data/my_data/baseline-tvoc.txt", "w")
+        except Exception as e:
+            print("Error saving TVOC baseline...")
+        else:
+            f.write(str(sgp30.baseline_TVOC))
+            f.close()
+
+        voc_baseline_count = 0

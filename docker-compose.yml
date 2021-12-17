@@ -2,10 +2,12 @@ version: '2'
 volumes:
     sense-data:
     dashboard-data:
+    iaq-data:
 services:
   influxdb:
     restart: always
-    image: arm32v7/influxdb@sha256:2fed9b09a672cab330ac3ea1f03616e6821f2235bda64d549f605ef0d7081911
+    #image: arm32v7/influxdb@sha256:2fed9b09a672cab330ac3ea1f03616e6821f2235bda64d549f605ef0d7081911
+    build: ./influx
     volumes:
       - 'sense-data:/var/lib/influxdb'
   dashboard:
@@ -19,6 +21,8 @@ services:
     build: ./iaq
     privileged: true
     restart: always
+    volumes:
+        - 'iaq-data:/data/my_data'
   connector:
     image: balenablocks/connector
     restart: always

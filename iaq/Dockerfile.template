@@ -8,9 +8,9 @@ RUN install_packages python3-pil
 
 # Install Adafruit Blinka for CircuitPython support in Python,
 #    CircuitPython PM25 module for PMSA0031,
-#    CircuitPython SCD4x module, LED matrix display module
+#    CircuitPython SCD4x module, LED matrix display module, SGP 30
 #     
-RUN pip3 install RPi.GPIO paho-mqtt Adafruit-Blinka adafruit-circuitpython-pm25 adafruit-circuitpython-scd4x adafruit-circuitpython-ht16k33
+RUN pip3 install RPi.GPIO paho-mqtt Adafruit-Blinka adafruit-circuitpython-pm25 adafruit-circuitpython-scd4x adafruit-circuitpython-ht16k33==4.1.5 adafruit-circuitpython-sgp30
 
 COPY *.py ./
 
@@ -19,5 +19,5 @@ ENV UDEV=1
 
 # iaq.py will run when container starts up on the device
 
-CMD ["sleep", "infinity"]
-
+#CMD ["sleep", "infinity"]
+CMD ["python3", "iaq.py"]
