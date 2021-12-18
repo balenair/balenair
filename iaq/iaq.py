@@ -497,25 +497,26 @@ while True:
     else:
         time.sleep(55)
     
-    voc_baseline_count = voc_baseline_count + 1
-    print("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
-    if voc_baseline_count == voc_baseline_limit:
-        print("Saving VOC baseline values... CO2eq = {0}, TVOC = {1}".format(sgp30.baseline_eCO2, sgp30.baseline_TVOC))
-        # Add a save routine here
-        try:
-            f = open("/data/my_data/baseline-eco2.txt", "w")
-        except Exception as e:
-            print("Error saving eCO2 baseline...")
-        else:
-            f.write(str(sgp30.baseline_eCO2))
-            f.close()
+    if voc_sensor == 1:
+        voc_baseline_count = voc_baseline_count + 1
+        print("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
+        if voc_baseline_count == voc_baseline_limit:
+            print("Saving VOC baseline values... CO2eq = {0}, TVOC = {1}".format(sgp30.baseline_eCO2, sgp30.baseline_TVOC))
+            # Add a save routine here
+            try:
+                f = open("/data/my_data/baseline-eco2.txt", "w")
+            except Exception as e:
+                print("Error saving eCO2 baseline...")
+            else:
+                f.write(str(sgp30.baseline_eCO2))
+                f.close()
 
-        try:
-            f = open("/data/my_data/baseline-tvoc.txt", "w")
-        except Exception as e:
-            print("Error saving TVOC baseline...")
-        else:
-            f.write(str(sgp30.baseline_TVOC))
-            f.close()
+            try:
+                f = open("/data/my_data/baseline-tvoc.txt", "w")
+            except Exception as e:
+                print("Error saving TVOC baseline...")
+            else:
+                f.write(str(sgp30.baseline_TVOC))
+                f.close()
 
-        voc_baseline_count = 0
+            voc_baseline_count = 0
