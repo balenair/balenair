@@ -4,7 +4,7 @@ Indoor air quality monitoring device with a matrix LED display driven by a Raspb
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit2.jpg)
 
 ## Description and use
-The IAQ device uses a combination of CO2 and particulate sensors to generate an indoor air quality score which it displays using an LED matrix on the front of the unit. The easy to remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
+The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score which it displays using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
 
 The LED display changes color based on the score as follows:
 | Score range | Description | LED display color | 
@@ -13,17 +13,18 @@ The LED display changes color based on the score as follows:
 | 50 - 74 | Moderate air quality | orange |
 | 75 - 99 | Unhealthy air quality | red |
 
-The project consists of two sensors (listed below) but only one is required. You can use either or both depending on your needs. The air quality score is comprised of the following readings:
+The project consists of up to three sensors (listed below) but only one is required. You can choose any or all depending on your needs. The air quality score is comprised of the following readings:
 
-| Sensor Type | Description | Reading | good range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
+| Reading | Description | Sensor Type | good range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
 | ------------ | ----------- | ----------- | ----------- | ----------- | ----------- |
-| PMSA003I | Smoke, dust, dirt, pollen | PM2.5 | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
-| PMSA003I | Dust, smoke, exhaust, tiny particles | PM10 | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
-| SCD-40 | Exhaled breath and burning fossil fuels | CO2 | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
+| PM2.5 | Smoke, dust, dirt, pollen | PMSA003I | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
+| PM10 | Dust, smoke, exhaust, tiny particles | PMSA003I | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
+| CO2 | Exhaled breath and burning fossil fuels | SCD-40 | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
+| VOC | Gasses emitted by solid and liquid products  | SGP-30 | 0 - 499 PPB | 500 - 999 PPB | 1000+ PPB |
 
 The reading with the highest index is the one that will be displayed. At startup, the device will display a list of the sensors that were detected.
 
-You can have the device alternate displaying the index and the name of the pollutant with the highest reading by setting the device [configuration variable](https://www.balena.io/docs/learn/manage/variables/) `ALERT_MODE`. The defualt value of `0` (or no setting) will never display the pollutant. A value of `1` will only display the pollutant if the index is over 49, and a value of `2` will always alternate the display with the pollutant name.
+The device can alternate between displaying the index and the name of the pollutant with the highest reading by setting the device [configuration variable](https://www.balena.io/docs/learn/manage/variables/) `ALERT_MODE`. The defualt value of `0` (or no setting) will never display the pollutant. A value of `1` will only display the pollutant if the index is over the `ALERT_LEVEL` variable, and a value of `2` will always alternate the display with the pollutant name regardless of the index value.
 
 
 ## Parts list
@@ -31,11 +32,19 @@ You can have the device alternate displaying the index and the name of the pollu
 
 1x Right-angled male headers for the LED matrix displays - ones where the right angle occurs above the plastic strip [like these](https://www.amazon.com/gp/product/B07ZHG25NH/), NOT below the strip [like these](https://www.adafruit.com/product/1540). (A subtle difference but one type will fit in the case while the other will not!) 
 
+One or more of the sensors below. The IAQ will automatically detect which ones are present.
+
 1x [Adafruit PMSA003I Air Quality Breakout](https://www.adafruit.com/product/4632)
 
 1x [SCD-40 - True CO2, Temperature and Humidity Sensor](https://www.adafruit.com/product/5187)
 
-2x [STEMMA QT / Qwiic JST SH 4-pin Cable - 100mm Long](https://www.adafruit.com/product/4210)
+1x [SGP30 Air Qulaity Sensor VOC and eC02](https://www.adafruit.com/product/3709)
+
+1x [STEMMA QT / Qwiic JST SH 4-pin Cable - 200mm Long](https://www.adafruit.com/product/4401)
+
+You'll need one of the following cables for each additional sensor beyond the first one:
+
+1x - 2x [STEMMA QT / Qwiic JST SH 4-pin Cable - 50mm Long](https://www.adafruit.com/product/4399)
 
 3x [STEMMA QT / Qwiic JST SH 4-pin Cable with Premium Female Sockets - 150mm Long](https://www.adafruit.com/product/4397)
 
@@ -65,7 +74,7 @@ The custom case consists of four pieces that can be printed using a standard con
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case.png)
 
 ### Front
-The front panel holds the LED/backpack assemblies. Each assembly slides onto a set of four posts and should be pushed down as far as possible until they rest on the larger diameter section of the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. Use a hot soldering iron tip to melt the smaller part of the post to keep the displays in place. (Note newer versions of the front piece use screw holes instead of posts.) The angled headers should face upwards. TIP: attach the female wire headers before inserting the displays onto the posts.
+The front panel holds the LED/backpack assemblies. Each assembly sits on a set of four posts. Use M1.4 x 5mm screws to secure the displays to the posts. (Note that older versions of the front panel had posts designed to be melted in place rather than using screw holes.) The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. The angled headers should face upwards. TIP: attach the female wire headers before inserting the displays onto the posts.
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_front.png)
 
 ### Pi Ring

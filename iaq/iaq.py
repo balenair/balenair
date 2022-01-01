@@ -613,9 +613,11 @@ while True:
             time.sleep(2.5)
     
     else:
-        time.sleep(cycle_time)
 
-    if voc_sensor == 1:    
+        time.sleep(55)
+    
+    if voc_sensor == 1:
+
         voc_baseline_count = voc_baseline_count + 1
         print("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
         if voc_baseline_count == voc_baseline_limit:

@@ -11,7 +11,7 @@ services:
     volumes:
       - 'sense-data:/var/lib/influxdb'
   dashboard:
-    image: balenablocks/dashboard
+    build: ./dashboard
     restart: always
     volumes:
         - 'dashboard-data:/data'
