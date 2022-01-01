@@ -11,6 +11,7 @@ from adafruit_pm25.i2c import PM25_I2C
 from adafruit_max7219 import matrices
 import paho.mqtt.client as mqtt
 import os
+import sys
 import adafruit_sgp30
 import binascii
 
@@ -40,7 +41,7 @@ cycle_time = 60
 voc_baseline_count = 0
 voc_baseline_eco2 = 0 # was 0x8973
 voc_baseline_tvoc = 0 # was 0x8AAE
-voc_baseline_limit = 60 * cycle_time
+voc_baseline_limit = 60
 
 
 green_limit = 50
@@ -168,7 +169,7 @@ else:
         f = open("/data/my_data/baseline-eco2.txt", "r")
     except Exception as e:
         print("No eCO2 baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = 730 * cycle_time # 730 minutes = 12 hours
+        voc_baseline_limit = 730 # 730 minutes = 12 hours
     else:
         voc_baseline_eco2 = int(f.read())
         f.close()
@@ -177,7 +178,7 @@ else:
         f = open("/data/my_data/baseline-tvoc.txt", "r")
     except Exception as e:
         print("No TVOC baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = 730 * cycle_time # 730 minutes = 12 hours
+        voc_baseline_limit = 730 # 730 minutes = 12 hours
     else:
         voc_baseline_tvoc = int(f.read())
         f.close()
