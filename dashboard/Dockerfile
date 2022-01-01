@@ -1,3 +1,0 @@
-FROM balenablocks/dashboard
-
-COPY ./default.json /usr/share/grafana/conf/provisioning/dashboards
