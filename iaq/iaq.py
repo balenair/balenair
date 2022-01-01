@@ -8,6 +8,7 @@ import busio
 import json
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_pm25.i2c import PM25_I2C
+from adafruit_max7219 import matrices
 import paho.mqtt.client as mqtt
 import os
 import adafruit_sgp30
@@ -32,11 +33,15 @@ VOC_RED = 1000
 pm_sensor = 1
 scd_sensor = 1
 voc_sensor = 1
-
+bar_graph = 0
+# Sleep time for each cycle. Normally 60 secs.
+# Some other operations are derived from this:
+cycle_time = 60
 voc_baseline_count = 0
-voc_baseline_eco2 = 0x8973
-voc_baseline_tvoc = 0x8AAE
-voc_baseline_limit = 120
+voc_baseline_eco2 = 0 # was 0x8973
+voc_baseline_tvoc = 0 # was 0x8AAE
+voc_baseline_limit = 60 * cycle_time
+
 
 green_limit = 50
 yellow_limit = 75
@@ -45,6 +50,8 @@ pm10_idx = 0
 pm25_idx = 0
 co2_idx = 0
 voc_idx = 0
+
+# Get ENV vars:
 
 try:
     alert_mode = int(os.getenv('ALERT_MODE', '0'))
@@ -57,7 +64,20 @@ try:
 except Exception as e:
     print("Invalid value for ALERT_LEVEL. Using default 50.")
     alert_level = 50
-           
+ 
+try:
+    zero_bar = int(os.getenv('ZERO_BAR', '1'))
+except Exception as e:
+    print("Invalid value for ZERO_BAR. Using default 1.")
+    zero_bar = 1
+
+try:
+    del_baseline = int(os.getenv('DELETE_BASELINE', '0'))
+except Exception as e:
+    print("Invalid value for DELETE_BASELINE. Using default 0.")
+    del_baseline = 0
+    
+              
 reset_pin = None
 # If you have a GPIO, its not a bad idea to connect it to the RESET pin
 # reset_pin = DigitalInOut(board.G0)
@@ -114,11 +134,28 @@ import board
 from adafruit_ht16k33.matrix import Matrix8x8x2
 
 #i2c = board.I2C()
-matrix2 = Matrix8x8x2(i2c, address=0x70)
-matrix1 = Matrix8x8x2(i2c, address=0x71)
+try:
+    matrix2 = Matrix8x8x2(i2c, address=0x70)
+    matrix1 = Matrix8x8x2(i2c, address=0x71)
+except Exception as e:
+    print("No LED matrix found, using LED bar graph...")
+    bar_graph = 1
 
 #i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
 
+# Delete baseline file(s) if device variable set
+if del_baseline != 0:
+    print("Baseline file will be deleted!")
+    print("Change DELETE_BASELINE device variable to 0 after delete!")
+    if os.path.exists("/data/my_data/baseline-eco2.txt"):
+        os.remove("/data/my_data/baseline-eco2.txt")
+    else:
+        print("The file /data/my_data/baseline-eco2.txt does not exist.")
+    if os.path.exists("/data/my_data/baseline-tvoc.txt"):
+        os.remove("/data/my_data/baseline-tvoc.txt")
+    else:
+        print("The file /data/my_data/baseline-tvoc.txt does not exist.") 
+    
 # Create library object on our I2C port
 try:
     sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
@@ -130,20 +167,40 @@ else:
     try:
         f = open("/data/my_data/baseline-eco2.txt", "r")
     except Exception as e:
-        print("Error reading from eCO2 baseline file. Using defaults...")
+        print("No eCO2 baseline file found. Calculating new 12hr baseline...")
+        voc_baseline_limit = 730 * cycle_time # 730 minutes = 12 hours
     else:
         voc_baseline_eco2 = int(f.read())
         f.close()
+      
     try:
         f = open("/data/my_data/baseline-tvoc.txt", "r")
     except Exception as e:
-        print("Error reading from TVOC baseline file. Using defaults...")
+        print("No TVOC baseline file found. Calculating new 12hr baseline...")
+        voc_baseline_limit = 730 * cycle_time # 730 minutes = 12 hours
     else:
         voc_baseline_tvoc = int(f.read())
         f.close()
     sgp30.iaq_init()
-    sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
+    if (voc_baseline_eco2 != 0) and (voc_baseline_tvoc != 0):
+        print("Setting VOC baseline from file.")
+        sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
     print("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
+
+# List for LED wiring configuration
+# format: [LED0 grn, LED0 red, LED1 grn, LED1 red... LED7 grn, LED7 red]
+# each entry is pixel [x, y] 
+LED_config = [[0,6],[0,7],[0,4],[0,5],[0,2],[0,3],[0,0],[0,1],[1,6],[1,7],[1,4],[1,5],[1,2],[1,3],[1,0],[1,1]]
+
+# For LED bar graph:
+if bar_graph == 1:
+    clk = board.SCK
+    din = board.MOSI
+    cs = DigitalInOut(board.CE0)
+
+    spi = busio.SPI(clk, MOSI=din)
+    bar_display = matrices.Matrix8x8(spi, cs)
+
 
 def scd_sense():
     #
@@ -219,7 +276,7 @@ def voc_sense():
     print("eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
     voc_dict["eCO2"] = sgp30.eCO2
     voc_dict["TVOC"] = sgp30.TVOC
-    
+
     return voc_dict
 
 def pm25_index(pm25):
@@ -339,6 +396,10 @@ def display_index(index_value):
     #
     # Display a two digit number on the LEDs
     #
+    if bar_graph == 1:
+        print("Skipping LED matrix display...")
+        bar_index(index_value)
+        return
     my_color = 0
     if round(index_value) < green_limit:
         my_color = 2
@@ -372,13 +433,13 @@ def display_led(my_matrix, my_value, color):
             else:
                 my_matrix[x,y] = my_matrix.LED_OFF
 
-def display_pollutant(pm10, pm25, co2):
+def display_pollutant(pm10, pm25, co2, voc):
     #
     # Display a two character icon on the LEDs
     #  representing highest-indexed pollutant
     #  Uses icons list 0/1=PM1, 2/3=PM2, 4/5=CO2
     #
-    index_list = [pm10, pm25, co2]
+    index_list = [pm10, pm25, co2, voc]
     max_value = max(index_list)
     max_value_index = index_list.index(max_value)
     icon_index = max_value_index * 2
@@ -401,6 +462,9 @@ def display_icon(icon_index, my_color):
     # Display a two character icon on the display
     # icon_index is the index of the first character
     #
+    if bar_graph == 1:
+        print("Skipping LED matrix icon display...")
+        return
     for digit in range(2):
       if digit == 0:
           my_matrix = matrix1
@@ -414,8 +478,52 @@ def display_icon(icon_index, my_color):
                   my_matrix[x,y] = my_color
               else:
                   my_matrix[x,y] = my_matrix.LED_OFF
-    
-    
+
+def LED_control(LED, color):
+    # 
+    # Turns an LED on in buffer and sets its color - still must call display()
+    # LED can be 0 - 7 (L to R)
+    # color can be "red", "green", or "yellow"
+    #
+    #print("LED CONTROL {0},{1}".format(LED, color))
+    if (LED < 0) or (LED > 7):
+        return
+
+    green_led = LED_config[LED * 2]
+    red_led = LED_config[(LED * 2) + 1]
+
+    if (color == "red") or (color == "yellow"):
+        bar_display.pixel(red_led[0], red_led[1], 1)
+    if (color == "green") or (color == "yellow"):
+        bar_display.pixel(green_led[0], green_led[1], 1)
+
+def bar_index(idx):
+    #
+    # Display an index on the LEDs
+    # idx = 0 - 99
+    # bar color chosen by green_limit, yellow_limit
+    #
+    if idx > 99:
+        idx = 99
+
+    print("Calling bar_index {}".format(idx))
+    bar_display.clear_all()
+    for i in range(8):
+        if (idx > (i) * 12.4):
+            if idx < green_limit:
+                LED_control(i, "green")
+            elif idx > yellow_limit:
+                LED_control(i, "red")
+            else:
+                LED_control(i, "yellow")
+
+    # Show first LED for zero index (can be disabled by user)
+    if (idx == 0) and (zero_bar == 1):
+        LED_control(0, "green")
+
+    bar_display.show()
+    bar_display.brightness(10)
+
 # START
 
 # Make sure there's at least one sensor
@@ -433,12 +541,19 @@ if pm_sensor == 1:
 if voc_sensor == 1:
     display_icon(6, 2)
     time.sleep(2)
+    
 if scd_sensor == 1:
     display_icon(4, 2)
     time.sleep(1)
     scd4x.start_periodic_measurement()
     print("Waiting for scd4x  measurement....")
 
+# Bar graph startup animation
+if bar_graph == 1:
+    for i in range(1,100, 5):
+        bar_index(i)
+        time.sleep(0.15)
+    bar_index(0)
 
 client = mqtt.Client()
 try:
@@ -465,6 +580,9 @@ while True:
         print("Testing VOC...")
         voc = voc_sense()
         voc_idx = voc_index(voc["TVOC"])
+        if scd_sensor == 0:
+            # Use eCO2 for CO2
+            co2_idx = co2_index(voc["eCO2"])
     # Merge dictionaries into scd:
     # If sensor does not exist, neither will its fields
     scd.update(pm)
@@ -489,33 +607,34 @@ while True:
     if ((iaq_idx > alert_level) and (alert_mode == 1)) or (alert_mode == 2):
         time.sleep(2.5)
         for recur in range(11):
-            display_pollutant(pm10_idx, pm25_idx, co2_idx)
+            display_pollutant(pm10_idx, pm25_idx, co2_idx, voc_idx)
             time.sleep(2.5)
             display_index(iaq_idx)
             time.sleep(2.5)
     
     else:
-        time.sleep(55)
-    
-    voc_baseline_count = voc_baseline_count + 1
-    print("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
-    if voc_baseline_count == voc_baseline_limit:
-        print("Saving VOC baseline values... CO2eq = {0}, TVOC = {1}".format(sgp30.baseline_eCO2, sgp30.baseline_TVOC))
-        # Add a save routine here
-        try:
-            f = open("/data/my_data/baseline-eco2.txt", "w")
-        except Exception as e:
-            print("Error saving eCO2 baseline...")
-        else:
-            f.write(str(sgp30.baseline_eCO2))
-            f.close()
+        time.sleep(cycle_time)
 
-        try:
-            f = open("/data/my_data/baseline-tvoc.txt", "w")
-        except Exception as e:
-            print("Error saving TVOC baseline...")
-        else:
-            f.write(str(sgp30.baseline_TVOC))
-            f.close()
+    if voc_sensor == 1:    
+        voc_baseline_count = voc_baseline_count + 1
+        print("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
+        if voc_baseline_count == voc_baseline_limit:
+            print("Saving VOC baseline values... CO2eq = {0}, TVOC = {1}".format(sgp30.baseline_eCO2, sgp30.baseline_TVOC))
+            # Add a save routine here
+            try:
+                f = open("/data/my_data/baseline-eco2.txt", "w")
+            except Exception as e:
+                print("Error saving eCO2 baseline...")
+            else:
+                f.write(str(sgp30.baseline_eCO2))
+                f.close()
 
-        voc_baseline_count = 0
+            try:
+                f = open("/data/my_data/baseline-tvoc.txt", "w")
+            except Exception as e:
+                print("Error saving TVOC baseline...")
+            else:
+                f.write(str(sgp30.baseline_TVOC))
+                f.close()
+
+            voc_baseline_count = 0
