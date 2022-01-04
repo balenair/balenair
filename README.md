@@ -75,7 +75,7 @@ The custom case consists of four pieces that can be printed using a standard con
 
 ### Front
 The front panel holds the LED/backpack assemblies. Each assembly sits on a set of four posts. Use M1.4 x 5mm screws to secure the displays to the posts. (Note that older versions of the front panel had posts designed to be melted in place rather than using screw holes.) The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. The angled headers should face upwards. TIP: attach the female wire headers before inserting the displays onto the posts.
-![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_front2.png)
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_front2.PNG)
 
 ### Pi Ring
 The `pi_ring` holds the Raspberry Pi 3A+ in place. Use four #2-56 pan head screws 1/4" to 5/16" long to mount the Pi in the provided holes. A longer screw will go through the pi_ring so a nut could be added to the other side. 
