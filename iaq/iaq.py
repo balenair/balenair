@@ -1,6 +1,4 @@
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
-
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries SPDX-License-Identifier: MIT
 # pylint: disable=unused-import
 import time
 import board
@@ -35,6 +33,7 @@ pm_sensor = 1
 scd_sensor = 1
 voc_sensor = 1
 bar_graph = 0
+
 # Sleep time for each cycle. Normally 60 secs.
 # Some other operations are derived from this:
 cycle_time = 60
@@ -77,8 +76,19 @@ try:
 except Exception as e:
     print("Invalid value for DELETE_BASELINE. Using default 0.")
     del_baseline = 0
-    
-              
+
+try:
+    bar_style = int(os.getenv('BAR_VERSION', '1'))
+except Exception as e:
+    print("Invalid value for BAR_VERSION. Using default 1.")
+    bar_style = 1
+
+try:
+    bar_mode = int(os.getenv('BAR_MODE', '1'))
+except Exception as e:
+    print("Invalid value for BAR_MODE. Using default 1.")
+    bar_mode = 1
+
 reset_pin = None
 # If you have a GPIO, its not a bad idea to connect it to the RESET pin
 # reset_pin = DigitalInOut(board.G0)
@@ -189,9 +199,17 @@ else:
     print("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
 
 # List for LED wiring configuration
-# format: [LED0 grn, LED0 red, LED1 grn, LED1 red... LED7 grn, LED7 red]
-# each entry is pixel [x, y] 
-LED_config = [[0,6],[0,7],[0,4],[0,5],[0,2],[0,3],[0,0],[0,1],[1,6],[1,7],[1,4],[1,5],[1,2],[1,3],[1,0],[1,1]]
+# format: [LED0 grn, LED0 red, LED1 grn, LED1 red... LEDx grn, LEDx red] max 32 total bi-color LEDs
+# each entry is pixel [x, y] where x = row (DIG) and y = col (SEG) max 8x8, must be an even # of entries
+# below for prototype LED 8 pcb:
+if bar_style == 2:
+    LED_config = [[0,6],[0,7],[0,4],[0,5],[0,2],[0,3],[0,0],[0,1],[1,6],[1,7],[1,4],[1,5],[1,2],[1,3],[1,0],[1,1]]
+#LED_config = [[0,6],[0,1],[0,4],[0,3],[0,4],[0,5],[0,6],[0,7],[1,6],[1,1],[1,4],[1,3],[1,4],[1,5],[1,6],[1,7],[2,0],[2,1],[2,4],[2,3],[2,4],[2,5],[2,6],[2,7]]
+# Below config for 12 bi-color LED large breadboard
+#LED_config = [[0,6],[0,5],[0,4],[0,3],[0,2],[0,1],[0,0],[0,7],[1,6],[1,5],[1,2],[1,3],[1,2],[1,1],[1,0],[1,7],[2,6],[2,5],[2,2],[2,3],[2,2],[2,1],[2,0],[2,7]]
+# Below config for prototype pcb 12 LED bargraph:
+if bar_style == 1:
+    LED_config = [[0,7],[0,0],[0,3],[0,5],[0,2],[0,1],[0,4],[0,6],[1,7],[1,0],[1,3],[1,5],[1,2],[1,1],[1,4],[1,6],[2,7],[2,0],[2,3],[2,5],[2,2],[2,1],[2,4],[2,6]]
 
 # For LED bar graph:
 if bar_graph == 1:
@@ -482,12 +500,15 @@ def display_icon(icon_index, my_color):
 
 def LED_control(LED, color):
     # 
-    # Turns an LED on in buffer and sets its color - still must call display()
-    # LED can be 0 - 7 (L to R)
+    # Turns a bi-color LED on in buffer and sets its color - still must call display()
+    # LED is position in dict LED_config - two elements per LED, green and red.
     # color can be "red", "green", or "yellow"
     #
     #print("LED CONTROL {0},{1}".format(LED, color))
-    if (LED < 0) or (LED > 7):
+    led_max = len(LED_config)/2
+    #print("led_max:{}".format(led_max))
+    if (LED < 0) or (LED > led_max):
+        print("LED value out of range.")
         return
 
     green_led = LED_config[LED * 2]
@@ -495,10 +516,12 @@ def LED_control(LED, color):
 
     if (color == "red") or (color == "yellow"):
         bar_display.pixel(red_led[0], red_led[1], 1)
+        #print("Displaying pixel LED_config[{0}]: {1}, {2}".format((LED * 2) + 1, red_led[0], red_led[1]))
     if (color == "green") or (color == "yellow"):
         bar_display.pixel(green_led[0], green_led[1], 1)
+        #print("Displaying pixel LED_config[{0}]: {1}, {2}".format((LED * 2), green_led[0], green_led[1]))
 
-def bar_index(idx):
+def bar_index(idx, force_mode=0):
     #
     # Display an index on the LEDs
     # idx = 0 - 99
@@ -507,33 +530,147 @@ def bar_index(idx):
     if idx > 99:
         idx = 99
 
-    print("Calling bar_index {}".format(idx))
+    segment_count = int(len(LED_config)/2)
+    segment_value = 100/(segment_count)
+    
     bar_display.clear_all()
-    for i in range(8):
-        if (idx > (i) * 12.4):
+
+    if bar_mode == 1 or force_mode == 1:
+        # Standard bargraph shows percent
+        print("Calling bar_index {}".format(idx))
+        for i in range(segment_count):
+            if (idx > (i) * segment_value):
+                if idx < green_limit:
+                    LED_control(i, "green")
+                elif idx > yellow_limit:
+                    LED_control(i, "red")
+                else:
+                    LED_control(i, "yellow")
+
+        # Show first LED for zero index (can be disabled by user)
+        if (idx == 0) and (zero_bar == 1):
+            LED_control(0, "green")
+
+    elif bar_mode == 2:
+        # All segments displayed at all times, color varies
+        for i in range(segment_count):
+            print(" bar mode 2, i:{0}, idx:{1}".format(i, idx))
             if idx < green_limit:
+                print("bar 2 green")
                 LED_control(i, "green")
             elif idx > yellow_limit:
+                print("bar 2 yellow")
                 LED_control(i, "red")
             else:
                 LED_control(i, "yellow")
 
-    # Show first LED for zero index (can be disabled by user)
-    if (idx == 0) and (zero_bar == 1):
-        LED_control(0, "green")
+    else:
+        # All segments of current color on at once
+        idx_color = "green"
+        idx_limit = 0
+        if idx < green_limit:
+            idx_color = "green"
+            idx_limit = green_limit
+        elif idx > yellow_limit:
+            idx_color =  "red"
+            idx_limit = red_limit
+        else:
+            idx_color = "yellow"
+            idx_limit = yellow_limit
+        for i in range(segment_count):
+            if (idx_limit > (i) * segment_value):
+                LED_control(i, idx_color)
 
     bar_display.show()
     bar_display.brightness(10)
 
+def LED_test(rows, cols):
+
+    # For testing LEDs. Provide total # of rows and cols
+    bar_display.clear_all()
+
+    for x in range(rows):
+        for y in range(cols):
+            print("LED ({0}, {1})".format(x,y))
+            bar_display.pixel(x, y, 1)
+            bar_display.show()
+            input("Press Enter to continue...")
+            bar_display.clear_all()
+
+def LED_icons(icon_num):
+
+    # Displays rudimentary icons on LED bar graph.
+
+    bar_display.clear_all()
+
+    if icon_num == 1:
+        # All red
+        print("LED_icons: all red")
+        for i in range(1, len(LED_config), 2):
+            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
+
+    if icon_num == 2:
+        # All green
+        print("LED_icons: all green")
+        for i in range(0, len(LED_config), 2):
+            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
+
+    if icon_num == 3:
+        # All yellow
+        print("LED_icons: all yellow")
+        for i in range(0, len(LED_config), 2):
+            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
+            bar_display.pixel(LED_config[i+1][0], LED_config[i+1][1], 1)
+    
+    if icon_num == 4:
+        # First 1/3, green
+        print("LED_icons: 1/3 green")
+        for i in range(0, int(len(LED_config)/3), 2):
+            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
+    
+    if icon_num == 5:
+        # Second 1/3, green
+        print("LED_icons: middle 1/3 green")
+        for i in range(int(len(LED_config)/3), int(len(LED_config)/3)*2, 2):
+            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
+
+    if icon_num == 6:
+        # Last 1/3, green:
+        print("LED_icons: last 1/3 green")
+        for i in range(int(len(LED_config)/3)*2, len(LED_config), 2):
+            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
+ 
+    if icon_num == 7:
+        # Staggered red:
+        print("LED_icons: staggered red")
+        for i in range(0, len(LED_config), 4):
+            bar_display.pixel(LED_config[i+1][0], LED_config[i+1][1], 1)
+
+    if icon_num == 8:
+        # Staggered alternate red:
+        print("LED_icons: staggered alternate red")
+        for i in range(2, len(LED_config), 4):
+            bar_display.pixel(LED_config[i+1][0], LED_config[i+1][1], 1)
+
+    bar_display.show()
+    
 # START
 
 # Make sure there's at least one sensor
 
 if max(pm_sensor, scd_sensor, voc_sensor) < 1:
-    display_icon(8, 1)
+    if bar_graph == 1:
+        # Display bargraph animation
+        for i in range(8):
+            LED_icons(7)
+            time.sleep(0.66)
+            LED_icons(8)
+            time.sleep(0.66)
+    else:
+        display_icon(8, 1)
     print("No sensors found! Exiting...")
     sys.exit()
- 
+
 if pm_sensor == 1:
     display_icon(0, 2)
     time.sleep(2)
@@ -542,7 +679,7 @@ if pm_sensor == 1:
 if voc_sensor == 1:
     display_icon(6, 2)
     time.sleep(2)
-    
+
 if scd_sensor == 1:
     display_icon(4, 2)
     time.sleep(1)
@@ -552,9 +689,12 @@ if scd_sensor == 1:
 # Bar graph startup animation
 if bar_graph == 1:
     for i in range(1,100, 5):
-        bar_index(i)
+        bar_index(i, 1)
         time.sleep(0.15)
     bar_index(0)
+    # Uncomment below to run an interactive LED test
+    #print("LED TEST")
+    #LED_test(3, 8)
 
 client = mqtt.Client()
 try:
@@ -568,6 +708,10 @@ while True:
     pm = {}
     scd = {}
     voc = {}
+    # Merge dictionaries into scd:
+    # If sensor does not exist, neither will its fields
+    scd.update(pm)
+    scd.update(voc)
     if pm_sensor == 1:
         print("Testimg PM...")
         pm = pm_sense()
@@ -581,13 +725,14 @@ while True:
         print("Testing VOC...")
         voc = voc_sense()
         voc_idx = voc_index(voc["TVOC"])
+        print("scd_sensor: {}".format(scd_sensor))
         if scd_sensor == 0:
             # Use eCO2 for CO2
+            print("Using eCO2 for C02.")
+            print("voc[eCO2]={}".format(voc["eCO2"]))
+            print("co2_index(voc[eCO2])={}".format(co2_index(voc["eCO2"])))
             co2_idx = co2_index(voc["eCO2"])
-    # Merge dictionaries into scd:
-    # If sensor does not exist, neither will its fields
-    scd.update(pm)
-    scd.update(voc)
+            scd["co2"] = voc["eCO2"]
     print("Scaled pm25: {0}".format(pm25_idx))
     print("Scaled pm10: {0}".format(pm10_idx))
     print("Scaled co2: {0}".format(co2_idx))
