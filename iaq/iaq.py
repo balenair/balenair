@@ -202,15 +202,17 @@ else:
 # format: [LED0 grn, LED0 red, LED1 grn, LED1 red... LEDx grn, LEDx red] max 32 total bi-color LEDs
 # each entry is pixel [x, y] where x = row (DIG) and y = col (SEG) max 8x8, must be an even # of entries
 # below for prototype LED 8 pcb:
-if bar_style == 2:
+if bar_style == 3:
     LED_config = [[0,6],[0,7],[0,4],[0,5],[0,2],[0,3],[0,0],[0,1],[1,6],[1,7],[1,4],[1,5],[1,2],[1,3],[1,0],[1,1]]
 #LED_config = [[0,6],[0,1],[0,4],[0,3],[0,4],[0,5],[0,6],[0,7],[1,6],[1,1],[1,4],[1,3],[1,4],[1,5],[1,6],[1,7],[2,0],[2,1],[2,4],[2,3],[2,4],[2,5],[2,6],[2,7]]
 # Below config for 12 bi-color LED large breadboard
 #LED_config = [[0,6],[0,5],[0,4],[0,3],[0,2],[0,1],[0,0],[0,7],[1,6],[1,5],[1,2],[1,3],[1,2],[1,1],[1,0],[1,7],[2,6],[2,5],[2,2],[2,3],[2,2],[2,1],[2,0],[2,7]]
 # Below config for prototype pcb 12 LED bargraph:
-if bar_style == 1:
+if bar_style == 2:
     LED_config = [[0,7],[0,0],[0,3],[0,5],[0,2],[0,1],[0,4],[0,6],[1,7],[1,0],[1,3],[1,5],[1,2],[1,1],[1,4],[1,6],[2,7],[2,0],[2,3],[2,5],[2,2],[2,1],[2,4],[2,6]]
-
+# Below config for prototype pcb 12 LED bargraph - INVERTED:
+if bar_style == 1:
+    LED_config = [[2,4],[2,6],[2,2],[2,1],[2,3],[2,5],[2,7],[2,0],[1,4],[1,6],[1,2],[1,1],[1,3],[1,5],[1,7],[1,0],[0,4],[0,6],[0,2],[0,1],[0,3],[0,5],[0,7],[0,0]]
 # For LED bar graph:
 if bar_graph == 1:
     clk = board.SCK
