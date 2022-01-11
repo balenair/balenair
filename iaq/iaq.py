@@ -710,10 +710,6 @@ while True:
     pm = {}
     scd = {}
     voc = {}
-    # Merge dictionaries into scd:
-    # If sensor does not exist, neither will its fields
-    scd.update(pm)
-    scd.update(voc)
     if pm_sensor == 1:
         print("Testimg PM...")
         pm = pm_sense()
@@ -735,6 +731,10 @@ while True:
             print("co2_index(voc[eCO2])={}".format(co2_index(voc["eCO2"])))
             co2_idx = co2_index(voc["eCO2"])
             scd["co2"] = voc["eCO2"]
+    # Merge dictionaries into scd:
+    # If sensor does not exist, neither will its fields
+    scd.update(pm)
+    scd.update(voc)
     print("Scaled pm25: {0}".format(pm25_idx))
     print("Scaled pm10: {0}".format(pm10_idx))
     print("Scaled co2: {0}".format(co2_idx))
