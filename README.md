@@ -1,4 +1,4 @@
-![The IAQ](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/images/iaq-device-m1.png)
+![The IAQ](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/iaq-device-m1.png)
 
 **An attractive device you can easily build that measures the quality of your indoor air and provides readable feedback on an integrated LED display and a web dashboard.**
 
@@ -34,7 +34,7 @@ Since all of the sensors utilize the I2C Qwiic connector, no soldering is requir
 
 ### The display
 
-![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/images/three-iaq-displays.png)
+![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/three-iaq-displays.png)
 
 The standard display uses two 1.2" Bi-color 8x8 LED Matrix displays that cost about $16 each ($32 total). This display provides visual feedback of the air quality score and changes color as the score increases. A less costly option utilizes a 12 segment bi-color LED bargraph that displays the air quality score as a horizontal graph that also changes color as the score increases. The least costly option is a single large bi-color LED that only indicates whether the score is low, moderate, or high.
 
