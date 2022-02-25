@@ -34,7 +34,7 @@ Since all of the sensors utilize the I2C Qwiic connector, no soldering is requir
 
 ### The display
 
-![The IAQ](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/images/three-iaq-displays.png)
+![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/images/three-iaq-displays.png)
 
 The standard display uses two 1.2" Bi-color 8x8 LED Matrix displays that cost about $16 each ($32 total). This display provides visual feedback of the air quality score and changes color as the score increases. A less costly option utilizes a 12 segment bi-color LED bargraph that displays the air quality score as a horizontal graph that also changes color as the score increases. The least costly option is a single large bi-color LED that only indicates whether the score is low, moderate, or high.
 
@@ -50,10 +50,6 @@ We provide STL files so you can use your 3D printer to print a beautiful case fo
 The case consists of four interlocking layers that are held together by four M3 x 40mm hex socket head screws. The case accomodates any or all of the supported sensors, as well as all of the display options.
 
 See the documentation for more information about printing and assembly of the case.
-
-
-The device can alternate between displaying the index and the name of the pollutant with the highest reading by setting the device [configuration variable](https://www.balena.io/docs/learn/manage/variables/) `ALERT_MODE`. The defualt value of `0` (or no setting) will never display the pollutant. A value of `1` will only display the pollutant if the index is over the `ALERT_LEVEL` variable, and a value of `2` will always alternate the display with the pollutant name regardless of the index value.
-
 
 ## Documentation
 
