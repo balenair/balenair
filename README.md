@@ -19,18 +19,14 @@ The LED display changes color based on the score as follows:
 | 75 - 99 | Unhealthy air quality | red |
 
 ### The sensors
-The project consists of up to three sensors (listed below) but only one is required. You can choose any or all depending on your needs and budget. The air quality score is comprised of the following readings:
+The project consists of up to three sensors but only one is required. You can choose any or all depending on your needs and budget. The air quality score is comprised of a combination of readings from the available sensors. 
 
-| Reading | Description | Sensor Type | good range (0 - 50) | moderate range (51 - 74) | unhealthy range (75 - 99) |
-| ------------ | ----------- | ----------- | ----------- | ----------- | ----------- |
-| PM2.5 | Smoke, dust, dirt, pollen | PMSA003I | 12 - 34 ug/m3 | 35 - 54 ug/m3 | 55+ ug/m3 |
-| PM10 | Dust, smoke, exhaust, tiny particles | PMSA003I | 0 - 53 ug/m3 | 54 - 149 ug/m3 | 150+ ug/m3 |
-| CO2 | Exhaled breath and burning fossil fuels | SCD-40 | 400 - 999 PPM | 1000 - 1999 PPM | 2000+ PPM |
-| VOC | Gasses emitted by solid and liquid products  | SGP-30 | 0 - 499 PPB | 500 - 999 PPB | 1000+ PPB |
+- Particulate sensors for smoke, dust, pollen and other tiny particles
+- CO2 sensor for exhaled breath and burning fossil fuels
+- Volatile Organic Compound (VOC) sensor for gasses emitted by solid and liquid products
+- Temperature and humidity environmental sensors
 
-The reading with the highest index is the one that will be displayed. At startup, the device will display a list of the sensors that were detected.
-
-Since all of the sensors utilize the I2C Qwiic connector, no soldering is required. See the parts list in the Getting Started guide for more details on cost and availability of these sensors.
+Since all of the sensors utilize an I2C Qwiic connector, no soldering is required. See the parts list in the documentation for more details on cost and availability of these sensors.
 
 ### The display
 
@@ -42,12 +38,11 @@ The standard matrix display and the LED bargraph requires some soldering to buil
 
 See the parts list in the Getting Started guide for more details on cost and availability of the display parts.
 
-
 ### The case
 
 We provide STL files so you can use your 3D printer to print a beautiful case for the IAQ. Don't have a 3D printer? Use this link to order the case parts from a local service bureau.
 
-The case consists of four interlocking layers that are held together by four M3 x 40mm hex socket head screws. The case accomodates any or all of the supported sensors, as well as all of the display options.
+The case consists of four interlocking layers that are held together by four M3 x 40mm hex socket head screws. The case accomodates any or all of the supported sensors, two different Raspberry Pis, as well as any of the display options. (A printable bracket may be required)
 
 See the documentation for more information about printing and assembly of the case.
 
