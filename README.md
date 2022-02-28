@@ -6,6 +6,7 @@
 
 - **Works with multiple sensors**: Choose among CO2, particulate matter, and VOC sensors based on your needs and budget.
 - **Multiple display options**: Choose from a tri-color LED matrix, a 12 segment LED bargraph, or a single tri-color LED.
+- **Your data stays local**: Your data remains your own. It is stored locally and can be accessed by a built-in secure VPN.
 - **Detailed web dashboard**: Provides real time gauges and measurement history over time for detecting trends. 
 
 ![Dashboard](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/dashboard.png)
