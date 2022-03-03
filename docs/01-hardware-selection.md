@@ -63,7 +63,7 @@ This is the simplest and least expensive display at about $7 in parts. It is als
 
 - One [220 ohm resistor](https://www.adafruit.com/product/2780) pack. (You'll have 23 left over in this pack. If you have any resistors lying around, any between 120 - 560 ohm should work fine.)
 
-- One set of [female/male jumper cables](https://www.adafruit.com/product/5018) (We'll need 3 of the 10 jumpers included.)
+- One set of [female/male jumper cables](https://www.adafruit.com/product/1954) (We'll only need 3 of the 20 jumpers included.)
 
 ## Remaining parts list
 
