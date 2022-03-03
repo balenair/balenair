@@ -1,4 +1,4 @@
-# Hardware setup
+# Hardware selection
 
 There are a number of options when it comes to selecting hardware for the IAQ. Cost, availability and performance are some factors to consider when choosing the parts below.
 
@@ -19,9 +19,9 @@ The sensors evaluate your air and return data that is used to deterime your air 
 
 | Sensor | Detects | Description | cost (USD) | specifications (approx.) |
 | ------------ | ----------- | ----------- | ----------- | ----------- |
-| [Particle](https://www.adafruit.com/product/4632) | Smoke, dust, dirt, pollen | PMSA003I laser-scattering type | $44.95 | 0.3-1.0,1.0-2.5, 2.5-10 Micrometer particles |
-| [CO2](https://www.adafruit.com/product/5187) (plus temp and humidity) | Exhaled breath and burning fossil fuels | SCD-40 photoacoustic sensor | $49.50 | 400 - 2000 PPM |
-| [VOC](https://www.adafruit.com/product/3709) | Gasses emitted by solid and liquid products  | SGP-30 Hot-plate MOX sensor | $17.50 | eCO2 400-60,000 ppm, TVOC 0-60,000 ppb |
+| Particle | Smoke, dust, dirt, pollen | [PMSA003I]((https://www.adafruit.com/product/4632)) laser-scattering type | $44.95 | 0.3-1.0,1.0-2.5, 2.5-10 Micrometer particles |
+| CO2 (plus temp and humidity) | Exhaled breath and burning fossil fuels | [SCD-40](https://www.adafruit.com/product/5187) photoacoustic sensor | $49.50 | 400 - 2000 PPM |
+| VOC | Gasses emitted by solid and liquid products  | [SGP-30](https://www.adafruit.com/product/3709) Hot-plate MOX sensor | $17.50 | eCO2 400-60,000 ppm, TVOC 0-60,000 ppb |
 
 All of these sensors use the popular I2C protocol to communicate with the Pi and include [Qwiic](https://www.sparkfun.com/qwiic) connectors so you don't need to do any soldering to use these sensors.
 
@@ -57,7 +57,7 @@ This option is about $13 or less than half the cost of the LED matrix. Currently
 
 This is the simplest and least expensive display at about $7 in parts. It is also the only display option that requires no soldering. (If you choose this option, you can build the entire IAQ without any soldering.) Since it is just a single LED, it can only tell you if the air quality is good, moderate, or poor based on the color. You'll need the following parts for this option:
 
-- One [Red/Green LED](https://www.adafruit.com/product/4042)
+- One [18mm Red/Green LED](https://www.adafruit.com/product/4042)
 
 - One [tiny breadboard](https://www.adafruit.com/product/65)
 
