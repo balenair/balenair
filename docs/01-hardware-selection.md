@@ -51,7 +51,7 @@ To summarize the parts for this option:
 
 This type of display is less detailed than the two digit matrix (the score is broken into 12 segments with each one representing 8.33 points) and can't display the pollutant type. It does however have the green/orange/red color indications and can be configured in three different display formats.
 
-This option is about $13 or less than half the cost of the LED matrix. Currently this option is a somewhat complex build and requires soldering components onto a protoboard. The components include the LED bargraph, a [MAX 7219](https://www.adafruit.com/product/453) display driver, and a [74AHCT125](https://www.adafruit.com/product/1787) quad level shifter IC. In the near future we hope to offer a pre-etched version of the PCB, but for now if you are interested in this display, see these instructions.
+This option is about $13 or less than half the cost of the LED matrix. Currently this option is a somewhat complex build and requires soldering components onto a protoboard. The components include the [LED bargraph](https://www.adafruit.com/product/1719), a [MAX 7219](https://www.adafruit.com/product/453) display driver, and a [74AHCT125](https://www.adafruit.com/product/1787) quad level shifter IC. In the near future we hope to offer a pre-etched version of the PCB, but for now if you are interested in this display, see these instructions.
 
 ### Single bi-color LED
 
