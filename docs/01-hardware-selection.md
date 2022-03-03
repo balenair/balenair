@@ -17,9 +17,9 @@ The IAQ is not particularly resource-intensive, so any of the supported boards a
 
 The sensors evaluate your air and return data that is used to deterime your air quality score. The IAQ supports the three different sensors listed below. You can choose to have one, two, or all three present in your device, depending on your budget and air quality analysis needs.
 
-| Sensor | Detects | Description | cost (USD) | specifications |
+| Sensor | Detects | Description | cost (USD) | specifications (approx.) |
 | ------------ | ----------- | ----------- | ----------- | ----------- |
-| [Particle](https://www.adafruit.com/product/4632) | Smoke, dust, dirt, pollen | PMSA003I laser-scattering type | $44.95 | 0.3~1.0,1.0~2.5, 2.5~10 Micrometer particles |
+| [Particle](https://www.adafruit.com/product/4632) | Smoke, dust, dirt, pollen | PMSA003I laser-scattering type | $44.95 | 0.3-1.0,1.0-2.5, 2.5-10 Micrometer particles |
 | [CO2](https://www.adafruit.com/product/5187) (plus temp and humidity) | Exhaled breath and burning fossil fuels | SCD-40 photoacoustic sensor | $49.50 | 400 - 2000 PPM |
 | [VOC](https://www.adafruit.com/product/3709) | Gasses emitted by solid and liquid products  | SGP-30 Hot-plate MOX sensor | $17.50 | eCO2 400-60,000 ppm, TVOC 0-60,000 ppb |
 
