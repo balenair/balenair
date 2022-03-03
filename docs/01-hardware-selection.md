@@ -19,7 +19,7 @@ The sensors evaluate your air and return data that is used to deterime your air 
 
 | Sensor | Detects | Description | cost (USD) | specifications (approx.) |
 | ------------ | ----------- | ----------- | ----------- | ----------- |
-| Particle | Smoke, dust, dirt, pollen | [PMSA003I]((https://www.adafruit.com/product/4632)) laser-scattering type | $44.95 | 0.3-1.0,1.0-2.5, 2.5-10 Micrometer particles |
+| Particle | Smoke, dust, dirt, pollen | [PMSA003I](https://www.adafruit.com/product/4632) laser-scattering type | $44.95 | 0.3-1.0,1.0-2.5, 2.5-10 Micrometer particles |
 | CO2 (plus temp and humidity) | Exhaled breath and burning fossil fuels | [SCD-40](https://www.adafruit.com/product/5187) photoacoustic sensor | $49.50 | 400 - 2000 PPM |
 | VOC | Gasses emitted by solid and liquid products  | [SGP-30](https://www.adafruit.com/product/3709) Hot-plate MOX sensor | $17.50 | eCO2 400-60,000 ppm, TVOC 0-60,000 ppb |
 
