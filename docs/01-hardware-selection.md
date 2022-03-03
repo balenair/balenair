@@ -39,6 +39,14 @@ The matrix displays are driven via I2C and require two [Qwiic to female header](
 
 In addition to displaying the two digit score, these displays can optionally show the most dominant pollutant type (CO2, PM10, PM2.5, VOC) detected by the sensors, as well as some rudimentary animations. The displayed information will change color from green to orange to red depending on the score.
 
+To summarize the parts for this option:
+
+- Two [LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902)
+
+- One strip of [angled male headers](https://www.amazon.com/gp/product/B07ZHG25NH/)
+
+- Two [Qwiic to female header](https://www.adafruit.com/product/4397) cables
+
 ### 12 LED bi-color bargraph
 
 This type of display is less detailed than the two digit matrix (the score is broken into 12 segments with each one representing 8.33 points) and can't display the pollutant type. It does however have the green/orange/red color indications and can be configured in three different display formats.
@@ -56,6 +64,7 @@ This is the simplest and least expensive display at about $7 in parts. It is als
 - One [220 ohm resistor](https://www.adafruit.com/product/2780) pack. (You'll have 23 left over in this pack. If you have any resistors lying around, any between 120 - 560 ohm should work fine.)
 
 - One set of [female/male jumper cables](https://www.adafruit.com/product/5018) (We'll need 3 of the 10 jumpers included.)
+
 ## Remaining parts list
 
 Regardless of the options above, you'll need the following parts:
