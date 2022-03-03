@@ -12,7 +12,7 @@
 ![Dashboard](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/dashboard.png)
 
 ## Description and use
-The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score.  The standard IAQ device displays the score using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality). Other simpler display options use one or more LEDs to show a color based on the score. The IAQ is powered by a Raspberry Pi 3A+ or Zero 2W.
+The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score.  The standard IAQ device displays the score using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality). Other simpler display options use one or more LEDs to show a color based on the score. The IAQ is powered by a Raspberry Pi. (See here for supported versions.) The IAQ can calculate and display an air quality score without internet access, but does require internet access for initial software download and to view your dashboard outside your internal network.
 
 The LED display changes color based on the score as follows:
 | Score range | Description | LED display color | 
