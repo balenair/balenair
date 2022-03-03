@@ -33,7 +33,7 @@ Each IAQ device has a bright LED display so you can read your score from across 
 
 ### Two digit bi-color LED matrix
 
-This is the most detailed display and also the most expensive. It utilizes two $15.95 [LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902) boards which also require some light soldering to install the connecting headers. You'll need to use angled headers, not the straight ones included with the boards. These should be right-angled male headers where the right angle occurs above the plastic strip [like these](https://www.amazon.com/gp/product/B07ZHG25NH/), NOT below the strip [like these](https://www.adafruit.com/product/1540). (A subtle difference but one type will fit in the case while the other will not!) If you are not using our custom case, you can just use the headers that are included with the display boards. These displays can be mounted directly on posts in the custom case with no modifications required.
+This is the most detailed display and also the most expensive. It utilizes two $15.95 [LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902) boards which also require some light soldering to install the connecting headers. You'll need to use angled headers, not the straight ones included with the boards. These should be right-angled male headers where the right angle occurs above the plastic strip [like these](https://www.amazon.com/Uxcell-a15062500ux0349-Single-40-pin-Breadboard/dp/B01461DQ6S/), NOT below the strip [like these](https://www.adafruit.com/product/1540). (A subtle difference but one type will fit in the case while the other will not!) If you are not using our custom case, you can just use the headers that are included with the display boards. These displays can be mounted directly on posts in the custom case with no modifications required.
 
 The matrix displays are driven via I2C and require two [Qwiic to female header](https://www.adafruit.com/product/4397) cables to connect to the Pi. 
 
@@ -43,7 +43,7 @@ To summarize the parts for this option:
 
 - Two [LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902)
 
-- One strip of [angled male headers](https://www.amazon.com/gp/product/B07ZHG25NH/)
+- One strip of [angled male headers](https://www.amazon.com/Uxcell-a15062500ux0349-Single-40-pin-Breadboard/dp/B01461DQ6S/)
 
 - Two [Qwiic to female header](https://www.adafruit.com/product/4397) cables
 
