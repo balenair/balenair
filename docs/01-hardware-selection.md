@@ -21,7 +21,7 @@ The sensors evaluate your air and return data that is used to deterime your air 
 | ------------ | ----------- | ----------- | ----------- | ----------- |
 | [Particle](https://www.adafruit.com/product/4632) | Smoke, dust, dirt, pollen | PMSA003I laser-scattering type | $44.95 | 0.3~1.0,1.0~2.5, 2.5~10 Micrometer particles |
 | [CO2](https://www.adafruit.com/product/5187) (plus temp and humidity) | Exhaled breath and burning fossil fuels | SCD-40 photoacoustic sensor | $49.50 | 400 - 2000 PPM |
-| [VOC](https://www.adafruit.com/product/3709) | Gasses emitted by solid and liquid products  | SGP-30 Hot-plate MOX sensor | $17.50 | eCO2 400~60,000 ppm, TVOC 0~60,000 ppb |
+| [VOC](https://www.adafruit.com/product/3709) | Gasses emitted by solid and liquid products  | SGP-30 Hot-plate MOX sensor | $17.50 | eCO2 400-60,000 ppm, TVOC 0-60,000 ppb |
 
 All of these sensors use the popular I2C protocol to communicate with the Pi and include [Qwiic](https://www.sparkfun.com/qwiic) connectors so you don't need to do any soldering to use these sensors.
 
