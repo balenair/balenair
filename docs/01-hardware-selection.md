@@ -29,7 +29,7 @@ The IAQ will automatically detect which sensors are present and caluclate the ai
 
 ## Choosing your display
 
-Each IAQ device has a bright LED display so you can read your score from across a room. The score will be calculated and displayed even if your device is not connected to the internet. Regardless of the display type you choose, you can still obtain detailed sensor and air quality scre readings from the built-in web dashboard.
+Each IAQ device has a bright LED display so you can read your score from across a room. The score will be calculated and displayed even if your device is not connected to the internet. Regardless of the display type you choose, you can still obtain detailed sensor and air quality score readings from the built-in web dashboard.
 
 ### Two digit bi-color LED matrix
 
