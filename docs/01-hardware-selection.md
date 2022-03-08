@@ -21,11 +21,11 @@ The sensors evaluate your air and return data that is used to deterime your air 
 | ------------ | ----------- | ----------- | ----------- | ----------- |
 | Particle | Smoke, dust, dirt, pollen | [PMSA003I](https://www.adafruit.com/product/4632) laser-scattering type | $44.95 | 0.3-1.0,1.0-2.5, 2.5-10 Micrometer particles |
 | CO2 (plus temp and humidity) | Exhaled breath and burning fossil fuels | [SCD-40](https://www.adafruit.com/product/5187) photoacoustic sensor | $49.50 | 400 - 2000 PPM |
-| VOC | Gasses emitted by solid and liquid products  | [SGP-30](https://www.adafruit.com/product/3709) Hot-plate MOX sensor | $17.50 | eCO2 400-60,000 ppm, TVOC 0-60,000 ppb |
+| VOC (and eCO2) | Gasses emitted by solid and liquid products  | [SGP-30](https://www.adafruit.com/product/3709) Hot-plate MOX sensor | $17.50 | eCO2 400-60,000 ppm, TVOC 0-60,000 ppb |
 
 All of these sensors use the popular I2C protocol to communicate with the Pi and include [Qwiic](https://www.sparkfun.com/qwiic) connectors so you don't need to do any soldering to use these sensors.
 
-The IAQ will automatically detect which sensors are present and caluclate the air quality score accordingly.
+The IAQ will automatically detect which sensors are present and caluclate the air quality score accordingly. If you connect the specified VOC sensor but do not have the specified CO2 sensor attached, the VOC sensor's eCO2 readings will be reported as the CO2 values. (eCO2 is less accurate than CO2 and requires proper calibration - see here)
 
 ## Choosing your display
 
