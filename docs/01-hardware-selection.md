@@ -78,3 +78,5 @@ Regardless of the options above, you'll need the following parts:
 - One [100mm QT to QT cable](https://www.adafruit.com/product/4210) to connect the first sensor to the second sensor. Only required if you have two or three sensors!
 
 - Another [100mm QT to QT cable](https://www.adafruit.com/product/4210) to connect the second sensor to the third sensor. Only required if you have three sensors!
+
+Note that there are some additional hardware requirements if you will be using the custom 3D printed case - see this section for details.
