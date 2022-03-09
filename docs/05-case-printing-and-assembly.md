@@ -28,14 +28,14 @@ The front panel holds the LED/backpack assemblies. Each assembly sits on a set o
 
 If you are using the LED bargraph, also print the `bargraph-bracket.stl` piece. Attach the bargraph to the bracket as shown below, then attach the bracket to the front piece with the Qwiic connectors on the left side.
 
-Printing tips: Note that the first layer is only one layer thick for the display window portion of the front piece. Since that adds a lot of surface area, you can probably get by with a skirt instead of a brim for this part. Typical printing characteristsics: 28g/9.4m of filament; 4:06 print time.
+Printing tips: Note that the first layer is only one layer thick for the display window portion of the front piece. Since that adds a lot of surface area on the bed, you can probably get by with a skirt instead of a brim for this part. Typical printing characteristsics: 28g/9.4m of filament; 4:06 print time.
 
 ### Pi Ring
 The `pi_ring` holds the Raspberry Pi 3A+ or Zero 2 W in place. Use four #2-56 pan head screws 1/4" to 5/16" long to mount the Pi in the provided holes. A longer screw will go through the pi_ring so a nut could be added to the other side for additional stability. Note the four cylidrical spacers that print along the right wall of the part. These are used to properly mount a Pi Zero 2 W - you can ignore or discard them if using a Pi 3A+. See the photos below for the proper mounting orientation of the two different Pi models:
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_pi.png)
 
-Printing tips: This piece does not have a lot of surface area, so a brim is recommended. Printing characteristics: 27g/9.04m of filament; 5:15 print time.
+Printing tips: This piece does not have a lot of bed surface area, so a brim is recommended. Printing characteristics: 27g/9.04m of filament; 5:15 print time.
 
 ### Insulate sense
 The `insulate_sense` piece is used to mount the sensors and insulate them from the heat of the Pi. There is a small opening at the bottom of this piece to feed a Qwiic connector and cable through to the other side to attach to the first sensor (usually the particulate unit). The side opposite the sensor mounts has two holes to attach the Qwiic multiport connector with #2-56 1/2" pan head screws and nuts.
@@ -47,4 +47,9 @@ There are mounting holes in the posts for all sensors. You can use two, three, o
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_insulate_back.png)
 
-Printing tips: This piece has a good amount of surface area, so a skirt may be sufficient. Printing characteristics: 31g/10.36m of filament; 3:42 print time.
+Printing tips: This piece has a good amount of surface area on the bed, so a skirt may be sufficient. Printing characteristics: 31g/10.36m of filament; 3:42 print time.
+
+### Back
+The back of the unit provides protection and airflow for the sensors. All four pieces are held together by inserting four M3 x 40mm hex socket head screws through the back piece and attaching to the screw holes in the front piece. These screws should not thread into any piece other than the front - they should move freely until they hit the holes in the front. You may need to start the threading on the front piece by inserting a small wood screw and rotating it a few turns.
+
+Printing tips: This piece has a limited amount of bed surface area, so a brim is recommended. Printing characteristics: 28g/8.04m of filament; 4:44 print time.
