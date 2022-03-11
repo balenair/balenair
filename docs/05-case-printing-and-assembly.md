@@ -23,12 +23,12 @@ We have tested these pieces by slicing them using Ultimaker Cura 4.11; Each piec
 
 ## Front piece
 
-The front panel holds the LED/backpack assemblies. Each assembly sits on a set of four posts. Use M1.4 x 5mm screws to secure the displays to the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. The angled headers should face upwards. TIP: attach the female wire headers before inserting the displays onto the posts.
+The front panel holds the LED/backpack assemblies. Each assembly sits on a set of four posts. Use M1.4 x 5mm screws to secure the displays to the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. The angled headers should face upwards towards the top of the front piece. (At this point, you can establish which orientation is the top, as the sides are both the same.) TIP: attach the female wire headers before inserting the displays onto the posts.
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_front2.PNG)
 
 If you are using the LED bargraph, also print the `bargraph-bracket.stl` piece. Attach the bargraph to the bracket as shown below, then attach the bracket to the front piece with the Qwiic connectors on the left side.
 
-Printing tips: Note that the first layer is only one layer thick for the display window portion of the front piece. Since that adds a lot of surface area on the bed, you can probably get by with a skirt instead of a brim for this part. Typical printing characteristsics: 28g/9.4m of filament; 4:06 print time.
+Printing tips: Note that the first layer is only one layer thick for the display window portion of the front piece. Since that adds a lot of surface area on the bed, you can probably get by with a skirt instead of a brim for this part. We suggest printing this piece in some version of white so that the window does not interfere with the LED colors. (Our standard has been to print the front and back in white, and the middle pieces in orange.) Typical printing characteristsics: 28g/9.4m of filament; 4:06 print time.
 
 ## Pi Ring
 The `pi_ring` holds the Raspberry Pi 3A+ or Zero 2 W in place. Use four #2-56 pan head screws 1/4" to 5/16" long to mount the Pi in the provided holes. A longer screw will go through the pi_ring so a nut could be added to the other side for additional stability. Note the four cylidrical spacers that print along the right wall of the part. These are used to properly mount a Pi Zero 2 W - you can ignore or discard them if using a Pi 3A+. See the photos below for the proper mounting orientation of the two different Pi models:
