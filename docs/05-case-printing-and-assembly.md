@@ -56,3 +56,6 @@ Printing tips: This piece has a limited amount of bed surface area, so a brim is
 
 ## stand
 The optional stand is a small angled platform for your IAQ device to sit on, which tilts it slightly upward for better viewing. When slicing this piece, it's best to rotate it forward 90 degrees and then select your "lay flat" option. Using a brim is also recommended.
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/stand-slicing.png)
+
