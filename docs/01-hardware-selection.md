@@ -27,6 +27,10 @@ All of these sensors use the popular I2C protocol to communicate with the Pi and
 
 The IAQ will automatically detect which sensors are present and caluclate the air quality score accordingly. If you connect the specified VOC sensor but do not have the specified CO2 sensor attached, the VOC sensor's eCO2 readings will be reported as the CO2 values. (eCO2 is generally less accurate than CO2 and requires proper calibration - see here)
 
+If the SCD-40 CO2 sensor times out (meaning it can't get a reading after 15 tries) it will skip until the next measurement interval. If you have a VOC sensor attached when the SCD-40 times out, it will use the eCO2 reading for CO2 until it tries again to read the SCD-40 on the next measurement interval.
+
+The particulate sensor will timeout if no reading can be taken after three tries during a three second interval. In that case no new reading will be generated until the next measurement interval.
+
 ## Choosing your display
 
 Each IAQ device has a bright LED display so you can read your score from across a room. The score will be calculated and displayed even if your device is not connected to the internet. Regardless of the display type you choose, you can still obtain detailed sensor and air quality score readings from the built-in web dashboard.
