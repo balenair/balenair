@@ -6,7 +6,7 @@ The IAQ has a lovely and easy-to-print 3D case that fits the standard parts list
 
 To assemble the printed parts, you'll need the following:
 
-- eight (8) M1.4 x 5mm self-tapping screws to mount the display
+- eight (8) M1.4 x 5mm self-tapping screws to mount the display (plus four more if using the LED bargraph)
 - four (4) #2-56 5/8" pan head screws if you are using the LED bargraph display
 - four (4) #2-56 pan head screws 1/4" to 5/16" long with optional nuts for mounting the Pi
 - two (2) #2-56 1/2" long pan head screws for mounting the multiport connector
@@ -55,7 +55,7 @@ The back of the unit provides protection and airflow for the sensors. All four p
 Printing tips: This piece has a limited amount of bed surface area, so a brim is recommended. In addition, you should enable the "generate support" option for placement "everywhere" and a support overhang angle of "45". Printing characteristics: 25g/8.44m of filament; 5:09 print time.
 
 ## stand
-The optional stand is a small angled platform for your IAQ device to sit on, which tilts it slightly upward for better viewing. When slicing this piece, it's best to rotate it forward 90 degrees and then select your "lay flat" option. Using a brim is also recommended.
+The optional stand is a small angled platform for your IAQ device to sit on, which tilts it slightly upward for an improved viewing angle. When slicing this piece, it's best to rotate it forward 90 degrees and then select your "lay flat" option. Using a brim is also recommended.
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/stand-slicing.png)
 
