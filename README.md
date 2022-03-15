@@ -5,7 +5,7 @@
 ## Highlights
 
 - **Works with multiple sensors**: Choose among CO2, particulate matter, and VOC sensors based on your needs and budget.
-- **Multiple display options**: Choose from a tri-color LED matrix, a 12 segment LED bargraph, or a single tri-color LED.
+- **Multiple display options**: Choose either a bi-color LED matrix or a multi-color 8 segment LED bargraph.
 - **Your data stays local**: Your data remains your own. It is stored locally and can be accessed by a built-in secure VPN.
 - **Onboard web dashboard**: Provides real time gauges and measurement history over time for detecting trends. 
 
@@ -35,9 +35,9 @@ Since all of the sensors utilize an I2C Qwiic connector, no soldering is require
 
 ![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/three-iaq-displays.png)
 
-The standard display uses two 1.2" Bi-color 8x8 LED Matrix displays that cost about $16 each ($32 total). This display provides visual feedback of the air quality score and changes color as the score increases. A less costly option utilizes a 12 segment bi-color LED bargraph that displays the air quality score as a horizontal graph that also changes color as the score increases. The least costly option is a single large bi-color LED that only indicates whether the score is low, moderate, or high.
+The standard display uses two 1.2" Bi-color 8x8 LED Matrix displays that cost about $16 each ($32 total). This display provides visual feedback of the air quality score and changes color as the score increases. A less costly option utilizes an eight segment multi-color LED bargraph that displays the air quality score as a horizontal graph that also changes color as the score changes. 
 
-The standard matrix display and the LED bargraph requires some soldering to build. The single bi-color LED version can be built without any soldering.
+The standard matrix display requires some soldering to build. The bargraph LED version can be built without any soldering.
 
 See the parts list in the Getting Started guide for more details on cost and availability of the display parts.
 
