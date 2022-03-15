@@ -55,7 +55,7 @@ To summarize the parts for this option:
 
 This type of display is less detailed than the two digit matrix (the score is broken into eight segments with each one representing 12.5 points) and can't display the pollutant type. It does however have multiple color indications and can be configured in three different display formats. No soldering is required with this option
 
-This display is $11 or about a third the cost of the LED matrix and is based on the 10 LED [SparkFun Qwiic Stick](https://www.sparkfun.com/products/18354). (We only use eight of the ten LEDs that neatly fit the IAQ's case window.)
+This display is $11 or about a third the cost of the LED matrix and is based on the 10 LED [SparkFun Qwiic Stick](https://www.sparkfun.com/products/18354). (We only use eight of the ten LEDs that neatly fit the IAQ's case window.) In addition to one of these displays, you'll need a [100mm QT to QT cable](https://www.adafruit.com/product/4210) to connect it to the IAQ.
 
 
 ## Remaining parts list
