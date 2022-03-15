@@ -44,7 +44,15 @@ The display changes color based on the score as follows:
 | 75 - 99 | Unhealthy air quality | red |
 
 ### LED bargraph display
-TBD
+By default the bargraph display will illuminate a segment from left to right based on the IAQ score, with each segment representing 12.5 points. The segments will be lit according to the color scheme shown above for the matrix display. Any unused segments to the right will be slightly illuminated in white. To eliminate the white segments, set the device variable `BAR_MODE` to `2`.
+
+If you set the `BAR_MODE` to `0` all of the LED segments will always be illuminated in either green, yellow, or red depending on the IAQ sore as shown above. 
+
+To reset the display to the default mode, set `BAR_MODE` to `1` or delete the variable.
+
+If the score is zero and you are using display mode 2, no LED segments will be illuminated. To force the leftmost LED segment to be lit even if the score is zero, set the `ZERO_BAR` variable to a value of `1`.
+
+Upon initial startup, if no sensors are detected the bargraph display will show alternating red and green segments.
 
 ## The IAQ dashboard
 The IAQ dashboard is a pre-built [Grafana](https://grafana.com/grafana/) dashboard that shows you the current and historical values from all of your sensors as well as the air quality score over time. If you are on the same network as the device, you can browse to IAQ.local or to the local IP address of the device (which you can find on its balenaCloud dashboard) to see the dashboard. If you want to enable access to the IAQ dashboard from outside your network, you can enable the "Public Device URL" from your balenaCloud dashboard and then click the icon next to that switch to view its public URL.
