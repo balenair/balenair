@@ -51,23 +51,12 @@ To summarize the parts for this option:
 
 - Two [Qwiic to female header](https://www.adafruit.com/product/4397) cables
 
-### 12 LED bi-color bargraph
+### Eight LED multi-color bargraph
 
-This type of display is less detailed than the two digit matrix (the score is broken into 12 segments with each one representing 8.33 points) and can't display the pollutant type. It does however have the green/orange/red color indications and can be configured in three different display formats.
+This type of display is less detailed than the two digit matrix (the score is broken into eight segments with each one representing 12.5 points) and can't display the pollutant type. It does however have multiple color indications and can be configured in three different display formats. No soldering is required with this option
 
-This option is about $13 or less than half the cost of the LED matrix. Currently this option is a somewhat complex build and requires soldering components onto a protoboard. The components include the [LED bargraph](https://www.adafruit.com/product/1719), a [MAX 7219](https://www.adafruit.com/product/453) display driver, and a [74AHCT125](https://www.adafruit.com/product/1787) quad level shifter IC. In the near future we hope to offer a pre-etched version of the PCB, but for now if you are interested in this display, see these instructions.
+This display is $11 or about a third the cost of the LED matrix and is based on the 10 LED [SparkFun Qwiic Stick](https://www.sparkfun.com/products/18354). (We only use eight of the ten LEDs that neatly fit the IAQ's case window.)
 
-### Single bi-color LED
-
-This is the simplest and least expensive display at about $7 in parts. It is also the only display option that requires no soldering. (If you choose this option, you can build the entire IAQ without any soldering.) Since it is just a single LED, it can only tell you if the air quality is good, moderate, or poor based on the color. You'll need the following parts for this option:
-
-- One [18mm Red/Green LED](https://www.adafruit.com/product/4042)
-
-- One [tiny breadboard](https://www.adafruit.com/product/65)
-
-- One [220 ohm resistor](https://www.adafruit.com/product/2780) pack. (You'll have 23 left over in this pack. If you have any resistors lying around, any between 120 - 560 ohm should work fine.)
-
-- One set of [female/male jumper cables](https://www.adafruit.com/product/1954) (We'll only need 3 of the 20 jumpers included.)
 
 ## Remaining parts list
 
