@@ -39,9 +39,4 @@ Here's a diagram that shows all of the connections:
 
 ### LED bargraph display
 
-TBD
-
-### Single LED display
-
-TBD
-
+Connecting this type of display is easy: simply connect one end of a 100mm Qwiic connector to one of the jacks on the LED stick. Connect the other end to a free port in the 4-way Qwiic multiport connector.
