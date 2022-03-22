@@ -45,11 +45,11 @@ The display changes color based on the score as follows:
 
 ### LED bargraph display
 
-![Qwiic Stick](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/bargraph-display-two.png)
+![Bargraph](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/bargraph-display-two.png)
 
 By default the bargraph display will illuminate a segment from left to right based on the IAQ score, with each segment representing 12.5 points. The segments will be lit according to the color scheme shown above for the matrix display. Any unused segments to the right will be slightly illuminated in white. To eliminate the white segments, set the device variable `BAR_MODE` to `2`.
 
-![Qwiic Stick](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/bargraph-display-all.png.png)
+![Bargraph](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/bargraph-display-all.png)
 
 If you set the `BAR_MODE` to `0` all of the LED segments will always be illuminated in either green, yellow, or red depending on the IAQ sore as shown above. 
 
