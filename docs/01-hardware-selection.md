@@ -33,6 +33,8 @@ The particulate sensor will timeout if no reading can be taken after three tries
 
 ## Choosing your display
 
+![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/displays.png)
+
 Each IAQ device has a bright LED display so you can read your score from across a room. The score will be calculated and displayed even if your device is not connected to the internet. Regardless of the display type you choose, you can still obtain detailed sensor and air quality score readings from the built-in web dashboard.
 
 ### Two digit bi-color LED matrix
@@ -40,6 +42,8 @@ Each IAQ device has a bright LED display so you can read your score from across 
 This is the most detailed display and also the most expensive. It utilizes two $15.95 [LED Square Pixel Matrix with I2C Backpack](https://www.adafruit.com/product/902) boards which also require some light soldering to install the connecting headers. You'll need to use angled headers, not the straight ones included with the boards. These should be right-angled male headers where the right angle occurs above the plastic strip [like these](https://www.amazon.com/Uxcell-a15062500ux0349-Single-40-pin-Breadboard/dp/B01461DQ6S/), NOT below the strip [like these](https://www.adafruit.com/product/1540). (A subtle difference but one type will fit in the case while the other will not!) If you are not using our custom case, you can just use the headers that are included with the display boards. These displays can be mounted directly on posts in the custom case with no modifications required.
 
 The matrix displays are driven via I2C and require two [Qwiic to female header](https://www.adafruit.com/product/4397) cables to connect to the Pi. 
+
+![image](https://user-images.githubusercontent.com/39385685/159563329-b029bcee-c9c0-47e0-ae4b-3dc773e562c7.png)
 
 In addition to displaying the two digit score, these displays can optionally show the most dominant pollutant type (CO2, PM10, PM2.5, VOC) detected by the sensors, as well as some rudimentary animations. The displayed information will change color from green to orange to red depending on the score.
 
