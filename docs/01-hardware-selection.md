@@ -1,4 +1,4 @@
-# Hardware selection
+# 1. Hardware selection
 
 There are a number of options when it comes to selecting hardware for the IAQ. Cost, availability and performance are some factors to consider when choosing the parts below.
 
@@ -79,3 +79,6 @@ Regardless of the options above, you'll need the following parts:
 - Another [100mm QT to QT cable](https://www.adafruit.com/product/4210) to connect the second sensor to the third sensor. Only required if you have three sensors!
 
 Note that there are some additional hardware requirements if you will be using the custom 3D printed case - see this section for details.
+
+### NEXT
+[2. Hardware Setup](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/02-hardware-setup.md)
