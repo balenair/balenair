@@ -1,4 +1,4 @@
-# Case printing and assembly
+# 5. Case printing and assembly
 
 The IAQ has a lovely and easy-to-print 3D case that fits the standard parts listed in the hardware list.
 
