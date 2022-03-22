@@ -1,4 +1,4 @@
-# Hardware setup
+# 2. Hardware setup
 
 Once you have all of your parts gathered, it's a good idea to walk through this assembly guide to get familiar with how everything gets connected together. Even if you will be using the 3D printed case, you may want to connect everything together and install the software before placing everything in the case. All of the connections are modular so it's easy to disconnect all of the parts and re-cobbect them again later inside the case. Make sure your Pi is powered off during the hardware setup!
 
