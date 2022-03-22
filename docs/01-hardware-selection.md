@@ -43,7 +43,7 @@ This is the most detailed display and also the most expensive. It utilizes two $
 
 The matrix displays are driven via I2C and require two [Qwiic to female header](https://www.adafruit.com/product/4397) cables to connect to the Pi. 
 
-![image](https://user-images.githubusercontent.com/39385685/159563329-b029bcee-c9c0-47e0-ae4b-3dc773e562c7.png)
+![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/co2-display.png)
 
 In addition to displaying the two digit score, these displays can optionally show the most dominant pollutant type (CO2, PM10, PM2.5, VOC) detected by the sensors, as well as some rudimentary animations. The displayed information will change color from green to orange to red depending on the score.
 
@@ -56,6 +56,8 @@ To summarize the parts for this option:
 - Two [Qwiic to female header](https://www.adafruit.com/product/4397) cables
 
 ### Eight LED multi-color bargraph
+
+![Qwiic Stick](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/qwiic-stick.png)
 
 This type of display is less detailed than the two digit matrix (the score is broken into eight segments with each one representing 12.5 points) and can't display the pollutant type. It does however have multiple color indications and can be configured in three different display formats. No soldering is required with this option
 
