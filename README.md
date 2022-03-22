@@ -33,7 +33,7 @@ Since all of the sensors utilize an I2C Qwiic connector, no soldering is require
 
 ### The display
 
-![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/three-iaq-displays.png)
+![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/displays.png)
 
 The standard display uses two 1.2" Bi-color 8x8 LED Matrix displays that cost about $16 each ($32 total). This display provides visual feedback of the air quality score and changes color as the score increases. A less costly option utilizes an eight segment multi-color LED bargraph that displays the air quality score as a horizontal graph that also changes color as the score changes. 
 
