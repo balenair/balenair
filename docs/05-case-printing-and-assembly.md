@@ -46,7 +46,7 @@ Now use eight M1.4 x 5mm self-tapping screws to attach the bracket assembly to t
 The `pi_ring` holds the Raspberry Pi 3A+ or Zero 2 W in place. 
 
 ### Pi 3A+
-Use four #2-56 pan head screws 5/16" long to mount the Pi in the provided holes and secure with nuts as ahown below. Make sure the micro USB port lines up with the holeon the side of the pi ring.
+Use four #2-56 pan head screws 5/16" long to mount the Pi in the provided holes and secure with nuts oriented as ahown below. Make sure the micro USB port lines up with the hole on the side of the pi ring.
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/pi-ring-3a.png)
 
@@ -68,21 +68,27 @@ Printing tips: This piece does not have a lot of bed surface area, so a brim is 
 ## Insulate sense
 The `insulate_sense` piece is used to mount the sensors and insulate them from the heat of the Pi. There is a small opening at the bottom of this piece to feed a Qwiic connector and cable through to the other side to attach to the first sensor (usually the particulate unit). The side opposite the sensor mounts has two holes to attach the Qwiic multiport connector with #2-56 1/2" pan head screws and nuts.
 
-There are mounting holes in the posts for all sensors. You can use two, three, or four #2-56 5/32" pan head screws to attach each sensor. For extra stability, use one or more 5/8" screw with a nut on the other end per sensor. The bottom of the particulate sensor "sits" on a small shelf. TIP: Tape the blue part of the particulate sensor to the circuit board with a small amount of electrical tape to keep it from sliding around. (Make sure not to cover any of the venting holes on the right of the sensor though!) You can daisy chain the sensors together using various length Qwiic connector cables.
+There are mounting holes in the posts for all sensors. You can use two, three, or four #2-56 5/32" pan head screws to attach each sensor. For extra stability, use one or more 5/8" screw with a nut on the other end per sensor. The bottom of the particulate sensor "sits" on a small shelf. TIP: Tape the blue part of the particulate sensor to the circuit board with a small amount of electrical tape to keep it from sliding around. (Make sure not to cover any of the venting holes on the right of the sensor though!) You can daisy chain the sensors together using various length Qwiic connector cables. The image below shows the location for each sensor:
 
-![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_insulate.png)
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/insulate-sense-front.png)
 
 
-![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_insulate_back.png)
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/insulate-sense-back.png)
+
 
 Printing tips: This piece has a good amount of surface area on the bed, so a skirt may be sufficient. Printing characteristics: 31g/10.36m of filament; 3:42 print time.
 
 ## Back
-The back of the unit provides protection and airflow for the sensors. All four pieces are held together by inserting four M3 x 40mm hex socket head screws through the back piece and attaching to the screw holes in the front piece. These screws should not thread into any piece other than the front - they should move freely until they hit the holes in the front. You may need to start the threading on the front piece by inserting a small wood screw and rotating it a few turns.
+The back of the unit provides protection and airflow for the sensors. All four pieces are held together by inserting four M3 x 40mm hex socket head screws through the back piece and attaching to the screw holes in the front piece. These screws should not thread into any piece other than the front - they should move freely until they hit the holes in the front. Since the front three pieces are interlocking, you can sandwich them together (being careful not to crimp any wires!) before placing the back piece on. You may need to start the threading on the front piece by inserting a small wood screw and rotating it a few turns.
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/back.png)
 
 Printing tips: This piece has a limited amount of bed surface area, so a brim is recommended. In addition, you should enable the "generate support" option for placement "everywhere" and a support overhang angle of "45". Printing characteristics: 25g/8.44m of filament; 5:09 print time.
 
 ## stand
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/stand.png)
+
 The optional stand is a small angled platform for your IAQ device to sit on, which tilts it slightly upward for an improved viewing angle. When slicing this piece, it's best to rotate it forward 90 degrees and then select your "lay flat" option. Using a brim is also recommended.
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/stand-slicing.png)
