@@ -37,3 +37,6 @@ Finally, use the two remaining "Qwiic to female jumper" cables to connect the tw
 ### LED bargraph display
 
 Connecting this type of display is easy: simply connect one end of a 100mm Qwiic connector to one of the jacks on the LED stick. Connect the other end to a free port in the 4-way Qwiic multiport connector.
+
+### Next
+[3. Software setup](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/03-software-setup.md)
