@@ -1,4 +1,4 @@
-# IAQ usage and configuration
+# 4. IAQ usage and configuration
 
 After you have put together the hardware, installed the software and (optionally) assembled the case, you can power on the IAQ by plugging a standard 5V/2.5A or greater power transformer into the Pi's micro USB port. After about a minute, the air quality score should be visible on the display. Sensor readings are taken approximately once per minute.
 
@@ -83,3 +83,5 @@ The [SGP30 VOC sensor](https://www.adafruit.com/product/3709) is a type of gas s
 
 In other words, the first time you power on the device, let it sit for 12 hours in the location it will be used. If you significantly change the device's location or power the device down for more than seven days, you can force the unit to calculate a new baseline. To do that, set the device variable `DELETE_BASELINE` to `1` at which point the device will restart and delete the stored baseline. After it restarts, delete the `DELETE_BASELINE` variable or set it to `0`. The device will restart again and calculate a new baseline. 
 
+### NEXT
+[Case printing & assembly](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/05-case-printing-and-assembly.md)
