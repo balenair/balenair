@@ -43,9 +43,25 @@ Now use eight M1.4 x 5mm self-tapping screws to attach the bracket assembly to t
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/qwiic-stick-assemble-3.png)
 
 ## Pi Ring
-The `pi_ring` holds the Raspberry Pi 3A+ or Zero 2 W in place. Use four #2-56 pan head screws 1/4" to 5/16" long to mount the Pi in the provided holes. A longer screw will go through the pi_ring so a nut could be added to the other side for additional stability. Note the four cylidrical spacers that print along the right wall of the part. These are used to properly mount a Pi Zero 2 W - you can ignore or discard them if using a Pi 3A+. See the photos below for the proper mounting orientation of the two different Pi models:
+The `pi_ring` holds the Raspberry Pi 3A+ or Zero 2 W in place. 
 
-![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/case_pi.png)
+### Pi 3A+
+Use four #2-56 pan head screws 5/16" long to mount the Pi in the provided holes and secure with nuts as ahown below. Make sure the micro USB port lines up with the holeon the side of the pi ring.
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/pi-ring-3a.png)
+
+### Pi Zero 2W
+Note the four cylidrical spacers that print along the right wall of the part. These are used to properly mount a Pi Zero 2 W - you can ignore or discard them if using a Pi 3A+. 
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/pi-zero2-spacers.png)
+
+To mount a Zero 2 W, remove the spacers and place them on the screw holes as shown below. The short spacers go closest to the wall with the hole, while the longer spacers go on the two midway tabs.
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/pi-ring-spacers.png)
+
+Mount the Pi Zero 2 inverted onto the spacers as shown below and secure with longer screws and nuts.
+
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/pi-ring-zero-2.png)
 
 Printing tips: This piece does not have a lot of bed surface area, so a brim is recommended. Printing characteristics: 27g/9.04m of filament; 5:15 print time.
 
