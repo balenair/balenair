@@ -1,4 +1,4 @@
-# Software setup
+# 3. Software setup
 
 Now that you have your hardware set up and connected, it's time to install the software...
 
@@ -61,3 +61,6 @@ If you are running into issues getting your IAQ software running, please try the
 1. Check the [support and troubleshooting guide](../support) for common issues and how to resolve them.
 2. Post in the [forums] for help from our growing community.
 3. Create an issue on the [IAQ GitHub project] if you find your issue may be a bug or problem with the IAQ software.
+
+### NEXT
+[4. Use and configuration](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/04-use-and-configuration.md)
