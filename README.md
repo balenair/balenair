@@ -51,7 +51,7 @@ See the documentation for more information about printing and assembly of the ca
 
 ## Documentation
 
-Head over to our docs for detailed parts lists, options, building, installation and usage instructions, customization options and more!
+Head over to [our docs](https://github.com/balena-io-playground/balena-iaq/tree/new-docs/docs) for detailed parts lists, options, building, installation and usage instructions, customization options and more!
 
 ## Getting Help
 
