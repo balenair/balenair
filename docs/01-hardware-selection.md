@@ -25,7 +25,7 @@ The sensors evaluate your air and return data that is used to deterime your air 
 
 All of these sensors use the popular I2C protocol to communicate with the Pi and include [Qwiic](https://www.sparkfun.com/qwiic) connectors so you don't need to do any soldering to use these sensors.
 
-The IAQ will automatically detect which sensors are present and caluclate the air quality score accordingly. If you connect the specified VOC sensor but do not have the specified CO2 sensor attached, the VOC sensor's eCO2 readings will be reported as the CO2 values. (eCO2 is generally less accurate than CO2 and requires proper calibration - [see here](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/04-use-and-configuration.md#voc-calibration))
+The IAQ will automatically detect which sensors are present and caluclate the air quality score accordingly. If you connect the specified VOC sensor but do not have the specified CO2 sensor attached, the VOC sensor's eCO2 readings will be reported as the CO2 values. (eCO2 is generally less accurate than CO2 and requires proper calibration - [see here](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/04-use-and-configuration.md#voc-calibration))
 
 If the SCD-40 CO2 sensor times out (meaning it can't get a reading after 15 tries) it will skip until the next measurement interval. If you have a VOC sensor attached when the SCD-40 times out, it will use the eCO2 reading for CO2 until it tries again to read the SCD-40 on the next measurement interval.
 
@@ -33,7 +33,7 @@ The particulate sensor will timeout if no reading can be taken after three tries
 
 ## Choosing your display
 
-![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/displays.png)
+![IAQ displays](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/displays.png)
 
 Each IAQ device has a bright LED display so you can read your score from across a room. The score will be calculated and displayed even if your device is not connected to the internet. Regardless of the display type you choose, you can still obtain detailed sensor and air quality score readings from the built-in web dashboard.
 
@@ -43,7 +43,7 @@ This is the most detailed display and also the most expensive. It utilizes two $
 
 The matrix displays are driven via I2C and require two [Qwiic to female header](https://www.adafruit.com/product/4397) cables to connect to the Pi. 
 
-![IAQ displays](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/co2-display.png)
+![IAQ displays](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/co2-display.png)
 
 In addition to displaying the two digit score, these displays can optionally show the most dominant pollutant type (CO2, PM10, PM2.5, VOC) detected by the sensors, as well as some rudimentary animations. The displayed information will change color from green to orange to red depending on the score.
 
@@ -59,7 +59,7 @@ To summarize the parts for this option:
 
 This type of display is less detailed than the two digit matrix (the score is broken into eight segments with each one representing 12.5 points) and can't display the pollutant type. It does however have multiple color indications and can be configured in three different display formats. No soldering is required with this option
 
-![Qwiic Stick](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/qwiic-stick.png)
+![Qwiic Stick](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/qwiic-stick.png)
 
 This display is $11 or about a third the cost of the LED matrix and is based on the 10 LED [SparkFun Qwiic Stick](https://www.sparkfun.com/products/18354). (We only use eight of the ten LEDs that neatly fit the IAQ's case window.) In addition to one of these displays, you'll need a [100mm QT to QT cable](https://www.adafruit.com/product/4210) to connect it to the IAQ.
 
@@ -81,4 +81,4 @@ Regardless of the options above, you'll need the following parts:
 Note that there are some additional hardware requirements if you will be using the custom 3D printed case - see this section for details.
 
 ### NEXT
-[2. Hardware Setup](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/02-hardware-setup.md)
+[2. Hardware Setup](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/02-hardware-setup.md)
