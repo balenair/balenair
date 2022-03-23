@@ -1,6 +1,6 @@
 # 2. Hardware setup
 
-Once you have all of your parts gathered, it's a good idea to walk through this assembly guide to get familiar with how everything gets connected together. Even if you will be using the 3D printed case, you may want to connect everything together and install the software before placing everything in the case. All of the connections are modular so it's easy to disconnect all of the parts and re-cobbect them again later inside the case. Make sure your Pi is powered off during the hardware setup!
+Once you have all of your parts gathered, it's a good idea to walk through this assembly guide to get familiar with how everything is connected together. Even if you will be using the 3D printed case, you may want to connect everything together and install the software before placing everything in the case. All of the connections are modular so it's easy to disconnect all of the parts and re-connect them again later inside the case. Make sure your Pi is powered off during the hardware setup!
 
 ## Connecting the sensors
 
@@ -25,7 +25,9 @@ The connector at the other end of the cable connects to any one of the four port
 
 If you're using the two LED matrix boards, you'll first need to solder each LED matrix to its backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). Then solder the four pin male headers to each backpack. If you will be using the standard case, you must use the angled headers as specified in the parts list, not the straight headers included in the backpack kit. Make sure the headers are angled outwards as shown below:
 
-You'll also need to change the I2C address of one of the displays. using [this guide](https://learn.adafruit.com/adafruit-led-backpack/changing-i2c-address), solder together the A0 pads of one display to change its address from 0x70 to 0x71. This will be the left digit when facing the two displays.
+![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/led-matrix-headers.png)
+
+You'll also need to change the I2C address of one of the displays. using [this guide](https://learn.adafruit.com/adafruit-led-backpack/changing-i2c-address), solder together the A0 pads of one display to change its address from 0x70 to 0x71. This will be the left digit when facing the front of the two displays.
 
 Finally, use the two remaining "Qwiic to female jumper" cables to connect the two displays to the two open ports on the multiport connector. The jumper cables connect to the headers as follows:
 
