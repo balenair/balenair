@@ -27,7 +27,7 @@ The front panel holds the LED/backpack assemblies. Each assembly sits on a set o
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/matrix-front-rear.png)
 
-Printing tips: Note that the first layer is only one layer thick for the display window portion of the front piece. Since that adds a lot of surface area on the bed, you can probably get by with a skirt instead of a brim for this part. We suggest printing this piece in some version of white so that the window does not interfere with the LED colors. (Our standard has been to print the front and back in white, and the middle pieces in orange.) Typical printing characteristsics: 28g/9.4m of filament; 4:06 print time.
+Printing tips: Note that the first layer is only one layer thick for the display window portion of the front piece. Since that adds a lot of surface area on the bed, you can probably get by with a skirt instead of a brim for this part. We suggest printing this piece in some version of white so that the window does not interfere with the LED colors. (Our standard has been to print the front and back in white, and the middle pieces in a contrasting color such as orange.) Typical printing characteristsics: 28g/9.4m of filament; 4:06 print time.
 
 ### LED Bargraph
 If you are using the LED bargraph, also print the `bargraph-bracket-front.stl` and `bargraph-bracket-back.stl` pieces. Start by laying the front bracket piece (with the square cutouts) flat with the pins facing up and the indented area on the left. Then place the Qwiic Stick upside down onto the four pins as shown below:
