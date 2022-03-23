@@ -4,9 +4,7 @@ import time
 import board
 import busio
 import json
-from digitalio import DigitalInOut, Direction, Pull
-from adafruit_pm25.i2c import PM25_I2C
-from adafruit_max7219 import matrices
+import qwiic_led_stick
 import paho.mqtt.client as mqtt
 import os
 import sys
@@ -80,12 +78,6 @@ try:
 except Exception as e:
     print("Invalid value for DELETE_BASELINE. Using default 0.")
     del_baseline = 0
-
-try:
-    bar_style = int(os.getenv('BAR_VERSION', '1'))
-except Exception as e:
-    print("Invalid value for BAR_VERSION. Using default 1.")
-    bar_style = 1
 
 try:
     bar_mode = int(os.getenv('BAR_MODE', '1'))
@@ -172,7 +164,6 @@ else:
 # SPDX-License-Identifier: Unlicense
 import adafruit_scd4x
 
-#i2c = board.I2C()
 try:
     scd4x = adafruit_scd4x.SCD4X(i2c)
 except Exception as e:
@@ -185,15 +176,12 @@ else:
 import board
 from adafruit_ht16k33.matrix import Matrix8x8x2
 
-#i2c = board.I2C()
 try:
     matrix2 = Matrix8x8x2(i2c, address=0x70)
     matrix1 = Matrix8x8x2(i2c, address=0x71)
 except Exception as e:
     logger.info("No LED matrix found, using LED bar graph...")
     bar_graph = 1
-
-#i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
 
 # Delete baseline file(s) if device variable set
 if del_baseline != 0:
@@ -240,30 +228,11 @@ else:
         sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
     logger.info("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
 
-# List for LED wiring configuration
-# format: [LED0 grn, LED0 red, LED1 grn, LED1 red... LEDx grn, LEDx red] max 32 total bi-color LEDs
-# each entry is pixel [x, y] where x = row (DIG) and y = col (SEG) max 8x8, must be an even # of entries
-# below for prototype LED 8 pcb:
-if bar_style == 3:
-    LED_config = [[0,6],[0,7],[0,4],[0,5],[0,2],[0,3],[0,0],[0,1],[1,6],[1,7],[1,4],[1,5],[1,2],[1,3],[1,0],[1,1]]
-# Below config for 12 bi-color LED large breadboard
-if bar_style == 4:
-    LED_config = [[0,6],[0,5],[0,4],[0,3],[0,2],[0,1],[0,0],[0,7],[1,6],[1,5],[1,2],[1,3],[1,2],[1,1],[1,0],[1,7],[2,6],[2,5],[2,2],[2,3],[2,2],[2,1],[2,0],[2,7]]
-# Below config for prototype pcb 12 LED bargraph:
-if bar_style == 2:
-    LED_config = [[0,7],[0,0],[0,3],[0,5],[0,2],[0,1],[0,4],[0,6],[1,7],[1,0],[1,3],[1,5],[1,2],[1,1],[1,4],[1,6],[2,7],[2,0],[2,3],[2,5],[2,2],[2,1],[2,4],[2,6]]
-# Below config for prototype pcb 12 LED bargraph - INVERTED:
-if bar_style == 1:
-    LED_config = [[2,4],[2,6],[2,2],[2,1],[2,3],[2,5],[2,7],[2,0],[1,4],[1,6],[1,2],[1,1],[1,3],[1,5],[1,7],[1,0],[0,4],[0,6],[0,2],[0,1],[0,3],[0,5],[0,7],[0,0]]
 # For LED bar graph:
 if bar_graph == 1:
-    clk = board.SCK
-    din = board.MOSI
-    cs = DigitalInOut(board.CE0)
-
-    spi = busio.SPI(clk, MOSI=din)
-    bar_display = matrices.Matrix8x8(spi, cs)
-
+    my_stick = qwiic_led_stick.QwiicLEDStick()
+    time.sleep(0.75)
+    my_stick.LED_off()
 
 def scd_sense():
     #
@@ -278,7 +247,6 @@ def scd_sense():
         time.sleep(1)
         if count > 15:
             logger.warning("scd4x reading timed out! No CO2 data available!")
-            scd_sensor = 0
             scd_timeout = 1
             return scd_dict
             
@@ -314,7 +282,6 @@ def pm_sense():
                 logger.warning("Unable to read from PM sensor (3), skipping...")
                 return {}
 
-    #print()
     logger.info("Concentration Units (standard)")
     logger.info("---------------------------------------")
     logger.info("PM 1.0: {0} PM2.5: {1} PM10: {2}".format(aqdata["pm10 standard"], aqdata["pm25 standard"], aqdata["pm100 standard"]))
@@ -477,8 +444,8 @@ def display_index(index_value):
     left_digit = disp_val[:1]
     right_digit = disp_val[-1:]
 
-    display_led(matrix1, left_digit, my_color)
     display_led(matrix2, right_digit, my_color)
+    display_led(matrix1, left_digit, my_color)
     
 def display_led(my_matrix, my_value, color):
     #
@@ -515,9 +482,6 @@ def display_pollutant(pm10, pm25, co2, voc):
         my_color = 3
     else:
         my_color = 1
-    #print("display...")
-    #print("max value {0}".format(max_value))
-    #print("my_color {0}".format(my_color))
     display_icon(icon_index, my_color)
     
     
@@ -529,7 +493,8 @@ def display_icon(icon_index, my_color):
     if bar_graph == 1:
         print("Skipping LED matrix icon display...")
         return
-    for digit in range(2):
+    # Loop through digits from 1 to 0
+    for digit in range(1, -1, -1):
       if digit == 0:
           my_matrix = matrix1
       else:
@@ -543,203 +508,115 @@ def display_icon(icon_index, my_color):
               else:
                   my_matrix[x,y] = my_matrix.LED_OFF
 
-def LED_control(LED, color):
-    # 
-    # Turns a bi-color LED on in buffer and sets its color - still must call display()
-    # LED is position in dict LED_config - two elements per LED, green and red.
-    # color can be "red", "green", or "yellow"
+def bar_index(idx):
     #
-    #print("LED CONTROL {0},{1}".format(LED, color))
-    led_max = len(LED_config)/2
-    #print("led_max:{}".format(led_max))
-    if (LED < 0) or (LED > led_max):
-        logger.debug("LED value out of range.")
-        return
-
-    green_led = LED_config[LED * 2]
-    red_led = LED_config[(LED * 2) + 1]
-
-    if (color == "red") or (color == "yellow"):
-        bar_display.pixel(red_led[0], red_led[1], 1)
-        #print("Displaying pixel LED_config[{0}]: {1}, {2}".format((LED * 2) + 1, red_led[0], red_led[1]))
-    if (color == "green") or (color == "yellow"):
-        bar_display.pixel(green_led[0], green_led[1], 1)
-        #print("Displaying pixel LED_config[{0}]: {1}, {2}".format((LED * 2), green_led[0], green_led[1]))
-
-def bar_index(idx, force_mode=0):
-    #
-    # Display an index on the LEDs
+    # Display an index on the LED bargraph
     # idx = 0 - 99
     # bar color chosen by green_limit, yellow_limit
     #
-    if idx > 99:
-        idx = 99
-
-    segment_count = int(len(LED_config)/2)
-    segment_value = 100/(segment_count)
-    
-    bar_display.clear_all()
-
-    if bar_mode == 1 or force_mode == 1:
-        # Standard bargraph shows percent
-        logger.debug("Calling bar_index {}".format(idx))
-        for i in range(segment_count):
-            if (idx > (i) * segment_value):
-                if idx < green_limit:
-                    LED_control(i, "green")
-                elif idx > yellow_limit:
-                    LED_control(i, "red")
-                else:
-                    LED_control(i, "yellow")
-
-        # Show first LED for zero index (can be disabled by user)
-        if (idx == 0) and (zero_bar == 1):
-            LED_control(0, "green")
-
-    elif bar_mode == 2:
-        # All segments displayed at all times, color varies
-        for i in range(segment_count):
-            logger.debug(" bar mode 2, i:{0}, idx:{1}".format(i, idx))
-            if idx < green_limit:
-                logger.debug("bar 2 green")
-                LED_control(i, "green")
+    my_stick.set_all_LED_brightness(1)
+    j = 0
+    for i in range(7,-1,-1):
+        time.sleep(0.25)
+        j = j + 1
+        seg_value_start = (j-1) * (100/8)
+        seg_value_end = j * (100/8)
+        if bar_mode == 2: # Standard bargraph, no fillers
+            if idx <= green_limit:
+                my_stick.set_single_LED_color(i, 0, 255, 0)
             elif idx > yellow_limit:
-                logger.debug("bar 2 yellow")
-                LED_control(i, "red")
+                my_stick.set_single_LED_color(i, 255, 0, 0)
             else:
-                LED_control(i, "yellow")
+                my_stick.set_single_LED_color(i, 255, 155, 0)
+        else:  # mode 0: All LEDs 
+            if ((idx > seg_value_start ) and (idx <= seg_value_end)) or (idx > seg_value_end):
+                if idx <= green_limit:
+                    my_stick.set_single_LED_color(i, 0, 255, 0)
+                elif idx > yellow_limit:
+                    my_stick.set_single_LED_color(i, 255, 0, 0)
+                else:
+                    my_stick.set_single_LED_color(i, 255, 155, 0)
+            else:
+                if bar_mode == 1: # Standard bargraph with filler (default)
+                    my_stick.set_single_LED_color(i, 25, 25, 25)
 
-    else:
-        # All segments of current color on at once
-        idx_color = "green"
-        idx_limit = 0
-        if idx < green_limit:
-            idx_color = "green"
-            idx_limit = green_limit
-        elif idx > yellow_limit:
-            idx_color =  "red"
-            idx_limit = red_limit
-        else:
-            idx_color = "yellow"
-            idx_limit = yellow_limit
-        for i in range(segment_count):
-            if (idx_limit > (i) * segment_value):
-                LED_control(i, idx_color)
+    if (idx <= (100/8)) and (zero_bar == 1):
+        my_stick.set_single_LED_color(7, 0, 255, 0)
 
-    bar_display.show()
-    bar_display.brightness(10)
+def LED_icon(icon_num):
 
-def LED_test(rows, cols):
-
-    # For testing LEDs. Provide total # of rows and cols
-    bar_display.clear_all()
-
-    for x in range(rows):
-        for y in range(cols):
-            logger.debug("LED ({0}, {1})".format(x,y))
-            bar_display.pixel(x, y, 1)
-            bar_display.show()
-            input("Press Enter to continue...")
-            bar_display.clear_all()
-
-def LED_icons(icon_num):
-
-    # Displays rudimentary icons on LED bar graph.
-
-    bar_display.clear_all()
+    # Displays rudimentary animation on LED bar graph.
 
     if icon_num == 1:
-        # All red
-        logger.debug("LED_icons: all red")
-        for i in range(1, len(LED_config), 2):
-            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
+        # alt red/grn
+        my_stick.set_single_LED_color(7, 255, 0, 0)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(6, 0, 255, 0)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(5, 255, 0, 0)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(4, 0, 255, 0)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(3, 255, 0, 0)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(2, 0, 255, 0)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(1, 255, 0, 0)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(0, 0, 255, 0)
+        time.sleep(0.2)
 
     if icon_num == 2:
-        # All green
-        logger.debug("LED_icons: all green")
-        for i in range(0, len(LED_config), 2):
-            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
-
-    if icon_num == 3:
-        # All yellow
-        logger.debug("LED_icons: all yellow")
-        for i in range(0, len(LED_config), 2):
-            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
-            bar_display.pixel(LED_config[i+1][0], LED_config[i+1][1], 1)
+        # All white
+        my_stick.set_single_LED_color(7, 25, 25, 25)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(6, 25, 25, 25)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(5, 25, 25, 25)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(4, 25, 25, 25)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(3, 25, 25, 25)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(2, 25, 25, 25)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(1, 25, 25, 25)
+        time.sleep(0.2)
+        my_stick.set_single_LED_color(0, 25, 25, 25)
+        time.sleep(0.2)
     
-    if icon_num == 4:
-        # First 1/3, green
-        logger.debug("LED_icons: 1/3 green")
-        for i in range(0, int(len(LED_config)/3), 2):
-            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
-    
-    if icon_num == 5:
-        # Second 1/3, green
-        logger.debug("LED_icons: middle 1/3 green")
-        for i in range(int(len(LED_config)/3), int(len(LED_config)/3)*2, 2):
-            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
-
-    if icon_num == 6:
-        # Last 1/3, green:
-        logger.debug("LED_icons: last 1/3 green")
-        for i in range(int(len(LED_config)/3)*2, len(LED_config), 2):
-            bar_display.pixel(LED_config[i][0], LED_config[i][1], 1)
- 
-    if icon_num == 7:
-        # Staggered red:
-        logger.debug("LED_icons: staggered red")
-        for i in range(0, len(LED_config), 4):
-            bar_display.pixel(LED_config[i+1][0], LED_config[i+1][1], 1)
-
-    if icon_num == 8:
-        # Staggered alternate red:
-        logger.debug("LED_icons: staggered alternate red")
-        for i in range(2, len(LED_config), 4):
-            bar_display.pixel(LED_config[i+1][0], LED_config[i+1][1], 1)
-
-    bar_display.show()
-    
-# START
+############################ START ##############################
 
 # Make sure there's at least one sensor
 
 if max(pm_sensor, scd_sensor, voc_sensor) < 1:
     if bar_graph == 1:
-        # Display bargraph animation
-        for i in range(8):
-            LED_icons(7)
-            time.sleep(0.66)
-            LED_icons(8)
-            time.sleep(0.66)
+        LED_icon(1)
+        time.sleep(5)
     else:
         display_icon(8, 1)
     logger.critical("No sensors found! Exiting...")
     sys.exit()
 
+# startup LED animation
+if bar_graph == 1:
+    LED_icon(2)
+        
 if pm_sensor == 1:
     display_icon(0, 2)
     time.sleep(2)
     display_icon(2, 2)
     time.sleep(1)
+   
 if voc_sensor == 1:
     display_icon(6, 2)
     time.sleep(2)
-
+        
 if scd_sensor == 1:
     display_icon(4, 2)
     time.sleep(1)
     scd4x.start_periodic_measurement()
     logger.info("Waiting for scd4x  measurement....")
-
-# Bar graph startup animation
-if bar_graph == 1:
-    for i in range(1,100, 5):
-        bar_index(i, 1)
-        time.sleep(0.15)
-    bar_index(0)
-    # Uncomment below to run an interactive LED test
-    #print("LED TEST")
-    #LED_test(3, 8)
 
 client = mqtt.Client()
 try:
@@ -767,8 +644,8 @@ while True:
         logger.info("Testing VOC...")
         voc = voc_sense()
         voc_idx = voc_index(voc["TVOC"])
-        #print("scd_sensor: {}".format(scd_sensor))
-        if scd_sensor == 0:
+       
+        if (scd_sensor == 0) or (scd_timeout == 1):
             # Use eCO2 for CO2
             logger.info("Using eCO2 for C02.")
             logger.info("voc[eCO2]={}".format(voc["eCO2"]))
@@ -809,9 +686,8 @@ while True:
         time.sleep(55)
     
     if scd_timeout == 1:
-        # Turn sensor back on and try again
+        # Turn sensor back on and try again on next pass
         scd_timeout = 0
-        scd_sensor = 1
         
     if voc_sensor == 1:
 
@@ -819,7 +695,7 @@ while True:
         logger.debug("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
         if voc_baseline_count == voc_baseline_limit:
             logger.info("Saving VOC baseline values... CO2eq = {0}, TVOC = {1}".format(sgp30.baseline_eCO2, sgp30.baseline_TVOC))
-            # Add a save routine here
+            
             try:
                 f = open("/data/my_data/baseline-eco2.txt", "w")
             except Exception as e:
