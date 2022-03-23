@@ -12,7 +12,7 @@
 ![Dashboard](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/dashboard.png)
 
 ## Description and use
-The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score.  The standard IAQ device displays the score using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality). A simpler and less expensive display option uses eight RGB LEDs to display a bar graph based on the score. The IAQ is powered by a Raspberry Pi. ([See here](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/01-hardware-selection.md#choosing-your-pi) for supported versions.) The IAQ can calculate and display an air quality score without internet access, but does require internet access for initial software download and to view your dashboard outside your internal network.
+The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score.  The standard IAQ device displays the score using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality). A simpler and less expensive display option uses eight RGB LEDs to display a bar graph based on the score. The IAQ is powered by a Raspberry Pi. ([See here](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/01-hardware-selection.md#choosing-your-pi) for supported versions.) The IAQ can calculate and display an air quality score without internet access, but does require internet access for initial software download and to view your dashboard outside your internal network.
 
 The LED display changes color based on the score as follows:
 | Score range | Description | LED display color | 
@@ -29,7 +29,7 @@ The project consists of up to three sensors but only one is required. You can ch
 - Volatile Organic Compound (VOC) sensor for gasses emitted by solid and liquid products
 - Temperature and humidity environmental sensors
 
-Since all of the sensors utilize an I2C Qwiic connector, no soldering is required. See the [parts list](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/01-hardware-selection.md#choosing-your-sensors) in the documentation for more details on cost and availability of these sensors.
+Since all of the sensors utilize an I2C Qwiic connector, no soldering is required. See the [parts list](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/01-hardware-selection.md#choosing-your-sensors) in the documentation for more details on cost and availability of these sensors.
 
 ### The display
 
@@ -39,19 +39,19 @@ The standard display uses two 1.2" Bi-color 8x8 LED Matrix displays that cost ab
 
 The standard matrix display requires some soldering to build. The bargraph LED version can be built without any soldering.
 
-You can build a working IAQ device for as little as $50! See the parts list in the [Hardware Selection Guide](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/01-hardware-selection.md) for more details on cost and availability of the display parts.
+You can build a working IAQ device for as little as $50! See the parts list in the [Hardware Selection Guide](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/01-hardware-selection.md) for more details on cost and availability of the display parts.
 
 ### The case
 
 We provide STL files so you can use your 3D printer to print a beautiful case for the IAQ. Don't have a 3D printer? Order the case parts from a local service bureau.
 
-The case consists of four interlocking layers that are held together by four M3 x 40mm hex socket head screws. The case accomodates any or all of the supported sensors, two different Raspberry Pis, as well as any of the display options. (A printable bracket may be required)
+The case consists of four interlocking layers that are held together by four M3 x 40mm hex socket head screws. The case accomodates any or all of the supported sensors, two different Raspberry Pis, as well either of the display options.
 
-See [the documentation](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/05-case-printing-and-assembly.md) for more information about printing and assembly of the case.
+See [the documentation](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/05-case-printing-and-assembly.md) for more information about printing and assembly of the case.
 
 ## Documentation
 
-Head over to [our docs](https://github.com/balena-io-playground/balena-iaq/tree/new-docs/docs) for detailed parts lists, options, building, installation and usage instructions, customization options and more!
+Head over to [our docs](https://github.com/balena-io-playground/balena-iaq/tree/master/docs) for detailed parts lists, options, building, installation and usage instructions, customization options and more!
 
 ## Getting Help
 
