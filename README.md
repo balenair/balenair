@@ -1,4 +1,4 @@
-![The IAQ](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/iaq-device-m1.png)
+![The IAQ](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/unit2.jpg)
 
 **An attractive device you can easily build that measures the quality of your indoor air and provides readable feedback on an integrated LED display and a web dashboard.**
 
