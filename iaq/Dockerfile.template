@@ -12,7 +12,7 @@ RUN install_packages python3-pil
 #     
 RUN pip3 install RPi.GPIO paho-mqtt Adafruit-Blinka adafruit-circuitpython-pm25 \
     adafruit-circuitpython-scd4x adafruit-circuitpython-ht16k33==4.1.5 adafruit-circuitpython-sgp30 \
-    adafruit-circuitpython-max7219 adafruit-circuitpython-framebuf
+    sparkfun-qwiic-led-stick
 
 COPY *.py ./
 
