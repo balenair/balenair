@@ -45,11 +45,11 @@ The display changes color based on the score as follows:
 
 ### LED bargraph display
 
-![Bargraph](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/bargraph-display-two.png)
+![Bargraph](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/bargraph-display-two.png)
 
 By default the bargraph display will illuminate a segment from left to right based on the IAQ score, with each segment representing 12.5 points. The segments will be lit according to the color scheme shown above for the matrix display. Any unused segments to the right will be slightly illuminated in white. To eliminate the white segments, set the device variable `BAR_MODE` to `2`.
 
-![Bargraph](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/bargraph-display-all.png)
+![Bargraph](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/bargraph-display-all.png)
 
 If you set the `BAR_MODE` to `0` all of the LED segments will always be illuminated in either green, yellow, or red depending on the IAQ sore as shown above. 
 
@@ -84,4 +84,4 @@ The [SGP30 VOC sensor](https://www.adafruit.com/product/3709) is a type of gas s
 In other words, the first time you power on the device, let it sit for 12 hours in the location it will be used. If you significantly change the device's location or power the device down for more than seven days, you can force the unit to calculate a new baseline. To do that, set the device variable `DELETE_BASELINE` to `1` at which point the device will restart and delete the stored baseline. After it restarts, delete the `DELETE_BASELINE` variable or set it to `0`. The device will restart again and calculate a new baseline. 
 
 ### NEXT
-[Case printing & assembly](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/05-case-printing-and-assembly.md)
+[Case printing & assembly](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/05-case-printing-and-assembly.md)
