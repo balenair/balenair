@@ -62,7 +62,7 @@ Upon initial startup, if no sensors are detected the bargraph display will show 
 ## The IAQ dashboard
 The IAQ dashboard is a pre-built [Grafana](https://grafana.com/grafana/) dashboard that shows you the current and historical values from all of your sensors as well as the air quality score over time. If you are on the same network as the device, you can browse to IAQ.local or to the local IP address of the device (which you can find on its balenaCloud dashboard) to see the dashboard. If you want to enable access to the IAQ dashboard from outside your network, you can enable the "Public Device URL" from your balenaCloud dashboard and then click the icon next to that switch to view its public URL.
 
-To modify the IAQ dashboard or add your own, you can log into Grafana with the arrow icon in the lower left of the screen. The default username and password are admin/admin. If you want to experiment with making changes to the dashboard, you can copy the default dashboard and make changes to it so you don't risk making inadvertant alterations.
+To modify the IAQ dashboard or add your own, you can log into Grafana with the arrow icon in the lower left of the screen. The default username and password are admin/admin. If you want to experiment with making changes to the dashboard, you can copy the default dashboard and make changes to it so you don't risk making inadvertent alterations.
 
 See the [Grafana documentation](https://grafana.com/docs/grafana/next/panels/working-with-panels/) for more information about modifying/designing dashboards.
 
