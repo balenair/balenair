@@ -30,11 +30,11 @@ The front panel holds the LED/backpack assemblies. Each assembly sits on a set o
 Printing tips: Note that the first layer is only one layer thick for the display window portion of the front piece. Since that adds a lot of surface area on the bed, you can probably get by with a skirt instead of a brim for this part. We suggest printing this piece in some version of white so that the window does not interfere with the LED colors. (Our standard has been to print the front and back in white, and the middle pieces in a contrasting color such as orange.) Typical printing characteristsics: 28g/9.4m of filament; 4:06 print time.
 
 ### LED Bargraph
-If you are using the LED bargraph, also print the `bargraph-bracket-front.stl` and `bargraph-bracket-back.stl` pieces. Start by laying the front bracket piece (with the square cutouts) flat with the pins facing up and the indented area on the left. Then place the Qwiic Stick upside down onto the four pins as shown below:
+If you are using the LED bargraph, also print the `bargraph-bracket-front.stl` and `bargraph-bracket-back.stl` pieces. Start by laying the front bracket piece (with the square cutouts) flat with the posts facing up and the indented area on the left. Then place the Qwiic Stick upside down onto the four posts as shown below:
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/qwiic-stick-assemble-1.png)
 
-Next, place the back bracket piece on top of the four pins fron the front piece, lining up the four holes. Note that the wider side of the back bracket (with the black marker in the image below) should be on the right. Use four M1.4 x 5mm self-tapping screws to secure the two parts of the bracket together with the Qwiic Stick in between.
+Next, place the back bracket piece on top of the four posts fron the front piece, lining up the four holes. Note that the wider side of the back bracket (with the black marker in the image below) should be on the right. Use four M1.4 x 5mm self-tapping screws to secure the two parts of the bracket together with the Qwiic Stick in between.
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/qwiic-stick-assemble-2.png)
 
@@ -46,7 +46,7 @@ Now use eight M1.4 x 5mm self-tapping screws to attach the bracket assembly to t
 The `pi_ring` holds the Raspberry Pi 3A+ or Zero 2 W in place. 
 
 ### Pi 3A+
-Use four #2-56 pan head screws 5/16" long to mount the Pi in the provided holes and secure with nuts oriented as ahown below. Make sure the micro USB port lines up with the hole on the side of the pi ring.
+Use four #2-56 pan head screws 5/16" long to mount the Pi in the provided holes and secure with nuts oriented as shown below. Make sure the micro USB port lines up with the hole on the side of the pi ring.
 
 ![](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/new-docs/docs/images/pi-ring-3a.png)
 
