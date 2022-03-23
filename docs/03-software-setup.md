@@ -63,4 +63,4 @@ If you are running into issues getting your IAQ software running, please try the
 3. Create an issue on the [IAQ GitHub project](https://github.com/balena-io-playground/balena-iaq/issues) if you find your issue may be a bug or problem with the IAQ software.
 
 ### NEXT
-[4. Use and configuration](https://github.com/balena-io-playground/balena-iaq/blob/new-docs/docs/04-use-and-configuration.md)
+[4. Use and configuration](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/04-use-and-configuration.md)
