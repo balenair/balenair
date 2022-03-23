@@ -1,0 +1,24 @@
+name: IAQ
+type: sw.application
+description: >-
+  Build an indoor air quality monitoring device featuring a simple real time display and a detailed web dashboard
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/balena-io-playground/balena-iaq'
+  logo:
+    type: blob.asset
+    data:
+      url: >-
+        https://github.com/balena-io-playground/balena-iaq/blob/master/images/logo.png
+data:
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    - raspberrypi3
+    - raspberrypi4-64
+    - fincm3
+    - raspberrypi0-2w-64
+    - raspberrypi3-64
+    
+version: 1.0.0
