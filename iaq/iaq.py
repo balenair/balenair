@@ -95,12 +95,7 @@ except Exception as e:
 # grafana graphing in a multi device setup while using mqtt *bridging*.  This could/should be replaced
 # with some magic at the backend using just hostid.
 # 
-try:
-    pretty_host_name = os.getenv('BALENA_DEVICE_NAME_AT_INIT')
-except Exception as e:
-    print("Invalid value for BALENA_DEVICE_NAME_AT_INIT. Using default 'NO-ROOM-ASSIGNED'.")
-    pretty_host_name = 'NO-ROOM-ASSIGNED'
-
+pretty_host_name = os.getenv('BALENA_DEVICE_NAME_AT_INIT', 'NO ROOM ASSIGNED')
 #
 # Set up logger
 logger = logging.getLogger('iaq_logger')
