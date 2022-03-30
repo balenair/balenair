@@ -97,6 +97,12 @@ except Exception as e:
 # 
 pretty_host_name = os.getenv('BALENA_DEVICE_NAME_AT_INIT', 'NO ROOM ASSIGNED')
 #
+# Strip out or replace characters that may not work well in mqtt topics.  Use brute force for now.
+pretty_host_name = pretty_host_name.replace("#", "")
+pretty_host_name = pretty_host_name.replace("/", "_")
+pretty_host_name = pretty_host_name.replace("+", "_")
+pretty_host_name = pretty_host_name.replace("$", "")
+#
 # Set up logger
 logger = logging.getLogger('iaq_logger')
 logger.setLevel(logging.DEBUG)  # Passes all messages to handlers
@@ -672,9 +678,10 @@ while True:
     logger.debug("Using index: {0}".format(iaq_idx))
     # Display on LED matrix
     display_index(iaq_idx)
-    # Publish all data to MQTT
+    #
+    # Publish all data to MQTT with BALENA_DEVICE_NAME appened to the topic
     try:
-        client.publish("sensors/" + pretty_host_name.replace("-", " "), json.dumps(scd))
+        client.publish("sensors/" + pretty_host_name, json.dumps(scd))
     except Exception as e:
         logger.error("Error publishing to mqtt. ({0})".format(str(e)))
         
