@@ -90,7 +90,18 @@ try:
 except Exception as e:
     print("Invalid value for LOG_LEVEL. Using default 'WARNING'.")
     log_level = 'WARNING'
-    
+#
+# Get a meaningful host hame from balenaCloud device name and add it to mqtt topic, this allows easier
+# grafana graphing in a multi device setup while using mqtt bridging.  This could/should be repalced
+# with some magic at the backend
+# 
+pretty_host_name = os.getenv('BALENA_DEVICE_NAME_AT_INIT', 'No Room Assigned')
+pretty_host_name = pretty_host_name.replace("/", "_")
+pretty_host_name = pretty_host_name.replace("-", " ")
+pretty_host_name = pretty_host_name.replace("$", "_")
+pretty_host_name = pretty_host_name.replace("+", "_")
+pretty_host_name = pretty_host_name.replace("#", "_")
+
 # Set up logger
 logger = logging.getLogger('iaq_logger')
 logger.setLevel(logging.DEBUG)  # Passes all messages to handlers
@@ -668,7 +679,7 @@ while True:
     display_index(iaq_idx)
     # Publish all data to MQTT
     try:
-        client.publish("sensors", json.dumps(scd))
+        client.publish("sensors/" + pretty_host_name, json.dumps(scd))
     except Exception as e:
         logger.error("Error publishing to mqtt. ({0})".format(str(e)))
         
