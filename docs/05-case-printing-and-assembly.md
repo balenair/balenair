@@ -7,11 +7,12 @@ The IAQ has a lovely and easy-to-print 3D case that fits the standard parts list
 To assemble the printed parts, you'll need the following:
 
 - eight (8) M1.4 x 5mm self-tapping screws to mount the display (plus four more if using the LED bargraph)
-- four (4) #2-56 5/8" pan head screws if you are using the LED bargraph display
-- four (4) #2-56 pan head screws 1/4" to 5/16" long with optional nuts for mounting the Pi
-- two (2) #2-56 1/2" long pan head screws for mounting the multiport connector
-- six (6) #2-56 5/32" pan head screws to mount the sensors
+- four (4) M2 x 6mm pan head screws for mounting the Pi 3A+ or four (4) M2 x 10mm screws for Pi Zero 2W
+- two (2) M2 x 10mm pan head screws for mounting the multiport connector
+- two to four (2 - 4) M2 x 12mm pan head screws to mount EACH sensor (up to 10 screws total)
 - four (4) M3 x 40mm hex socket head screws to secure the case
+
+The screw lengths specified above for the M2 screws are minimum values. Somewhat longer screws can always be used instead; shorter screws may not work well. In a pinch, #2 screws of similar length may be substituted for the M2 screws although they may be a bit tight.
 
 ## Printing
 
