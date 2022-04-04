@@ -533,14 +533,14 @@ def bar_index(idx):
         j = j + 1
         seg_value_start = (j-1) * (100/8)
         seg_value_end = j * (100/8)
-        if bar_mode == 2: # Standard bargraph, no fillers
+        if bar_mode == 2: # All LEDs same color
             if idx <= green_limit:
                 my_stick.set_single_LED_color(i, 0, 255, 0)
             elif idx > yellow_limit:
                 my_stick.set_single_LED_color(i, 255, 0, 0)
             else:
                 my_stick.set_single_LED_color(i, 255, 155, 0)
-        else:  # mode 0: All LEDs 
+        else:  # Standard bargraph
             if ((idx > seg_value_start ) and (idx <= seg_value_end)) or (idx > seg_value_end):
                 if idx <= green_limit:
                     my_stick.set_single_LED_color(i, 0, 255, 0)
@@ -549,9 +549,12 @@ def bar_index(idx):
                 else:
                     my_stick.set_single_LED_color(i, 255, 155, 0)
             else:
-                if bar_mode == 1: # Standard bargraph with filler (default)
+                if bar_mode == 1: # Fill empty segments with white (default)
                     my_stick.set_single_LED_color(i, 25, 25, 25)
+                else:  # Turn off empty segments
+                    my_stick.set_single_LED_color(i, 0, 0, 0)
 
+    # Turn on first segment if idx <= 12.5 and ZERO_BAR
     if (idx <= (100/8)) and (zero_bar == 1):
         my_stick.set_single_LED_color(7, 0, 255, 0)
 
