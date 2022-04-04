@@ -4,6 +4,7 @@ import time
 import board
 import busio
 import json
+from adafruit_pm25.i2c import PM25_I2C
 import qwiic_led_stick
 import paho.mqtt.client as mqtt
 import os
