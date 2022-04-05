@@ -8,17 +8,25 @@
 - **Multiple display options**: Choose either a bi-color LED matrix or a multi-color LED bargraph.
 - **Your data stays local**: Your data remains your own. It is stored locally and can be accessed by a built-in secure web dashboard.
 
-![Dashboard](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/docs/images/dashboard.png)
+## Setup and configuration
 
-## Description and use
-The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score.  The standard IAQ device displays the score using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality). A simpler and less expensive display option uses eight RGB LEDs to display a bar graph based on the score. The IAQ is powered by a Raspberry Pi. ([See here](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/01-hardware-selection.md#choosing-your-pi) for supported versions.) The IAQ can calculate and display an air quality score without internet access, but does require internet access for initial software download and to view your dashboard outside your internal network.
+Start by assembling the hardware - see our parts list and assembly instructions in the docs. Deploying the code to a fleet of one or more devices is as easy as clicking the button below:
 
-The LED display changes color based on the score as follows:
-| Score range | Description | LED display color | 
-| ------------ | ----------- | ----------- |
-| 0 - 49 | Good air quality | green |
-| 50 - 74 | Moderate air quality | orange |
-| 75 - 99 | Unhealthy air quality | red |
+
+## Documentation
+
+Head over to [our docs](https://github.com/balena-io-playground/balena-iaq/tree/master/docs) for detailed parts lists, options, building, installation and usage instructions, customization options and more!
+
+## Motivation
+
+![concept](https://raw.githubusercontent.com/balenalabs/balena-iaq/master/docs/images/iaq-device-montage.png)
+
+There are other commercial solutions out there that provide functionality similar to the IAQ. However, for a reasonable price, you can assemble a few parts along with a Raspberry Pi and our custom case to build your own air indoor quality monitoring device. It collects and displays comprehensive data, but unlike some other devices, you control your data which stays on the device and not in the cloud.
+
+This open source project is in active development so if you have any feature requests or issues please submit them here on GitHub. PRs are welcome, too.
+
+## The IAQ score
+The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score.  The standard IAQ device displays the score using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality).
 
 ### The sensors
 The project consists of up to three sensors but only one is required. You can choose any or all depending on your needs and budget. The air quality score is comprised of a combination of readings from the available sensors. 
@@ -48,9 +56,6 @@ The case consists of four interlocking layers that are held together by four M3 
 
 See [the documentation](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/05-case-printing-and-assembly.md) for more information about printing and assembly of the case.
 
-## Documentation
-
-Head over to [our docs](https://github.com/balena-io-playground/balena-iaq/tree/master/docs) for detailed parts lists, options, building, installation and usage instructions, customization options and more!
 
 ## Getting Help
 
