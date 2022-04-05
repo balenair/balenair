@@ -19,7 +19,7 @@ Head over to [our docs](https://github.com/balena-io-playground/balena-iaq/tree/
 
 ## Motivation
 
-![concept](https://raw.githubusercontent.com/balenalabs/balena-iaq/master/docs/images/iaq-device-montage.png)
+![concept](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/docs/images/iaq-device-montage.png)
 
 There are other commercial solutions out there that provide functionality similar to the IAQ. However, for a reasonable price, you can assemble a few parts along with a Raspberry Pi and our custom case to build your own air indoor quality monitoring device. It collects and displays comprehensive data, but unlike some other devices, you control your data which stays on the device and not in the cloud.
 
