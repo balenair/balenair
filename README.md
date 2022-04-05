@@ -1,15 +1,14 @@
-![The IAQ](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/iaq-device-montage.png)
+![logo](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/docs/images/balenair-logo.png)
 
 **An attractive device you can easily build that measures the quality of your indoor air and provides readable feedback on an integrated LED display and a web dashboard.**
 
 ## Highlights
 
 - **Works with multiple sensors**: Choose among CO2, particulate matter, temperature/humidity, and VOC sensors based on your needs and budget.
-- **Multiple display options**: Choose either a bi-color LED matrix or a multi-color 8 segment LED bargraph.
-- **Your data stays local**: Your data remains your own. It is stored locally and can be accessed by a built-in secure VPN.
-- **Onboard web dashboard**: Provides real time gauges and measurement history over time for detecting trends. 
+- **Multiple display options**: Choose either a bi-color LED matrix or a multi-color LED bargraph.
+- **Your data stays local**: Your data remains your own. It is stored locally and can be accessed by a built-in secure web dashboard.
 
-![Dashboard](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/images/dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/docs/images/dashboard.png)
 
 ## Description and use
 The IAQ device uses a combination of CO2, VOC, and particulate sensors to generate an indoor air quality score.  The standard IAQ device displays the score using an LED matrix on the front of the unit. The easy-to-remember score ranges from 0 (best air quality) to 99 (hazardous air quality). A simpler and less expensive display option uses eight RGB LEDs to display a bar graph based on the score. The IAQ is powered by a Raspberry Pi. ([See here](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/01-hardware-selection.md#choosing-your-pi) for supported versions.) The IAQ can calculate and display an air quality score without internet access, but does require internet access for initial software download and to view your dashboard outside your internal network.
