@@ -1,6 +1,6 @@
 ![logo](https://raw.githubusercontent.com/balena-io-playground/balena-iaq/master/docs/images/balenair-logo.png)
 
-**An attractive device you can easily build that measures the quality of your indoor air and provides readable feedback on an integrated LED display and a web dashboard.**
+**An attractive device you can easily build that measures the quality of your indoor air and also provides readable feedback on an integrated LED display and a web dashboard.**
 
 ## Highlights
 
