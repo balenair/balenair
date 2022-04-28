@@ -220,7 +220,7 @@ else:
         f = open("/data/my_data/baseline-eco2.txt", "r")
     except Exception as e:
         logger.info("No eCO2 baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = 730 # 730 minutes = 12 hours
+        voc_baseline_limit = 720 # 720 minutes = 12 hours
     else:
         voc_baseline_eco2 = int(f.read())
         f.close()
