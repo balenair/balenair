@@ -27,7 +27,7 @@ This option allows you to deploy and configure the IAQ with the single click of 
 
 [![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/balena-io-playground/balena-iaq)
 
-![sdcard](https://raw.githubusercontent.com/balenalabs/balena-sound/master/docs/images/sdcard.gif)
+![sdcard](./images/sdcard.gif)
 
 Once your application has been created you'll need to add a device to it:
 
