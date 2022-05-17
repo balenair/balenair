@@ -8,7 +8,7 @@ All of the sensors utilize the I2C data bus and contain Qwiic connectors, so the
 
 Start by connecting the female jumpers on one end of the "150 mm Qwiic to 4 pin female cables" to the Raspberry Pi. Note the pin assignments based on the wire color using the diagram below:
 
-![](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/hardware-setup-pi-connect.png)
+![](./images/hardware-setup-pi-connect.png)
 
 - The red wire goes to pin 1 (3v)
 - The blue wire goes to pin 3 (SDA)
@@ -17,7 +17,7 @@ Start by connecting the female jumpers on one end of the "150 mm Qwiic to 4 pin 
 
 The connector at the other end of the cable connects to any one of the four ports on the multiport connector. Now connect one end of the "200mm QT to QT cable" to any of the three remaining empty ports on the multiport connector. This is the long cable that will be used to connect to the first sensor since when mounted in the case, the multiport will be somewhat far from this sensor. The other end of this cable can be connected to the first sensor. When mounted in the case, the first sensor is physically the blue rectangular particulate sensor. However, you can connect the sensors in any order you please. Use the remaining "QT to QT" cables to connect any remaining sensors you may have in a daisy chain fashion as shown below:
 
-![](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/hardware-setup-sensor-connect.png)
+![](./images/hardware-setup-sensor-connect.png)
 
 ## Connecting the display
 
@@ -25,7 +25,7 @@ The connector at the other end of the cable connects to any one of the four port
 
 If you're using the two LED matrix boards, you'll first need to solder each LED matrix to its backpack as described [here](https://learn.adafruit.com/adafruit-led-backpack/bi-color-8x8-matrix-assembly). Then solder the four pin male headers to each backpack. If you will be using the standard case, you must use the angled headers as specified in the parts list, not the straight headers included in the backpack kit. Make sure the headers are angled outwards as shown below:
 
-![](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/images/led-matrix-headers.png)
+![](./images/led-matrix-headers.png)
 
 You'll also need to change the I2C address of one of the displays. using [this guide](https://learn.adafruit.com/adafruit-led-backpack/changing-i2c-address), solder together the A0 pads of one display to change its address from 0x70 to 0x71. This will be the left digit when facing the front of the two displays.
 
