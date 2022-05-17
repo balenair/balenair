@@ -33,7 +33,7 @@ The particulate sensor will timeout if no reading can be taken after three tries
 
 ## Choosing your display
 
-![IAQ displays](docs/images/displays.png)
+![IAQ displays](./images/displays.png)
 
 Each IAQ device has a bright LED display so you can read your score from across a room. The score will be calculated and displayed even if your device is not connected to the internet. Regardless of the display type you choose, you can still obtain detailed sensor and air quality score readings from the built-in web dashboard.
 
