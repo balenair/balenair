@@ -1,4 +1,4 @@
-![logo](./images/balenair-logo.png)
+![logo](./docs/images/balenair-logo.png)
 
 **An attractive device you can easily build that measures the quality of your indoor air and also provides readable feedback on an integrated LED display and a web dashboard.**
 
@@ -19,7 +19,7 @@ Head over to [our docs](./docs) for detailed parts lists, options, building, ins
 
 ## Motivation
 
-![concept](./images/iaq-device-montage.png)
+![concept](./docs/images/iaq-device-montage.png)
 
 balenAir is dedicated to making environmental information visibly more accessible to consumers so they can make actionable decisions to improve their health and wellbeing. Our projects are open source, highly customizable, easy to use, and respect your privacy.
 
@@ -65,7 +65,7 @@ If you're having any problem, please [raise an issue](./issues/new) on GitHub an
 
 ## Contributing
 
-Do you want to help make IAQ better? Take a look at our [Contributing Guide](./contributing). Hope to see you around!
+Do you want to help make IAQ better? Take a look at our [Contributing Guide](./contributing.md). Hope to see you around!
 
 ## License
 
