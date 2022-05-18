@@ -1,6 +1,6 @@
 ![logo](./docs/images/balenair-logo.png)
 
-**An attractive device you can easily build that measures the quality of your indoor air and also provides readable feedback on an integrated LED display and a web dashboard.**
+**The IAQ is an attractive device you can easily build that measures the quality of your indoor air and also provides readable feedback on an integrated LED display and a web dashboard.**
 
 ## Highlights
 
@@ -10,7 +10,7 @@
 
 ## Setup and configuration
 
-Start by assembling the hardware - see our parts list and assembly instructions in the docs. Deploying the code to a fleet of one or more devices is as easy as clicking the button below:
+Start by assembling the hardware - see our parts list and assembly instructions in [the docs](./docs). Deploying the code to a fleet of one or more devices is as easy as clicking the button below:
 
 
 ## Documentation
@@ -23,7 +23,9 @@ Head over to [our docs](./docs) for detailed parts lists, options, building, ins
 
 balenAir is dedicated to making environmental information visibly more accessible to consumers so they can make actionable decisions to improve their health and wellbeing. Our projects are open source, highly customizable, easy to use, and respect your privacy.
 
-There are other commercial solutions out there that provide functionality similar to the IAQ. However, for a reasonable price, you can assemble a few parts along with a Raspberry Pi and our custom case to build your own air indoor quality monitoring device. It collects and displays comprehensive data, but unlike some other devices, you control your data which stays on the device and not in the cloud.
+There are other commercial solutions out there that provide functionality similar to the IAQ. However, for a reasonable price, (as little as $50 USD) you can assemble a few parts along with a Raspberry Pi and our custom case to build your own air indoor quality monitoring device. It collects and displays comprehensive data, but unlike some other devices, you control your data which stays on the device and not in the cloud.
+
+The IAQ has a built-in web server and VPN tunnel which you can activate for simple web access to your device from anywhere.
 
 This open source project is in active development so if you have any feature requests or issues please submit them here on GitHub. PRs are welcome, too.
 
@@ -58,6 +60,9 @@ The case consists of four interlocking layers that are held together by four M3 
 
 See [the documentation](./docs/05-case-printing-and-assembly.md) for more information about printing and assembly of the case.
 
+### The software
+
+All of our software is open source and you can inspect it in this repository before you decide to build or purchase a device. The system is built on the [balena](www.balena.io) IoT platform which ensures easy software updates, secure URL access, and ease of maintenance.
 
 ## Getting Help
 
