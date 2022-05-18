@@ -25,7 +25,7 @@ balenAir is dedicated to making environmental information visibly more accessibl
 
 There are other commercial solutions out there that provide functionality similar to the IAQ. However, for a reasonable price, (as little as $50 USD) you can assemble a few parts along with a Raspberry Pi and our custom case to build your own air indoor quality monitoring device. It collects and displays comprehensive data, but unlike some other devices, you control your data which stays on the device and not in the cloud.
 
-The IAQ has a built-in web server and VPN tunnel which you can activate for simple web access to your device from anywhere.
+The IAQ has a built-in web server and VPN tunnel which you can activate for simple web access to your device from anywhere. No router adjustments required!
 
 This open source project is in active development so if you have any feature requests or issues please submit them here on GitHub. PRs are welcome, too.
 
@@ -62,7 +62,7 @@ See [the documentation](./docs/05-case-printing-and-assembly.md) for more inform
 
 ### The software
 
-All of our software is open source and you can inspect it in this repository before you decide to build or purchase a device. The system is built on the [balena](www.balena.io) IoT platform which ensures easy software updates, secure URL access, and ease of maintenance.
+All of our software is open source so you can inspect it in this repository before you decide to build or purchase a device. The system is built on the [balena](www.balena.io) IoT platform which ensures easy software updates, secure URL access, and ease of maintenance.
 
 ## Getting Help
 
