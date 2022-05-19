@@ -19,7 +19,7 @@ Head over to [our docs](./docs) for detailed parts lists, options, building, ins
 
 ## Motivation
 
-![concept](./docs/images/iaq-device-montage.png)
+![concept](./images/iaq-device-montage.png)
 
 balenAir is dedicated to making environmental information visibly more accessible to consumers so they can make actionable decisions to improve their health and wellbeing. Our projects are open source, highly customizable, easy to use, and respect your privacy.
 
