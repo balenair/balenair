@@ -14,11 +14,11 @@ Next click on the "get started" button and choose your model of Raspberry Pi fro
 ### Notes about open fleets
 - You don't need a balenaCloud account (free or paid) to join an open fleet
 
-- The "fleet owner" for this open fleet is balena itself
+- The "fleet owner" for this open fleet is balenAir itself
 
 - Your device's sensor data is potentially visible to the fleet owner, but not other members of the fleet
 
-- balena does not save or view your sensor data except as needed for troubleshooting purposes
+- balenAir does not save or view your sensor data except as needed for troubleshooting purposes initiated by a user
 
 - If you want a private fleet (where you will be the fleet owner) choose one of the other two options below
 
@@ -39,21 +39,7 @@ The IAQ application will start downloading as soon as your device appears in the
 
 ## Balena CLI option
 
-This is the traditional and more advanced approach for deploying applications to balena powered devices. Choose this option if you want to customize or modify the code before deploying to your device. You could also use this option if you want to add or alter the services in the project by editing the `docker-compose.yml` file.
-
-### Provision your device
-
-1. Sign up for or login to the [balenaCloud dashboard](https://dashboard.balena-cloud.com)
-2. Create a fleet, selecting the correct device type. (See the list of supported devices)
-3. Add a device to the fleet, enabling you to download the OS
-4. Flash the downloaded OS to your SD card with [balenaEtcher](https://balena.io/etcher)
-5. Power up your device and check it's online in the dashboard
-
-### Deploy the application
-
-- Install the [balena CLI tools](https://github.com/balena-io/balena-cli/blob/master/INSTALL.md)
-- Login with `balena login`
-- Download [this project](https://github.com/balena-io-playground/balena-iaq) and from the project directory run `balena push <appName>` where `<appName>` is the name you gave your balenaCloud application in the first step.
+This is the more advanced approach for deploying applications to balena powered devices. Choose this option if you want to customize or modify the code before deploying to your device. You'll need to download and install the [balena CLI tools](https://github.com/balena-io/balena-cli/blob/master/INSTALL.md). See the balena [Getting Started Guide](https://www.balena.io/docs/learn/getting-started/raspberrypi4-64/python/) for more details.
 
 ## Having trouble?
 
