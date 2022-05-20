@@ -25,7 +25,7 @@ Next click on the "get started" button and choose your model of Raspberry Pi fro
 ## One-click deploy option
 This option allows you to deploy and configure the IAQ with the single click of a button. It will create a new private fleet in your balenaCloud account. If you don't already have a free balenaCloud account, it will prompt you to create one. Use the button below to get started:
 
-[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=[https://github.com/balena-io-playground/balena-iaq](https://github.com/balenair/balenair))
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://https://github.com/balenair/balenair)
 
 ![sdcard](./images/sdcard.gif)
 
