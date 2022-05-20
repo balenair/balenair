@@ -46,7 +46,7 @@ This is the more advanced approach for deploying applications to balena powered 
 If you are running into issues getting your IAQ software running, please try the following:
 1. Check the support and troubleshooting guide for common issues and how to resolve them. (coming soon!)
 2. Post in the [forums](https://forums.balena.io/) for help from our growing community.
-3. Create an issue on the [IAQ GitHub project](https://github.com/balenair/balenair/issues) if you find your issue may be a bug or problem with the IAQ software.
+3. [Create an issue](https://github.com/balenair/balenair/issues) if you find your issue may be a bug or problem with the IAQ software.
 
 ### NEXT
 [4. Use and configuration](04-use-and-configuration.md)
