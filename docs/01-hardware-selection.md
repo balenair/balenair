@@ -25,7 +25,7 @@ The sensors evaluate your air and return data that is used to deterime your air 
 
 All of these sensors use the popular I2C protocol to communicate with the Pi and include [Qwiic](https://www.sparkfun.com/qwiic) connectors so you don't need to do any soldering to use these sensors.
 
-The IAQ will automatically detect which sensors are present and caluclate the air quality score accordingly. If you connect the specified VOC sensor but do not have the specified CO2 sensor attached, the VOC sensor's eCO2 readings will be reported as the CO2 values. (eCO2 is generally less accurate than CO2 and requires proper calibration - [see here](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/04-use-and-configuration.md#voc-calibration))
+The IAQ will automatically detect which sensors are present and caluclate the air quality score accordingly. If you connect the specified VOC sensor but do not have the specified CO2 sensor attached, the VOC sensor's eCO2 readings will be reported as the CO2 values. (eCO2 is generally less accurate than CO2 and requires proper calibration - [see here](04-use-and-configuration.md#voc-calibration))
 
 If the SCD-40 CO2 sensor times out (meaning it can't get a reading after 15 tries) it will skip until the next measurement interval. If you have a VOC sensor attached when the SCD-40 times out, it will use the eCO2 reading for CO2 until it tries again to read the SCD-40 on the next measurement interval.
 
@@ -78,7 +78,7 @@ Regardless of the options above, you'll need the following parts:
 
 - Another [100mm QT to QT cable](https://www.adafruit.com/product/4210) to connect the second sensor to the third sensor. Only required if you have three sensors!
 
-Note that there are some additional hardware requirements if you will be using the custom 3D printed case - see this section for details.
+Note that there are some additional hardware requirements if you will be using the custom 3D printed case - see [this section](05-case-printing-and-assembly.md) for details.
 
 ### NEXT
-[2. Hardware Setup](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/02-hardware-setup.md)
+[2. Hardware Setup](02-hardware-setup.md)
