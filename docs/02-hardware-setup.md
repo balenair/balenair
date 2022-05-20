@@ -43,4 +43,4 @@ Connecting this type of display is easy: simply connect one end of a 100mm Qwiic
 NOTE: This display has a power LED that may be visible through the IAQ case. You should disable this LED by scratching off the trace between the LED pads (not the VLED pads!) on the back of the circuit board. See the [Qwiic Stick guide](https://learn.sparkfun.com/tutorials/qwiic-led-stick---apa102c-hookup-guide#hardware-overview) for more details.
 
 ### Next
-[3. Software setup](https://github.com/balena-io-playground/balena-iaq/blob/master/docs/03-software-setup.md)
+[3. Software setup](03-software-setup.md)
