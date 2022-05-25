@@ -11,11 +11,8 @@ import os
 import sys
 import adafruit_sgp30
 import binascii
-
 import display
-
 import logging
-
 
 PM25_MAX = 250
 PM10_MAX = 430
@@ -31,6 +28,7 @@ VOC_MIN = 0
 VOC_MAX = 10000
 VOC_YELLOW = 500
 VOC_RED = 1000
+BASELINE_LIMIT = 720  # 720 minutes = 12 hours
 pm_sensor = 1
 scd_sensor = 1
 voc_sensor = 1
@@ -221,22 +219,36 @@ else:
         f = open("/data/my_data/baseline-eco2.txt", "r")
     except Exception as e:
         logger.info("No eCO2 baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = 730 # 730 minutes = 12 hours
+        voc_baseline_limit = BASELINE_LIMIT
     else:
-        voc_baseline_eco2 = int(f.read())
-        f.close()
+        try:
+            voc_baseline_eco2 = int(f.read())
+        except:
+            print("Invalid/no data found in eCO2 baseline file. Deleting file and calculating new baseline...")
+            f.close()
+            voc_baseline_limit = BASELINE_LIMIT
+            os.remove("/data/my_data/baseline-eco2.txt")
+        else:
+            f.close()
       
     try:
         f = open("/data/my_data/baseline-tvoc.txt", "r")
     except Exception as e:
         logger.info("No TVOC baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = 730 # 730 minutes = 12 hours
+        voc_baseline_limit = BASELINE_LIMIT
     else:
-        voc_baseline_tvoc = int(f.read())
-        f.close()
+        try:
+            voc_baseline_tvoc = int(f.read())
+        except:
+            print("Invalid/no data found in TVOC baseline file. Deleting file and calculating new baseline...")
+            f.close()
+            voc_baseline_limit = BASELINE_LIMIT
+            os.remove("/data/my_data/baseline-tvoc.txt")
+        else:
+            f.close()
     sgp30.iaq_init()
     if (voc_baseline_eco2 != 0) and (voc_baseline_tvoc != 0):
-        logger.info("Setting VOC baseline from file.")
+        logger.info("Setting VOC baseline from file: eCO2: {0}; tvoc: {1}".format(voc_baseline_eco2, voc_baseline_tvoc))
         sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
     logger.info("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
 
@@ -261,7 +273,6 @@ def scd_sense():
             logger.warning("scd4x reading timed out! No CO2 data available!")
             scd_timeout = 1
             return scd_dict
-            
 
     logger.info("CO2: %d ppm" % scd4x.CO2)
     logger.info("Temperature: %0.1f *C" % scd4x.temperature)
@@ -337,11 +348,10 @@ def pm25_index(pm25):
     else:
         scaler = make_interpolater(PM25_RED, PM25_MAX, 75, 99)
         scaled_pm25 = scaler(pm25)
-    
-    
+
     if scaled_pm25 > 99:
         scaled_pm25 = 99
-        
+
     return scaled_pm25
 
 def pm10_index(pm10):

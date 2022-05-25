@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-ubuntu-python:3.8-bionic-build
+FROM balenalib/%%BALENA_MACHINE_NAME%%-ubuntu-python:3.8-bionic-build-20210826
 
 # Set our working directory
 WORKDIR /usr/src/app
@@ -21,3 +21,4 @@ ENV UDEV=1
 
 # iaq.py will run when container starts up on the device
 CMD ["python3", "iaq.py"]
+
