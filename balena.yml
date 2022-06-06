@@ -1,4 +1,4 @@
-name: IAQ
+name: balenAir
 type: sw.application
 description: >-
   Build an indoor air quality monitoring device featuring a simple real time display and a detailed web dashboard
@@ -23,7 +23,7 @@ assets:
     type: blob.asset
     data:
       url: >-
-        https://raw.githubusercontent.com/balenair/balenair/blob/master/logo.png
+        https://raw.githubusercontent.com/balenair/balenair/master/logo.png
 data:
   defaultDeviceType: raspberrypi3
   supportedDeviceTypes:
@@ -33,4 +33,4 @@ data:
     - raspberrypi0-2w-64
     - raspberrypi3-64
     
-version: 1.0.0
+version: 1.0.1
