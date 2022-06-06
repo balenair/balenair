@@ -5,14 +5,14 @@ description: >-
 
 post-provisioning: >-
   ## Usage instructions
+
   **Application download**
-  Once you power up your device you'll need to allow some time for it to download the application, this typically takes 5-10 minutes but it can take more 
-  depending on your internet connection and what device you are using.
+
+  Once you power up your device you'll need to allow some time for it to download the application, this typically takes 5-10 minutes but it can take more depending on your internet connection and what device you are using.
+
   **Usage**
-  When the download is completed the application will start.  Depending on the display chosen you should see a LED test sequence and then shortly an 
-  indication of the current air quality.   Please note that if this is the first time setting up the device and depending on what sensors you have installed
-  you may need to wait 12 hours for baseline readings to be caclulated. See this [documentation](https://github.com/balenair/balenair/blob/master/docs/04-use-and-configuration.md)
-  for more information.
+
+  When the download is completed the application will start.  Depending on the display chosen you should see a LED test sequence and then shortly an indication of the current air quality.   Please note that if this is the first time setting up the device and depending on what sensors you have installed you may need to wait 12 hours for baseline readings to be caclulated. See this [documentation](https://github.com/balenair/balenair/blob/master/docs/04-use-and-configuration.md) for more information.
 
 assets:
   repository:
@@ -23,7 +23,7 @@ assets:
     type: blob.asset
     data:
       url: >-
-        https://github.com/balenair/balenair/blob/master/logo.png
+        https://raw.githubusercontent.com/balenair/balenair/blob/master/logo.png
 data:
   defaultDeviceType: raspberrypi3
   supportedDeviceTypes:
