@@ -90,11 +90,8 @@ except Exception as e:
     print("Invalid value for LOG_LEVEL. Using default 'WARNING'.")
     log_level = 'WARNING'
 #
-# Get a meaningful host hame from balenaCloud device name and add it to mqtt topic, this allows easier
-# grafana graphing in a multi device setup while using mqtt bridging.  This could/should be repalced
-# with some magic at the backend
-# 
-pretty_host_name = os.getenv('BALENA_DEVICE_NAME_AT_INIT', 'No Room Assigned')
+# Setting a IAQ node name from for use with the WHAQM project.  If no name is assigned assume it is not yet part of the WAHQM project.
+pretty_host_name = os.getenv('WHAQM_SENSOR_NAME', 'No Room Assigned')
 pretty_host_name = pretty_host_name.replace("/", "_")
 pretty_host_name = pretty_host_name.replace("-", " ")
 pretty_host_name = pretty_host_name.replace("$", "_")
@@ -691,7 +688,12 @@ while True:
     logger.debug("Using index: {0}".format(iaq_idx))
     # Display on LED matrix
     display_index(iaq_idx)
-    # Publish all data to MQTT
+    #
+    # Inject the WHAQM name into the MQTT data flow 
+    scd["WHAQMname"] = pretty_host_name
+    # logger.debug("Publishing to MQTT with WHAQM name:{}".format(pretty_host_name))
+    #
+    # Publish all data to MQTT and include the WHAQM name as part of the topic 
     try:
         client.publish("sensors/" + pretty_host_name, json.dumps(scd))
     except Exception as e:
