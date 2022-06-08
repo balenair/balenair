@@ -1,7 +1,7 @@
 name: balenAir
 type: sw.application
 description: >-
-  Build an indoor air quality monitoring device featuring a simple real time display and a detailed web dashboard
+  Build an indoor air quality monitoring device featuring a simple real time display and a detailed web dashboard (www.balenair.com)
 
 post-provisioning: >-
   ## Usage instructions
