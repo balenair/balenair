@@ -658,8 +658,8 @@ while True:
     if pm_sensor == 1:
         logger.info("Testimg PM...")
         pm = pm_sense()
-        pm10_idx = pm10_index(pm["pm100 standard"])
-        pm25_idx = pm25_index(pm["pm25 standard"])
+        pm10_idx = pm10_index(pm["pm100 env"])
+        pm25_idx = pm25_index(pm["pm25 env"])
     if scd_sensor == 1:
         logger.info("Testing SCD...")
         scd = scd_sense()
