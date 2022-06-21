@@ -33,6 +33,7 @@ pm_sensor = 1
 scd_sensor = 1
 voc_sensor = 1
 bar_graph = 0
+matrix_display = 0
 scd_timeout = 0
 
 # Sleep time for each cycle. Normally 60 secs.
@@ -190,8 +191,9 @@ try:
     matrix2 = Matrix8x8x2(i2c, address=0x70)
     matrix1 = Matrix8x8x2(i2c, address=0x71)
 except Exception as e:
-    logger.info("No LED matrix found, using LED bar graph...")
-    bar_graph = 1
+    logger.info("Only one or no LED matrix found, not using LED matrix...")
+else:
+    matrix_display = 1
 
 # Delete baseline file(s) if device variable set
 if del_baseline != 0:
@@ -253,10 +255,14 @@ else:
     logger.info("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
 
 # For LED bar graph:
-if bar_graph == 1:
+my_stick = qwiic_led_stick.QwiicLEDStick()
+if my_stick.begin() == True:
+    bar_graph = 1
     my_stick = qwiic_led_stick.QwiicLEDStick()
     time.sleep(0.75)
     my_stick.LED_off()
+else:
+    print("No LED stick found, not using LED stick...")
 
 def scd_sense():
     #
@@ -449,6 +455,11 @@ def display_index(index_value):
     #
     # Display a two digit number on the LEDs
     #
+    # Simple way to catch not having a local display, could be done better
+    if bar_graph == 0 and matrix_display == 0:
+        #print("Nothing to display on...")
+        return
+
     if bar_graph == 1:
         logger.debug("Skipping LED matrix display...")
         bar_index(index_value)
@@ -473,6 +484,11 @@ def display_led(my_matrix, my_value, color):
     #
     # Display a single digit
     #
+    # Simple way to catch not having a local display, could be done better
+    if bar_graph == 0 and matrix_display == 0:
+        #print("Nothing to display on...")
+        return
+
     if my_value == ' ':
         my_digit = display.digits[0]
     else:
@@ -492,6 +508,10 @@ def display_pollutant(pm10, pm25, co2, voc):
     #  representing highest-indexed pollutant
     #  Uses icons list 0/1=PM1, 2/3=PM2, 4/5=CO2
     #
+    # Simple way to catch not having a local display, could be done better
+    if bar_graph == 0 and matrix_display == 0:
+        #print("Nothing to display on...")
+        return
     index_list = [pm10, pm25, co2, voc]
     max_value = max(index_list)
     max_value_index = index_list.index(max_value)
@@ -512,9 +532,11 @@ def display_icon(icon_index, my_color):
     # Display a two character icon on the display
     # icon_index is the index of the first character
     #
-    if bar_graph == 1:
-        print("Skipping LED matrix icon display...")
+    # Simple way to catch not having a local display, could be done better
+    if bar_graph == 0 and matrix_display == 0:
+        #print("Nothing to display on...")
         return
+        
     # Loop through digits from 1 to 0
     for digit in range(1, -1, -1):
       if digit == 0:
