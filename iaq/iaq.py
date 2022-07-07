@@ -258,11 +258,10 @@ else:
 my_stick = qwiic_led_stick.QwiicLEDStick()
 if my_stick.begin() == True:
     bar_graph = 1
-    my_stick = qwiic_led_stick.QwiicLEDStick()
     time.sleep(0.75)
     my_stick.LED_off()
 else:
-    print("No LED stick found, not using LED stick...")
+    logger.info("No LED stick found, not using LED stick...")
 
 def scd_sense():
     #
@@ -532,25 +531,21 @@ def display_icon(icon_index, my_color):
     # Display a two character icon on the display
     # icon_index is the index of the first character
     #
-    # Simple way to catch not having a local display, could be done better
-    if bar_graph == 0 and matrix_display == 0:
-        #print("Nothing to display on...")
-        return
-        
+    if matrix_display == 1:
     # Loop through digits from 1 to 0
-    for digit in range(1, -1, -1):
-      if digit == 0:
-          my_matrix = matrix1
-      else:
-          my_matrix = matrix2
-      my_digit = display.icons[icon_index + digit]
-      my_digit = rotate_matrix(my_digit)
-      for x in range(8):
-          for y in range(8):
-              if my_digit[x][y] == 1:
-                  my_matrix[x,y] = my_color
-              else:
-                  my_matrix[x,y] = my_matrix.LED_OFF
+        for digit in range(1, -1, -1):
+            if digit == 0:
+                my_matrix = matrix1
+            else:
+                my_matrix = matrix2
+            my_digit = display.icons[icon_index + digit]
+            my_digit = rotate_matrix(my_digit)
+            for x in range(8):
+                for y in range(8):
+                    if my_digit[x][y] == 1:
+                        my_matrix[x,y] = my_color
+                    else:
+                        my_matrix[x,y] = my_matrix.LED_OFF
 
 def bar_index(idx):
     #
