@@ -511,6 +511,7 @@ def display_pollutant(pm10, pm25, co2, voc):
     if bar_graph == 0 and matrix_display == 0:
         #print("Nothing to display on...")
         return
+    
     index_list = [pm10, pm25, co2, voc]
     max_value = max(index_list)
     max_value_index = index_list.index(max_value)
