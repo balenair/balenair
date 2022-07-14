@@ -33,4 +33,4 @@ data:
     - raspberrypi0-2w-64
     - raspberrypi3-64
     
-version: 1.0.2
+version: 1.2.0

@@ -5,6 +5,7 @@ import board
 import busio
 import json
 from adafruit_pm25.i2c import PM25_I2C
+from DFRobot_ENS160 import *
 import qwiic_led_stick
 import paho.mqtt.client as mqtt
 import os
@@ -24,14 +25,19 @@ PM25_YELLOW = 35
 PM10_YELLOW = 54
 CO2_YELLOW = 1000
 CO2_MIN = 400
+
+#
 VOC_MIN = 0
 VOC_MAX = 10000
 VOC_YELLOW = 500
 VOC_RED = 1000
+
+#
 BASELINE_LIMIT = 720  # 720 minutes = 12 hours
 pm_sensor = 1
 scd_sensor = 1
-voc_sensor = 1
+sgp30_sensor = 0
+ens160_sensor = 1
 bar_graph = 0
 matrix_display = 0
 scd_timeout = 0
@@ -39,6 +45,8 @@ scd_timeout = 0
 # Sleep time for each cycle. Normally 60 secs.
 # Some other operations are derived from this:
 cycle_time = 60
+
+#
 voc_baseline_count = 0
 voc_baseline_eco2 = 0 # was 0x8973
 voc_baseline_tvoc = 0 # was 0x8AAE
@@ -195,7 +203,7 @@ except Exception as e:
 else:
     matrix_display = 1
 
-# Delete baseline file(s) if device variable set
+# Delete baseline file(s) for the sgp-30 if device variable set
 if del_baseline != 0:
     logger.warning("Baseline file will be deleted!")
     logger.warning("Change DELETE_BASELINE device variable to 0 after delete!")
@@ -207,52 +215,63 @@ if del_baseline != 0:
         os.remove("/data/my_data/baseline-tvoc.txt")
     else:
         logger.info("The file /data/my_data/baseline-tvoc.txt does not exist.") 
-    
-# Create library object on our I2C port
+
+# Look for a VOC sensor
+ens160 = DFRobot_ENS160_I2C(i2c_addr = 0x52, bus = 1)
 try:
-    sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
+    ens160.begin()
 except Exception as e:
-    logger.info("No SGP VOC sensor found...")
-    voc_sensor = 0
+    ens160_sensor = 0
+    logger.info("No ENS160 VOC sensor found...")
+    # Look for the SGP-30 Sensor and create a baseline if necessary
+    try:
+        sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
+    except Exception as e:
+        logger.info("No SGP VOC sensor found...")
+    else:
+        sgp30_sensor = 1
+        serial_num = [hex(i) for i in sgp30.serial]
+        logger.info("Found VOC sensor: SGP30 serial #{}".format(serial_num))
+        try:
+            f = open("/data/my_data/baseline-eco2.txt", "r")
+        except Exception as e:
+            logger.info("No eCO2 baseline file found. Calculating new 12hr baseline...")
+            voc_baseline_limit = BASELINE_LIMIT
+        else:
+            try:
+                voc_baseline_eco2 = int(f.read())
+            except:
+                print("Invalid/no data found in eCO2 baseline file. Deleting file and calculating new baseline...")
+                f.close()
+                voc_baseline_limit = BASELINE_LIMIT
+                os.remove("/data/my_data/baseline-eco2.txt")
+            else:
+                f.close()  
+        try:
+            f = open("/data/my_data/baseline-tvoc.txt", "r")
+        except Exception as e:
+            logger.info("No TVOC baseline file found. Calculating new 12hr baseline...")
+            voc_baseline_limit = BASELINE_LIMIT
+        else:
+            try:
+                voc_baseline_tvoc = int(f.read())
+            except:
+                print("Invalid/no data found in TVOC baseline file. Deleting file and calculating new baseline...")
+                f.close()
+                voc_baseline_limit = BASELINE_LIMIT
+                os.remove("/data/my_data/baseline-tvoc.txt")
+            else:
+                f.close()
+        sgp30.iaq_init()
+        if (voc_baseline_eco2 != 0) and (voc_baseline_tvoc != 0):
+            logger.info("Setting VOC baseline from file: eCO2: {0}; tvoc: {1}".format(voc_baseline_eco2, voc_baseline_tvoc))
+            sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
+        logger.info("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
 else:
-    serial_num = [hex(i) for i in sgp30.serial]
-    logger.info("Found VOC sensor: SGP30 serial #{}".format(serial_num))
-    try:
-        f = open("/data/my_data/baseline-eco2.txt", "r")
-    except Exception as e:
-        logger.info("No eCO2 baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = BASELINE_LIMIT
-    else:
-        try:
-            voc_baseline_eco2 = int(f.read())
-        except:
-            print("Invalid/no data found in eCO2 baseline file. Deleting file and calculating new baseline...")
-            f.close()
-            voc_baseline_limit = BASELINE_LIMIT
-            os.remove("/data/my_data/baseline-eco2.txt")
-        else:
-            f.close()
-      
-    try:
-        f = open("/data/my_data/baseline-tvoc.txt", "r")
-    except Exception as e:
-        logger.info("No TVOC baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = BASELINE_LIMIT
-    else:
-        try:
-            voc_baseline_tvoc = int(f.read())
-        except:
-            print("Invalid/no data found in TVOC baseline file. Deleting file and calculating new baseline...")
-            f.close()
-            voc_baseline_limit = BASELINE_LIMIT
-            os.remove("/data/my_data/baseline-tvoc.txt")
-        else:
-            f.close()
-    sgp30.iaq_init()
-    if (voc_baseline_eco2 != 0) and (voc_baseline_tvoc != 0):
-        logger.info("Setting VOC baseline from file: eCO2: {0}; tvoc: {1}".format(voc_baseline_eco2, voc_baseline_tvoc))
-        sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
-    logger.info("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
+    logger.info("Found ENS160 sensor, enabling standard mode...")
+    ens160.set_PWR_mode(ENS160_STANDARD_MODE)
+    # Assume we have reasonable indoor environment 
+    ens160.set_temp_and_hum(ambient_temp=25.00, relative_humidity=50.00)
 
 # For LED bar graph:
 my_stick = qwiic_led_stick.QwiicLEDStick()
@@ -329,12 +348,18 @@ def pm_sense():
 
 def voc_sense():
     #
-    # Take a reading from the VOC SGP30 sensor, return dict
+    # Take a reading from the VOC sensor found (currently either sgp-30 or ens160),  return dict
     #
     voc_dict = {}
-    logger.info("VOC sensor reading: eCO2 = {0} ppm \t TVOC = {1} ppb".format(sgp30.eCO2, sgp30.TVOC))
-    voc_dict["eCO2"] = sgp30.eCO2
-    voc_dict["TVOC"] = sgp30.TVOC
+
+    if sgp30_sensor == 1:
+        logger.info("VOC sensor reading: eCO2 = {0} ppm \t TVOC = {1} ppb".format(sgp30.eCO2, sgp30.TVOC))
+        voc_dict["eCO2"] = sgp30.eCO2
+        voc_dict["TVOC"] = sgp30.TVOC
+    elif ens160_sensor == 1:
+        logger.info("VOC sensor reading: eCO2 = {0} ppm \t TVOC = {1} ppb".format(ens160.get_ECO2_ppm, ens160.get_TVOC_ppb))
+        voc_dict["eCO2"] = ens160.get_ECO2_ppm
+        voc_dict["TVOC"] = ens160.get_TVOC_ppb
 
     return voc_dict
 
@@ -511,7 +536,6 @@ def display_pollutant(pm10, pm25, co2, voc):
     if bar_graph == 0 and matrix_display == 0:
         #print("Nothing to display on...")
         return
-    
     index_list = [pm10, pm25, co2, voc]
     max_value = max(index_list)
     max_value_index = index_list.index(max_value)
@@ -632,7 +656,7 @@ def LED_icon(icon_num):
 
 # Make sure there's at least one sensor
 
-if max(pm_sensor, scd_sensor, voc_sensor) < 1:
+if max(pm_sensor, scd_sensor, sgp30_sensor, ens160_sensor) < 1:
     if bar_graph == 1:
         LED_icon(1)
         time.sleep(5)
@@ -651,7 +675,7 @@ if pm_sensor == 1:
     display_icon(2, 2)
     time.sleep(1)
    
-if voc_sensor == 1:
+if sgp30_sensor == 1 or ens160_sensor == 1:
     display_icon(6, 2)
     time.sleep(2)
         
@@ -683,7 +707,7 @@ while True:
         scd = scd_sense()
         if scd_timeout != 1:
             co2_idx = co2_index(scd["co2"])
-    if voc_sensor == 1:
+    if sgp30_sensor == 1 or ens160_sensor == 1:
         logger.info("Testing VOC...")
         voc = voc_sense()
         voc_idx = voc_index(voc["TVOC"])
@@ -732,7 +756,7 @@ while True:
         # Turn sensor back on and try again on next pass
         scd_timeout = 0
         
-    if voc_sensor == 1:
+    if sgp30_sensor == 1:
 
         voc_baseline_count = voc_baseline_count + 1
         logger.debug("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
