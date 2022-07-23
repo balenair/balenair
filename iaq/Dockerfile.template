@@ -10,7 +10,7 @@ RUN install_packages python3-pil
 #    CircuitPython PM25 module for PMSA0031,
 #    CircuitPython SCD4x module, LED matrix display module, SGP 30
 #     
-RUN pip3 install RPi.GPIO paho-mqtt Adafruit-Blinka adafruit-circuitpython-pm25 \
+RUN pip3 install RPi.GPIO smbus spidev paho-mqtt Adafruit-Blinka adafruit-circuitpython-pm25 \
     adafruit-circuitpython-scd4x adafruit-circuitpython-ht16k33==4.1.5 adafruit-circuitpython-sgp30 \
     sparkfun-qwiic-led-stick
 
