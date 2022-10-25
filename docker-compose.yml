@@ -1,8 +1,8 @@
 version: '2'
 volumes:
-    sense-data:
-    dashboard-data:
-    iaq-data:
+  sense-data:
+  dashboard-data:
+  iaq-data:
 services:
   influxdb:
     restart: always
@@ -14,26 +14,33 @@ services:
     build: ./dashboard
     restart: always
     volumes:
-        - 'dashboard-data:/data'
+      - 'dashboard-data:/data'
     ports:
-        - '80'
+      - '80'
   iaq:
     build: ./iaq
     privileged: true
     restart: always
     volumes:
-        - 'iaq-data:/data/my_data'
+      - 'iaq-data:/data/my_data'
   connector:
     image: balenablocks/connector
     restart: always
     labels:
       io.balena.features.balena-api: '1'
     privileged: true
+  hostname:
+    image: bh.cr/g_tomas_migone1/hostname-armv7hf
+    restart: no
+    labels:
+      io.balena.features.supervisor-api: 1
+    environment:
+      SET_HOSTNAME: iaq
   mqtt:
     image: eclipse-mosquitto:1.6.15
     ports:
       - "1883:1883"
-    restart: always 
+    restart: always
   wifi-connect:
     image: balenablocks/wifi-connect:armv7hf
     restart: always
