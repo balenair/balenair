@@ -4,12 +4,22 @@ volumes:
     dashboard-data:
     iaq-data:
 services:
-  influxdb:
+  influxdb2:
     restart: always
     #image: arm32v7/influxdb@sha256:2fed9b09a672cab330ac3ea1f03616e6821f2235bda64d549f605ef0d7081911
     build: ./influx
     volumes:
       - 'sense-data:/var/lib/influxdb'
+    ports:
+        - '8086'
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup 
+      - DOCKER_INFLUXDB_INIT_USERNAME=demouser
+      - DOCKER_INFLUXDB_INIT_PASSWORD=demouser
+      - DOCKER_INFLUXDB_INIT_ORG=influxdb 
+      - DOCKER_INFLUXDB_INIT_BUCKET=edge
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=edge
+    
   dashboard:
     build: ./dashboard
     restart: always
