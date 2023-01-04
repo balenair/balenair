@@ -1,0 +1,67 @@
+apiVersion: influxdata.com/v2alpha1
+kind: Label
+metadata:
+    name: sleepy-darwin-1d4001
+spec:
+    color: '#5c10a0'
+    name: replication
+---
+apiVersion: influxdata.com/v2alpha1
+kind: Bucket
+metadata:
+    name: rainy-wright-5d4001
+spec:
+    associations:
+        - kind: Label
+          name: sleepy-darwin-1d4001
+    name: downsampled
+    retentionRules:
+        - everySeconds: 172800
+          type: expire
+---
+apiVersion: influxdata.com/v2alpha1
+kind: Task
+metadata:
+    name: modest-bose-5d4005
+spec:
+    associations:
+        - kind: Label
+          name: sleepy-darwin-1d4001
+    every: 1m
+    name: downsample
+    offset: 5s
+    query: |-
+        import "influxdata/influxdb/tasks"
+        import "types"
+
+
+
+        location = "UK"
+        data = () =>
+            from(bucket: "edge")
+                |> range(start: tasks.lastSuccess(orTime: -task.every))
+
+        numeric =
+            data()
+                |> filter(
+                    fn: (r) =>
+                        types.isType(v: r._value, type: "float") or types.isType(v: r._value, type: "int")
+                            or
+                            types.isType(v: r._value, type: "uint"),
+                )
+                |> aggregateWindow(every: task.every, fn: mean)
+
+        nonNumeric =
+            data()
+                |> filter(
+                    fn: (r) =>
+                        types.isType(v: r._value, type: "string") or types.isType(
+                                v: r._value,
+                                type: "bool",
+                            ),
+                )
+                |> aggregateWindow(every: task.every, fn: last)
+
+        union(tables: [numeric, nonNumeric])
+            |> set(key: "location", value: location)
+            |> to(bucket: "downsampled")

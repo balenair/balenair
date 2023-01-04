@@ -19,6 +19,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=influxdb 
       - DOCKER_INFLUXDB_INIT_BUCKET=edge
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=edge
+      - DOCKER_INFLUXDB_INIT_RETENTION=1d
     
   dashboard:
     build: ./dashboard
