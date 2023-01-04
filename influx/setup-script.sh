@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+if [ -z ${REPLICATION+x} ];
+then
 # install local dashboard and tasks
 EXISTING_STACK_ID=$(influx stack list --name edge-replication |awk '{ print $1}')
 if [ -z "$EXISTING_STACK_ID" ]; then 
@@ -27,3 +29,8 @@ LOCAL_BUCKET_ID=$(influx bucket list --name downsampled --hide-headers |awk '{pr
 
 
 influx replication create --name edge-to-cloud --org ${DOCKER_INFLUXDB_INIT_ORG} --remote-id $REMOTE_ID --local-bucket-id $LOCAL_BUCKET_ID --remote-bucket-id ${INFLUXDB_CLOUD_BUCKET_ID}
+
+else
+echo "No replication setup required"
+fi
+

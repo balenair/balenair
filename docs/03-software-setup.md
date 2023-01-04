@@ -25,9 +25,48 @@ Next click on the "get started" button and choose your model of Raspberry Pi fro
 ## One-click deploy option
 This option allows you to deploy and configure the IAQ with the single click of a button. It will create a new private fleet in your balenaCloud account. If you don't already have a free balenaCloud account, it will prompt you to create one. Use the button below to get started:
 
-[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/balenair/balenair)
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/InfluxCommunity/balenair)
 
 ![sdcard](./images/sdcard.gif)
+
+### Fleet Configuration
+Before adding a device to your fleet, you'll need to configure the fleet. Click on the "Fleet Configuration" tab and add the following environment variables:
+*IF YOU DO NOT WISH TO USE THE INFLUXDB REPLICATION FEATURE DO NOT SET THE REPLICATION ENVIRONMENT VARIABLE*
+```
+REPLICATION
+true
+All services
+
+INFLUX_TOKEN	
+edge
+All services	
+
+INFLUXDB_CLOUD_BUCKET_ID	
+<INSERT OWN CLOUD BUCKET ID>
+All services	
+
+INFLUXDB_CLOUD_HOST	
+<INSERT OWN CLOUD HOST ID>
+All services	
+
+INFLUXDB_CLOUD_ORG_ID	
+<INSERT OWN CLOUD ORG ID>
+All services	
+
+INFLUXDB_CLOUD_TOKEN	
+<INSERT OWN CLOUD TOKEN>
+All services	
+
+INFLUXDB_DB	
+edge
+All services	
+
+
+INFLUXDB_ORG	
+influxdb
+All services
+```
+
 
 Once your application has been created you'll need to add a device to it:
 
@@ -36,6 +75,51 @@ Once your application has been created you'll need to add a device to it:
 3. Power up your device and check it's online in the dashboard!
 
 The IAQ application will start downloading as soon as your device appears in the dashboard.
+
+## Configuration
+
+```
+INFLUX_TOKEN	
+not defined
+edge
+All services	
+
+
+INFLUXDB_CLOUD_BUCKET_ID	
+not defined
+<INSERT OWN CLOUD BUCKET ID>
+All services	
+
+
+INFLUXDB_CLOUD_HOST	
+not defined
+<INSERT OWN CLOUD HOST ID>
+All services	
+
+
+INFLUXDB_CLOUD_ORG_ID	
+not defined
+<INSERT OWN CLOUD ORG ID>
+influxdb2	
+
+
+INFLUXDB_CLOUD_TOKEN	
+not defined
+<INSERT OWN CLOUD TOKEN>
+influxdb2	
+
+
+INFLUXDB_DB	
+not defined
+edge
+All services	
+
+
+INFLUXDB_ORG	
+not defined
+influxdb
+All services
+```
 
 ## Balena CLI option
 
