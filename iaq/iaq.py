@@ -4,15 +4,15 @@ import time
 import board
 import busio
 import json
-from adafruit_pm25.i2c import PM25_I2C
 import qwiic_led_stick
 import paho.mqtt.client as mqtt
 import os
 import sys
-import adafruit_sgp30
 import binascii
 import display
 import logging
+from adafruit_ht16k33.matrix import Matrix8x8x2
+import requests
 
 PM25_MAX = 250
 PM10_MAX = 430
@@ -28,22 +28,16 @@ VOC_MIN = 0
 VOC_MAX = 10000
 VOC_YELLOW = 500
 VOC_RED = 1000
-BASELINE_LIMIT = 720  # 720 minutes = 12 hours
-pm_sensor = 1
-scd_sensor = 1
-voc_sensor = 1
-bar_graph = 0
-matrix_display = 0
-scd_timeout = 0
 
-# Sleep time for each cycle. Normally 60 secs.
-# Some other operations are derived from this:
-cycle_time = 60
-voc_baseline_count = 0
-voc_baseline_eco2 = 0 # was 0x8973
-voc_baseline_tvoc = 0 # was 0x8AAE
-voc_baseline_limit = 60
+pm_sensor = True
+co2_sensor = True
+voc_sensor = True
+use_eco2 = False
+sensor_count = 0
+use_tvoc = True
 
+bar_graph = False
+matrix_display = False
 
 green_limit = 50
 yellow_limit = 75
@@ -72,13 +66,6 @@ try:
 except Exception as e:
     print("Invalid value for ZERO_BAR. Using default 1.")
     zero_bar = 1
-
-try:
-    del_baseline = int(os.getenv('DELETE_BASELINE', '0'))
-except Exception as e:
-    print("Invalid value for DELETE_BASELINE. Using default 0.")
-    del_baseline = 0
-
 try:
     bar_mode = int(os.getenv('BAR_MODE', '1'))
 except Exception as e:
@@ -86,21 +73,52 @@ except Exception as e:
     bar_mode = 1
 
 try:
+    t = int(os.getenv('USE_TVOC', '1'))
+except Exception as e:
+    print("Invalid value for USE_TVOC. Using default 1.")
+    use_tvoc = True
+if t == 0:
+    use_tvoc = False
+    
+try:
     log_level = os.getenv('LOG_LEVEL', 'WARNING')
 except Exception as e:
     print("Invalid value for LOG_LEVEL. Using default 'WARNING'.")
     log_level = 'WARNING'
+   
+# Variables for optional Aggregator:
+ 
+agg_address = os.getenv('AGG_ADDRESS', 'NONE')
+
+try:
+    agg_port = int(os.getenv('AGG_PORT', '1883'))
+except Exception as e:
+    print("Invalid value for AGG_PORT. Using default 1883.")
+    agg_port = 1883
+
+agg_username = os.getenv('AGG_USERNAME')
+
+agg_password = os.getenv('AGG_PASSWORD')
+
+agg_data = {}
+
 #
 # Get a meaningful host hame from balenaCloud device name and add it to mqtt topic, this allows easier
-# grafana graphing in a multi device setup while using mqtt bridging.  This could/should be repalced
-# with some magic at the backend
+# grafana graphing in a multi device setup while using mqtt bridging. 
 # 
-pretty_host_name = os.getenv('BALENA_DEVICE_NAME_AT_INIT', 'No Room Assigned')
+try:
+    r = requests.get(os.getenv('BALENA_SUPERVISOR_ADDRESS') + "/v2/device/name?apikey=" + os.getenv('BALENA_SUPERVISOR_API_KEY'))
+    j = r.json()
+    pretty_host_name = j["deviceName"]
+except Exception as e:
+    print("Unable to get deviceName via Supervisor API. Using default value.")
+    pretty_host_name = "location"
 pretty_host_name = pretty_host_name.replace("/", "_")
-pretty_host_name = pretty_host_name.replace("-", " ")
+pretty_host_name = pretty_host_name.replace("'", "_")
 pretty_host_name = pretty_host_name.replace("$", "_")
 pretty_host_name = pretty_host_name.replace("+", "_")
 pretty_host_name = pretty_host_name.replace("#", "_")
+pretty_host_name = pretty_host_name.replace(" ", "_")
 
 # Set up logger
 logger = logging.getLogger('iaq_logger')
@@ -132,60 +150,8 @@ logger.error("You will see ERROR log entries.")
 logger.warning('You will see WARNING log entries.')
 logger.info("You will see INFO log entries.")
 
-reset_pin = None
-# If you have a GPIO, its not a bad idea to connect it to the RESET pin
-# reset_pin = DigitalInOut(board.G0)
-# reset_pin.direction = Direction.OUTPUT
-# reset_pin.value = False
-
-
-# For use with a computer running Windows:
-# import serial
-# uart = serial.Serial("COM30", baudrate=9600, timeout=1)
-
-# For use with microcontroller board:
-# (Connect the sensor TX pin to the board/computer RX pin)
-# uart = busio.UART(board.TX, board.RX, baudrate=9600)
-
-# For use with Raspberry Pi/Linux:
-# import serial
-# uart = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=0.25)
-
-# For use with USB-to-serial cable:
-# import serial
-# uart = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=0.25)
-
-# Connect to a PM2.5 sensor over UART
-# from adafruit_pm25.uart import PM25_UART
-# pm25 = PM25_UART(uart, reset_pin)
-
-# Create library object, use 'slow' 100KHz frequency!
-i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
-# Connect to a PM2.5 sensor over I2C
-try:
-    pm25 = PM25_I2C(i2c, reset_pin)
-except Exception as e:
-    logger.info("No PM2.5 sensor found...")
-    pm_sensor = 0
-else:
-    logger.info("Found PM2.5 sensor, reading data...")
-    
-# SPDX-FileCopyrightText: 2020 by Bryan Siepert, written for Adafruit Industries
-#
-# SPDX-License-Identifier: Unlicense
-import adafruit_scd4x
-
-try:
-    scd4x = adafruit_scd4x.SCD4X(i2c)
-except Exception as e:
-    logger.info("No SCD sensor found...")
-    scd_sensor = 0
-else:
-    serial_num = [hex(i) for i in scd4x.serial_number]
-    logger.info("Found SCD sensor: Serial number: {}".format(serial_num))
-
-import board
-from adafruit_ht16k33.matrix import Matrix8x8x2
+# Create library object, use 'slow' 10KHz frequency!
+i2c = busio.I2C(board.SCL, board.SDA, frequency=10000)
 
 try:
     matrix2 = Matrix8x8x2(i2c, address=0x70)
@@ -193,150 +159,65 @@ try:
 except Exception as e:
     logger.info("Only one or no LED matrix found, not using LED matrix...")
 else:
-    matrix_display = 1
-
-# Delete baseline file(s) if device variable set
-if del_baseline != 0:
-    logger.warning("Baseline file will be deleted!")
-    logger.warning("Change DELETE_BASELINE device variable to 0 after delete!")
-    if os.path.exists("/data/my_data/baseline-eco2.txt"):
-        os.remove("/data/my_data/baseline-eco2.txt")
-    else:
-        logger.info("The file /data/my_data/baseline-eco2.txt does not exist.")
-    if os.path.exists("/data/my_data/baseline-tvoc.txt"):
-        os.remove("/data/my_data/baseline-tvoc.txt")
-    else:
-        logger.info("The file /data/my_data/baseline-tvoc.txt does not exist.") 
-    
-# Create library object on our I2C port
-try:
-    sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
-except Exception as e:
-    logger.info("No SGP VOC sensor found...")
-    voc_sensor = 0
-else:
-    serial_num = [hex(i) for i in sgp30.serial]
-    logger.info("Found VOC sensor: SGP30 serial #{}".format(serial_num))
-    try:
-        f = open("/data/my_data/baseline-eco2.txt", "r")
-    except Exception as e:
-        logger.info("No eCO2 baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = BASELINE_LIMIT
-    else:
-        try:
-            voc_baseline_eco2 = int(f.read())
-        except:
-            print("Invalid/no data found in eCO2 baseline file. Deleting file and calculating new baseline...")
-            f.close()
-            voc_baseline_limit = BASELINE_LIMIT
-            os.remove("/data/my_data/baseline-eco2.txt")
-        else:
-            f.close()
-      
-    try:
-        f = open("/data/my_data/baseline-tvoc.txt", "r")
-    except Exception as e:
-        logger.info("No TVOC baseline file found. Calculating new 12hr baseline...")
-        voc_baseline_limit = BASELINE_LIMIT
-    else:
-        try:
-            voc_baseline_tvoc = int(f.read())
-        except:
-            print("Invalid/no data found in TVOC baseline file. Deleting file and calculating new baseline...")
-            f.close()
-            voc_baseline_limit = BASELINE_LIMIT
-            os.remove("/data/my_data/baseline-tvoc.txt")
-        else:
-            f.close()
-    sgp30.iaq_init()
-    if (voc_baseline_eco2 != 0) and (voc_baseline_tvoc != 0):
-        logger.info("Setting VOC baseline from file: eCO2: {0}; tvoc: {1}".format(voc_baseline_eco2, voc_baseline_tvoc))
-        sgp30.set_iaq_baseline(voc_baseline_eco2, voc_baseline_tvoc)
-    logger.info("Initial eCO2 = %d ppm \t TVOC = %d ppb" % (sgp30.eCO2, sgp30.TVOC))
+    matrix_display = True
 
 # For LED bar graph:
 my_stick = qwiic_led_stick.QwiicLEDStick()
 if my_stick.begin() == True:
-    bar_graph = 1
-    time.sleep(0.75)
-    my_stick.LED_off()
+    bar_graph = True
+    time.sleep(1.5)
+    try:
+        my_stick.LED_off()
+    except Exception as e:
+        logger.info("Error accessing LED stick: {}".format(e))
 else:
     logger.info("No LED stick found, not using LED stick...")
 
-def scd_sense():
-    #
-    # Take a reading from the CO2 sensor, return dict
-    #
-    global scd_timeout
-    scd_dict = {}
-    count = 0
-    while not scd4x.data_ready:
-        count = count + 1
-        print("Waiting for scd4x  measurement ({0})....".format(count))
-        time.sleep(1)
-        if count > 15:
-            logger.warning("scd4x reading timed out! No CO2 data available!")
-            scd_timeout = 1
-            return scd_dict
+def get_reading():
 
-    logger.info("CO2: %d ppm" % scd4x.CO2)
-    logger.info("Temperature: %0.1f *C" % scd4x.temperature)
-    logger.info("Humidity: %0.1f %%" % scd4x.relative_humidity)
-    #print()
-
-    scd_dict["co2"] = scd4x.CO2
-    scd_dict["temperature"] = scd4x.temperature
-    scd_dict["humidity"] = scd4x.relative_humidity
+    global sensor_count
     
-    return scd_dict
+    readings = {}
 
-def pm_sense():
-    #
-    # Take a reading from the particulate sensor, return dict
-    #
     try:
-        aqdata = pm25.read()
-    except RuntimeError:
-        logger.warning("Unable to read from PM sensor, retrying...")
-        time.sleep(1)
-        try:
-            aqdata = pm25.read()
-        except RuntimeError:
-            logger.warning("Unable to read from PM sensor, retrying (2)...")
-            time.sleep(2)
-            try:
-                aqdata = pm25.read()
-            except RuntimeError:
-                logger.warning("Unable to read from PM sensor (3), skipping...")
-                return {}
+        r = requests.get('http://sensor:7575/')
+    except Exception as e:
+        logger.error("Error requesting sensor reading: {}".format(e))
+        return readings
+        
+    j = r.json()
 
-    logger.info("Concentration Units (standard)")
-    logger.info("---------------------------------------")
-    logger.info("PM 1.0: {0} PM2.5: {1} PM10: {2}".format(aqdata["pm10 standard"], aqdata["pm25 standard"], aqdata["pm100 standard"]))
-    logger.info("Concentration Units (environmental)")
-    logger.info("---------------------------------------")
-    logger.info("PM 1.0: {0} PM2.5: {1} PM10: {2}".format(aqdata["pm10 env"], aqdata["pm25 env"], aqdata["pm100 env"]))
-    logger.debug("---------------------------------------")
-    logger.debug("Particles > 0.3um / 0.1L air:{}".format(aqdata["particles 03um"]))
-    logger.debug("Particles > 0.5um / 0.1L air:{}".format(aqdata["particles 05um"]))
-    logger.debug("Particles > 1.0um / 0.1L air:{}".format(aqdata["particles 10um"]))
-    logger.debug("Particles > 2.5um / 0.1L air:{}".format(aqdata["particles 25um"]))
-    logger.debug("Particles > 5.0um / 0.1L air:{}".format(aqdata["particles 50um"]))
-    logger.debug("Particles > 10 um / 0.1L air:{}".format(aqdata["particles 100um"]))
-    logger.debug("---------------------------------------")
+    #print("raw: {}".format(j))
 
-    return aqdata
+    for sensor, measurement in j.items():
+        #print("item: {}".format(sensor))
+        if sensor == "PM25":
+            readings.update(measurement)
+        else:
+            for key, item in measurement.items():
+                #print("key: {}".format(key))
+                if key == "temperature":
+                    if not "temperature" in readings:
+                        readings["temperature"] = item
+                if key == "humidity":
+                    if not "humidity" in readings:
+                        readings["humidity"] = item
+                if key == "CO2":
+                    if not "co2" in readings:
+                        sensor_count = sensor_count + 1
+                        readings["co2"] = item
+                if (key == "TVOC") and (use_tvoc):
+                    if not "TVOC" in readings:
+                        sensor_count = sensor_count + 1
+                        readings["TVOC"] = item
+                if key == "eCO2":
+                    if not "eCO2" in readings:
+                        sensor_count = sensor_count + 1
+                        readings["eCO2"] = item
+                        
+    return readings
+    #print("readings: {}".format(readings))
 
-def voc_sense():
-    #
-    # Take a reading from the VOC SGP30 sensor, return dict
-    #
-    voc_dict = {}
-    logger.info("VOC sensor reading: eCO2 = {0} ppm \t TVOC = {1} ppb".format(sgp30.eCO2, sgp30.TVOC))
-    voc_dict["eCO2"] = sgp30.eCO2
-    voc_dict["TVOC"] = sgp30.TVOC
-
-    return voc_dict
 
 def pm25_index(pm25):
     #
@@ -454,12 +335,12 @@ def display_index(index_value):
     #
     # Display a two digit number on the LEDs
     #
-    # Simple way to catch not having a local display, could be done better
-    if bar_graph == 0 and matrix_display == 0:
+    
+    if not bar_graph and not matrix_display:
         #print("Nothing to display on...")
         return
 
-    if bar_graph == 1:
+    if bar_graph:
         logger.debug("Skipping LED matrix display...")
         bar_index(index_value)
         return
@@ -482,9 +363,8 @@ def display_index(index_value):
 def display_led(my_matrix, my_value, color):
     #
     # Display a single digit
-    #
-    # Simple way to catch not having a local display, could be done better
-    if bar_graph == 0 and matrix_display == 0:
+    
+    if not matrix_display:
         #print("Nothing to display on...")
         return
 
@@ -505,10 +385,9 @@ def display_pollutant(pm10, pm25, co2, voc):
     #
     # Display a two character icon on the LEDs
     #  representing highest-indexed pollutant
-    #  Uses icons list 0/1=PM1, 2/3=PM2, 4/5=CO2
-    #
-    # Simple way to catch not having a local display, could be done better
-    if bar_graph == 0 and matrix_display == 0:
+    #  Uses icons list 0,1=PM1; 2,3=PM2; 4,5=CO2
+    
+    if not matrix_display:
         #print("Nothing to display on...")
         return
     index_list = [pm10, pm25, co2, voc]
@@ -531,7 +410,7 @@ def display_icon(icon_index, my_color):
     # Display a two character icon on the display
     # icon_index is the index of the first character
     #
-    if matrix_display == 1:
+    if matrix_display:
     # Loop through digits from 1 to 0
         for digit in range(1, -1, -1):
             if digit == 0:
@@ -553,7 +432,13 @@ def bar_index(idx):
     # idx = 0 - 99
     # bar color chosen by green_limit, yellow_limit
     #
-    my_stick.set_all_LED_brightness(1)
+    
+    if not bar_graph:
+        return
+    try:
+        my_stick.set_all_LED_brightness(1)
+    except Exception as e:
+        logger.error("Trouble communicating with LED: {}".format(e))
     j = 0
     for i in range(7,-1,-1):
         time.sleep(0.25)
@@ -562,28 +447,29 @@ def bar_index(idx):
         seg_value_end = j * (100/8)
         if bar_mode == 2: # All LEDs same color
             if idx <= green_limit:
-                my_stick.set_single_LED_color(i, 0, 255, 0)
+                my_single_LED(my_stick, i, 0, 255, 0)
             elif idx > yellow_limit:
-                my_stick.set_single_LED_color(i, 255, 0, 0)
+                my_single_LED(my_stick, i, 255, 0, 0)
             else:
-                my_stick.set_single_LED_color(i, 255, 155, 0)
+                my_single_LED(my_stick, i, 255, 155, 0)
         else:  # Standard bargraph
             if ((idx > seg_value_start ) and (idx <= seg_value_end)) or (idx > seg_value_end):
                 if idx <= green_limit:
-                    my_stick.set_single_LED_color(i, 0, 255, 0)
+                    my_single_LED(my_stick, i, 0, 255, 0)
                 elif idx > yellow_limit:
-                    my_stick.set_single_LED_color(i, 255, 0, 0)
+                    my_single_LED(my_stick, i, 255, 0, 0)
                 else:
-                    my_stick.set_single_LED_color(i, 255, 155, 0)
+                    my_single_LED(my_stick, i, 255, 155, 0)
             else:
                 if bar_mode == 1: # Fill empty segments with white (default)
-                    my_stick.set_single_LED_color(i, 25, 25, 25)
+                    my_single_LED(my_stick, i, 25, 25, 25)
                 else:  # Turn off empty segments
-                    my_stick.set_single_LED_color(i, 0, 0, 0)
+                    my_single_LED(my_stick, i, 0, 0, 0)
 
     # Turn on first segment if idx <= 12.5 and ZERO_BAR
     if (idx <= (100/8)) and (zero_bar == 1):
-        my_stick.set_single_LED_color(7, 0, 255, 0)
+        #my_stick.set_single_LED_color(7, 0, 255, 0)
+        my_single_LED(my_stick, 7, 0, 255, 0)
 
 def LED_icon(icon_num):
 
@@ -591,48 +477,67 @@ def LED_icon(icon_num):
 
     if icon_num == 1:
         # alt red/grn
-        my_stick.set_single_LED_color(7, 255, 0, 0)
+        my_single_LED(my_stick, 7, 255, 0, 0)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(6, 0, 255, 0)
+        my_single_LED(my_stick, 6, 0, 255, 0)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(5, 255, 0, 0)
+        my_single_LED(my_stick, 5, 255, 0, 0)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(4, 0, 255, 0)
+        my_single_LED(my_stick, 4, 0, 255, 0)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(3, 255, 0, 0)
+        my_single_LED(my_stick, 3, 255, 0, 0)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(2, 0, 255, 0)
+        my_single_LED(my_stick, 2, 0, 255, 0)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(1, 255, 0, 0)
+        my_single_LED(my_stick, 1, 255, 0, 0)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(0, 0, 255, 0)
+        my_single_LED(my_stick, 0, 0, 255, 0)
         time.sleep(0.2)
 
     if icon_num == 2:
         # All white
-        my_stick.set_single_LED_color(7, 25, 25, 25)
+        my_single_LED(my_stick, 7, 25, 25, 25)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(6, 25, 25, 25)
+        my_single_LED(my_stick, 6, 25, 25, 25)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(5, 25, 25, 25)
+        my_single_LED(my_stick, 5, 25, 25, 25)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(4, 25, 25, 25)
+        my_single_LED(my_stick, 4, 25, 25, 25)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(3, 25, 25, 25)
+        my_single_LED(my_stick, 3, 25, 25, 25)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(2, 25, 25, 25)
+        my_single_LED(my_stick, 2, 25, 25, 25)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(1, 25, 25, 25)
+        my_single_LED(my_stick, 1, 25, 25, 25)
         time.sleep(0.2)
-        my_stick.set_single_LED_color(0, 25, 25, 25)
+        my_single_LED(my_stick, 0, 25, 25, 25)
         time.sleep(0.2)
+
+def my_single_LED(stick, a, b, c, d):
+
+    # A wrapper for set_single_LED_color() with error checking
     
+    try:
+        stick.set_single_LED_color(a, b, c, d)
+    except Exception as e:
+        logger.error("Error accessing LED: {}".format(e))
+        
+            
 ############################ START ##############################
+
+
+# startup LED animation
+if bar_graph:
+    LED_icon(2)
+
+# Get a reading from the sensor block, see what measurements are available
+reading = get_reading()
+logger.info("initial reading: {}".format(reading))
 
 # Make sure there's at least one sensor
 
-if max(pm_sensor, scd_sensor, voc_sensor) < 1:
-    if bar_graph == 1:
+if sensor_count < 1:
+    if bar_graph:
         LED_icon(1)
         time.sleep(5)
     else:
@@ -640,80 +545,107 @@ if max(pm_sensor, scd_sensor, voc_sensor) < 1:
     logger.critical("No sensors found! Exiting...")
     sys.exit()
 
-# startup LED animation
-if bar_graph == 1:
-    LED_icon(2)
-        
-if pm_sensor == 1:
+if ("co2" not in reading) and ("eCO2" in reading):
+    # Use eCO2 for CO2
+    logger.info("Using eCO2 for CO2.")
+    use_eco2 = True
+            
+# If using matrix LEDs, display sensor icons
+
+if "pm10 standard" in reading:
     display_icon(0, 2)
     time.sleep(2)
     display_icon(2, 2)
     time.sleep(1)
    
-if voc_sensor == 1:
+if "TVOC" in reading:
     display_icon(6, 2)
     time.sleep(2)
         
-if scd_sensor == 1:
+if ("co2" in reading) or ("eCO2" in reading):
     display_icon(4, 2)
     time.sleep(1)
-    scd4x.start_periodic_measurement()
-    logger.info("Waiting for scd4x  measurement....")
+
+# Connect to internal MQTT for onboard dashboard
 
 client = mqtt.Client()
 try:
     client.connect("mqtt", 1883, 60)
 except Exception as e:
-    logger.error("Error connecting to mqtt. ({0})".format(str(e)))
+    logger.error("Error connecting to internal mqtt. ({0})".format(str(e)))
 else:
     client.loop_start()
 
+# If set, connect to Aggregator (external)
+
+if agg_address != "NONE":
+    logger.debug("Preparing connection to external MQTT address {}".format(agg_address))
+    client2 = mqtt.Client()
+
+    if (agg_username is None) and (agg_password is None):
+        logger.debug("Using external MQTT username ({}) and password.".format(agg_username))
+        client2.username_pw_set(agg_username, agg_password)      
+    try:
+        client2.connect(agg_address, agg_port, 60)
+    except Exception as e:
+        logger.error("Error connecting to external mqtt. ({0})".format(str(e)))
+    else:
+        client2.loop_start()
+    
 while True:
     pm = {}
     scd = {}
     voc = {}
-    if pm_sensor == 1:
+    if ("pm10 standard" in reading) and (reading["pm10 standard"] is not None):
         logger.info("Testimg PM...")
-        pm = pm_sense()
-        pm10_idx = pm10_index(pm["pm100 env"])
-        pm25_idx = pm25_index(pm["pm25 env"])
-    if scd_sensor == 1:
-        logger.info("Testing SCD...")
-        scd = scd_sense()
-        if scd_timeout != 1:
-            co2_idx = co2_index(scd["co2"])
-    if voc_sensor == 1:
+        pm10_idx = pm10_index(reading["pm100 env"])
+        pm25_idx = pm25_index(reading["pm25 env"])
+    if ("co2" in reading) and (reading["co2"] is not None):
+        logger.info("Testing CO2...")
+        co2_idx = co2_index(reading["co2"])
+    if ("TVOC" in reading) and (reading["TVOC"] is not None):
         logger.info("Testing VOC...")
-        voc = voc_sense()
-        voc_idx = voc_index(voc["TVOC"])
+        voc_idx = voc_index(reading["TVOC"])
        
-        if (scd_sensor == 0) or (scd_timeout == 1):
-            # Use eCO2 for CO2
-            logger.info("Using eCO2 for C02.")
-            logger.info("voc[eCO2]={}".format(voc["eCO2"]))
-            logger.info("co2_index(voc[eCO2])={}".format(co2_index(voc["eCO2"])))
-            co2_idx = co2_index(voc["eCO2"])
-            scd["co2"] = voc["eCO2"]
-    # Merge dictionaries into scd:
-    # If sensor does not exist, neither will its fields
-    scd.update(pm)
-    scd.update(voc)
+    if (use_eco2) and (reading["eCO2"] is not None):
+        logger.info("Using eCO2 for CO2...")
+        co2_idx = co2_index(reading["eCO2"])
+        reading["co2"] = reading["eCO2"]
+    else:
+        if (use_eco2):
+            logger.debug("No eCO2 reading found and use_eco2 is True.")
+
     logger.debug("Scaled pm25: {0}".format(pm25_idx))
     logger.debug("Scaled pm10: {0}".format(pm10_idx))
     logger.debug("Scaled co2: {0}".format(co2_idx))
     logger.debug("Scaled voc: {0}".format(voc_idx))  
     iaq_idx = max(pm25_idx, pm10_idx, co2_idx, voc_idx)
     # Add index to dict
-    scd["IAQ"] = iaq_idx
+    reading["IAQ"] = round(iaq_idx)
     logger.debug("Using index: {0}".format(iaq_idx))
     # Display on LED matrix
     display_index(iaq_idx)
-    # Publish all data to MQTT
+    # Publish all data to internal MQTT
     try:
-        client.publish("sensors/" + pretty_host_name, json.dumps(scd))
+        client.publish("sensors/" + pretty_host_name, json.dumps(reading))
     except Exception as e:
-        logger.error("Error publishing to mqtt. ({0})".format(str(e)))
-        
+        logger.error("Error publishing to internal mqtt. ({0})".format(str(e)))
+    
+    # Publish data to external MQTT
+    ret = 0
+    if agg_address != "NONE":
+        agg_data["device"] = pretty_host_name
+        agg_data["iaq"] = round(iaq_idx)
+        agg_data["dominant"] = "tbd"
+        logger.debug("Sending data {0} to external MQTT address {1}".format(agg_data, agg_address))
+        try:
+            ret = client2.publish("sensors/" + pretty_host_name, json.dumps(agg_data))
+            logger.debug("Sent external mqtt data... topic: {0}; data: {1}; return: {2}".format("sensors/" + pretty_host_name, agg_data, ret))
+        except Exception as e:
+            logger.error("Error publishing to external mqtt. ({0})".format(str(e)))  
+    else:
+        logger.debug("No external MQTT address provided.")
+                
     # Alternate display with icon every 2.5 seconds if index > green_limit
     if ((iaq_idx > alert_level) and (alert_mode == 1)) or (alert_mode == 2):
         time.sleep(2.5)
@@ -722,36 +654,8 @@ while True:
             time.sleep(2.5)
             display_index(iaq_idx)
             time.sleep(2.5)
-    
     else:
-
         time.sleep(55)
     
-    if scd_timeout == 1:
-        # Turn sensor back on and try again on next pass
-        scd_timeout = 0
-        
-    if voc_sensor == 1:
-
-        voc_baseline_count = voc_baseline_count + 1
-        logger.debug("VOC baseline count: {0}, saving in {1} iteration(s).".format(voc_baseline_count, voc_baseline_limit - voc_baseline_count))
-        if voc_baseline_count == voc_baseline_limit:
-            logger.info("Saving VOC baseline values... CO2eq = {0}, TVOC = {1}".format(sgp30.baseline_eCO2, sgp30.baseline_TVOC))
-            
-            try:
-                f = open("/data/my_data/baseline-eco2.txt", "w")
-            except Exception as e:
-                logger.error("Error saving eCO2 baseline...")
-            else:
-                f.write(str(sgp30.baseline_eCO2))
-                f.close()
-
-            try:
-                f = open("/data/my_data/baseline-tvoc.txt", "w")
-            except Exception as e:
-                logger.error("Error saving TVOC baseline...")
-            else:
-                f.write(str(sgp30.baseline_TVOC))
-                f.close()
-
-            voc_baseline_count = 0
+    reading = get_reading()
+    logger.info("loop reading: {}".format(reading))

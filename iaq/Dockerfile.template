@@ -6,12 +6,10 @@ WORKDIR /usr/src/app
 # Install PIL for LED displays
 RUN install_packages python3-pil
 
-# Install Adafruit Blinka for CircuitPython support in Python,
-#    CircuitPython PM25 module for PMSA0031,
-#    CircuitPython SCD4x module, LED matrix display module, SGP 30
+# Install Adafruit Blinka for CircuitPython support in Python, LED matrix display modules
 #     
-RUN pip3 install RPi.GPIO paho-mqtt Adafruit-Blinka adafruit-circuitpython-pm25 \
-    adafruit-circuitpython-scd4x adafruit-circuitpython-ht16k33==4.1.5 adafruit-circuitpython-sgp30 \
+RUN pip3 install RPi.GPIO paho-mqtt requests Adafruit-Blinka \
+    adafruit-circuitpython-ht16k33==4.1.5 \
     sparkfun-qwiic-led-stick
 
 COPY *.py ./

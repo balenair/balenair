@@ -71,17 +71,12 @@ See the [Grafana documentation](https://grafana.com/docs/grafana/next/panels/wor
 ### Logging
 By default, the IAQ service will only send certain information to the logs. If you want to see more or less detail in the logs, you can set the `LOG_LEVEL` device variable. The default value is `WARNING` but setting to `DEBUG` or `INFO` will provide more logging detail. To see fewer logging details, you can select `ERROR` or `CRITICAL` as well.
 
+### External MQTT
+
+You can have the balenAir publish to an external MQTT broker or service, such as the [balenAir Aggregator](https://github.com/balenair/aggregator). To initiate this, set the `AGG_ADDRESS` variable to the address of the external MQTTT broker - this works best if all devices are on the same local network. See the Aggregator repo for more details on other setup options. You can also specify `AGG_USERNAME`, `AGG_PASSWORD`, and `AGG_PORT` (default is 1883) as well. To stop publishing, delete the `AGG_ADDRESS` variable.
 
 ## VOC calibration
-The [SGP30 VOC sensor](https://www.adafruit.com/product/3709) is a type of gas sensor that needs to be calibrated to provide reasonably accurate measurements. The calibration process is automatic, but you should be aware of the basic steps for best results:
-
-- The sensor requires a "baseline" which is stored in a persistent file on the device
-- On initial power up of the device, there will be no baseline file
-- The sensor needs to run for 12 hours to create and store a baseline
-- While the baseline is being created, keep the device in the same location
-- If the device has been powered down for more than seven days, you should force a new baseline creation.
-
-In other words, the first time you power on the device, let it sit for 12 hours in the location it will be used. If you significantly change the device's location or power the device down for more than seven days, you can force the unit to calculate a new baseline. To do that, set the device variable `DELETE_BASELINE` to `1` at which point the device will restart and delete the stored baseline. After it restarts, delete the `DELETE_BASELINE` variable or set it to `0`. The device will restart again and calculate a new baseline. 
+The [SGP30 VOC sensor](https://www.adafruit.com/product/3709) is a type of gas sensor that needs to be calibrated to provide reasonably accurate measurements. The balenAir no longer stores a baseline for this sensor, so see the details [here](https://learn.adafruit.com/adafruit-sgp30-gas-tvoc-eco2-mox-sensor/circuitpython-wiring-test#baseline-set-and-get-2980177) regarding its default calibration process.
 
 ### NEXT
 [Case printing & assembly](05-case-printing-and-assembly.md)

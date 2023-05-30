@@ -24,7 +24,9 @@ We have tested these pieces by slicing them using Ultimaker Cura 4.11; Each piec
 
 ## Front piece
 
-The front panel holds the LED/backpack assemblies. Each assembly sits on a set of four posts. Use M1.4 x 5mm screws to secure the displays to the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. The angled headers should face upwards towards the top of the front piece. (At this point, you can establish which orientation is the top, as the sides are both the same.) TIP: attach the female wire headers before inserting the displays onto the posts.
+The front panel holds the LED/backpack assemblies. Each assembly sits on a set of four posts. Use M1.4 x 5mm screws to secure the displays to the posts. The backpack that is set to the 0x71 address by the solder pad blob should be on the right when looking at the back of the face plate. The angled headers should face upwards towards the top of the front piece. (At this point, you can establish which orientation is the top, as the sides are both the same.) TIP: attach the qwiic connectors (or female wire headers) before inserting the displays onto the posts.
+
+![](./images/matrix-front-rear3.png)
 
 ![](./images/matrix-front-rear2.png)
 
@@ -67,7 +69,7 @@ Mount the Pi Zero 2 inverted onto the spacers as shown below and secure with lon
 Printing tips: This piece does not have a lot of bed surface area, so a brim is recommended. Printing characteristics: 27g/9.04m of filament; 5:15 print time.
 
 ## Insulate sense
-The `insulate_sense` piece is used to mount the sensors and insulate them from the heat of the Pi. There is a small opening at the bottom of this piece to feed a Qwiic connector and cable through to the other side to attach to the first sensor (usually the particulate unit). The side opposite the sensor mounts has two holes to attach the Qwiic multiport connector with M2 x 10mm pan head screws and optionally nuts.
+The `insulate_sense` piece is used to mount the sensors and insulate them from the heat of the Pi. There is a small opening at the bottom of this piece to feed a Qwiic connector and cable through to the other side to attach to the first sensor (usually the particulate unit). The side opposite the sensor mounts has two holes to attach the Qwiic multiport connector (if needed) with M2 x 10mm pan head screws and optionally nuts.
 
 There are mounting holes in the posts for all sensors. You can use two, three, or four M2 screws to attach each sensor. For extra stability, use one or more 12mm screw with a nut on the other end per sensor. The bottom of the particulate sensor "sits" on a small shelf. TIP: Tape the blue part of the particulate sensor to the circuit board with a small amount of electrical tape to keep it from sliding around. (Make sure not to cover any of the venting holes on the right of the sensor though!) You can daisy chain the sensors together using various length Qwiic connector cables. The image below shows the location for each sensor:
 

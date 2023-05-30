@@ -12,6 +12,7 @@
 
 Start by assembling the hardware - see our parts list and assembly instructions in [the docs](./docs). Deploying the code to a fleet of one or more devices is as easy as clicking the button below:
 
+[![balena deploy button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/balenair/balenair)
 
 ## Documentation
 
@@ -21,11 +22,7 @@ Head over to [our docs](./docs) for detailed parts lists, options, building, ins
 
 ![concept](./images/iaq-device-montage.png)
 
-balenAir is dedicated to making environmental information visibly more accessible to consumers so they can make actionable decisions to improve their health and wellbeing. Our projects are open source, highly customizable, easy to use, and respect your privacy.
-
-There are other commercial solutions out there that provide functionality similar to the IAQ. However, for a reasonable price, (as little as $50 USD) you can assemble a few parts along with a Raspberry Pi and our custom case to build your own indoor air quality monitoring device. It collects and displays comprehensive data, but unlike some other devices, you control your data which stays on the device and not in the cloud.
-
-The IAQ has a built-in web server and VPN tunnel which you can activate for simple web access to your device from anywhere. No router adjustments required!
+balenAir is a great starter project for learning about IoT, environmental sensors, containers, and the balena platform. It is also a very functional and useful device, which stores all of your data locally, not in the cloud. Yet you can access this data anywhere via its built-in web server and secure VPN tunnel.
 
 This open source project is in active development so if you have any feature requests or issues please submit them here on GitHub. PRs are welcome, too.
 
@@ -54,7 +51,7 @@ You can build a working IAQ device for as little as $50! See the parts list in t
 
 ### The case
 
-We provide STL files so you can use your 3D printer to print a beautiful case for the IAQ. Don't have a 3D printer? Order the case parts from a local service bureau.
+We provide STL files so you can use a 3D printer to print a beautiful case for the IAQ.
 
 The case consists of four interlocking layers that are held together by four M3 x 40mm hex socket head screws. The case accomodates any or all of the supported sensors, two different Raspberry Pis, as well either of the display options.
 

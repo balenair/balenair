@@ -23,8 +23,18 @@ services:
     restart: always
     volumes:
         - 'iaq-data:/data/my_data'
+    labels:
+      io.balena.features.supervisor-api: '1'
+  sensor:
+    image: bh.cr/al_s_apps/big-sensor-armv7hf
+    privileged: true
+    restart: always
+    labels:
+      io.balena.features.supervisor-api: '1'
+    environment:
+      ALWAYS_USE_HTTPSERVER: 1
   connector:
-    image: balenablocks/connector
+    image: bh.cr/balenalabs/connector-armv7hf
     restart: always
     labels:
       io.balena.features.balena-api: '1'
