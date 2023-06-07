@@ -648,6 +648,7 @@ while True:
                 
     # Alternate display with icon every 2.5 seconds if index > green_limit
     if ((iaq_idx > alert_level) and (alert_mode == 1)) or (alert_mode == 2):
+    #if (1 == 1):
         time.sleep(2.5)
         for recur in range(11):
             display_pollutant(pm10_idx, pm25_idx, co2_idx, voc_idx)

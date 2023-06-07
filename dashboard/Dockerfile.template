@@ -1,3 +1,5 @@
 FROM bh.cr/balenalabs/dashboard
 
+COPY ./dashboards.yml /usr/share/grafana/conf/provisioning/dashboards
+
 COPY ./default.json /usr/share/grafana/conf/provisioning/dashboards

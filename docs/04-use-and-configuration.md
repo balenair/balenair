@@ -73,7 +73,7 @@ By default, the IAQ service will only send certain information to the logs. If y
 
 ### External MQTT
 
-You can have the balenAir publish to an external MQTT broker or service, such as the [balenAir Aggregator](https://github.com/balenair/aggregator). To initiate this, set the `AGG_ADDRESS` variable to the address of the external MQTTT broker - this works best if all devices are on the same local network. See the Aggregator repo for more details on other setup options. You can also specify `AGG_USERNAME`, `AGG_PASSWORD`, and `AGG_PORT` (default is 1883) as well. To stop publishing, delete the `AGG_ADDRESS` variable.
+You can have the balenAir publish to an external MQTT broker or service, such as the [balenAir Aggregator](https://github.com/balenair/aggregator). To initiate this, set the `AGG_ADDRESS` variable to the address of the external MQTT broker - this works best if all devices are on the same local network. See the Aggregator repo for more details on other setup options. You can also specify `AGG_USERNAME`, `AGG_PASSWORD`, and `AGG_PORT` (default is 1883) as well. To stop publishing, delete the `AGG_ADDRESS` variable.
 
 ## VOC calibration
 The [SGP30 VOC sensor](https://www.adafruit.com/product/3709) is a type of gas sensor that needs to be calibrated to provide reasonably accurate measurements. The balenAir no longer stores a baseline for this sensor, so see the details [here](https://learn.adafruit.com/adafruit-sgp30-gas-tvoc-eco2-mox-sensor/circuitpython-wiring-test#baseline-set-and-get-2980177) regarding its default calibration process.
