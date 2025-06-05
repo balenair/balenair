@@ -33,6 +33,8 @@ You can change the default behavior of the icon display by setting the following
 
 `ALERT_MODE` has a default value of `1`, which causes the display to alternate the pollutant icon when the score exceeds the `ALERT_LEVEL` defined above. Changing this value to `0` will cause the score to always be displayed and never display a pollutant icon regardless of the `ALERT_LEVEL`. Setting this value to 2 will always show an alternating pollutant icon regardless of the `ALERT_LEVEL`.
 
+`FONT` has a default value of `BLOCK` but can be changed to `RETRO` to show icons and numbers with a different appearance.
+
 Note that these variables will not initially be present in the dashboard, you will have to add them if you want to change their value. If they have not been added, or you delete them after previously adding them, they will revert back to the default values mentioned above.
 
 The display changes color based on the score as follows:
