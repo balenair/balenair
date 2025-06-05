@@ -45,7 +45,7 @@ services:
       - "1883:1883"
     restart: always 
   wifi-connect:
-    image: balenablocks/wifi-connect:armv7hf
+    image: bh.cr/balenalabs/wifi-connect-armv7hf
     restart: always
     network_mode: host
     privileged: true
